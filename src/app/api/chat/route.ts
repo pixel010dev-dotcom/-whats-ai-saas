@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { generateChatResponse } from '@/lib/ai/client'
+import type { Knowledge, Message } from '@prisma/client'
 
 export async function POST(req: Request) {
   try {
@@ -36,19 +37,19 @@ export async function POST(req: Request) {
       data: { conversationId: conversation.id, role: 'user', content: message }
     })
 
-    const [settings, knowledge] = await Promise.all([
+    const [settings, knowledgeEntries] = await Promise.all([
       prisma.tenantSettings.findUnique({ where: { tenantId } }),
       prisma.knowledge.findMany({ where: { tenantId }, take: 5 })
     ])
 
-    const knowledgeStr = knowledge && knowledge.length > 0
-      ? (knowledge as Array<{title: string; content: string}>).map(k => `- ${k.title}: ${k.content}`).join('\n')
+    const knowledgeStr = knowledgeEntries && knowledgeEntries.length > 0
+      ? knowledgeEntries.map((k: Knowledge) => `- ${k.title}: ${k.content}`).join('\n')
       : 'Nenhum conhecimento cadastrado'
 
     const systemPrompt = `Voc\u00ea \u00e9 um atendente digital da empresa.\nPersonalidade: ${settings?.aiPersonality || 'Educado, profissional e amig\u00e1vel'}\n\nRegras:\n- Seja educado e profissional\n- Ajude o cliente com suas d\u00favidas\n- Se n\u00e3o souber responder, pe\u00e7a desculpas e diga que vai transferir\n- Responda em portugu\u00eas do Brasil\n- N\u00e3o invente informa\u00e7\u00f5es\n\nConhecimento da empresa:\n${knowledgeStr}`
 
-    const history = (conversation.messages as Array<{role: string; content: string}>).map(m => ({
-      role: m.role as 'user' | 'assistant',
+    const history = conversation.messages.map((m: Message) => ({
+      role: m.role === 'assistant' ? 'assistant' as const : 'user' as const,
       content: m.content
     }))
 
