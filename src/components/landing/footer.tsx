@@ -1,0 +1,77 @@
+'use client'
+
+import Link from 'next/link'
+
+export default function Footer() {
+  return (
+    <footer className="relative bg-gray-900 text-gray-400">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20 pointer-events-none" />
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid md:grid-cols-4 gap-12 mb-12">
+          {/* Brand */}
+          <div className="md:col-span-1">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">W</span>
+              </div>
+              <span className="font-bold text-xl text-white">WhatsAI</span>
+            </div>
+            <p className="text-sm leading-relaxed">
+              Seu funcion\u00e1rio digital para WhatsApp. Venda, negocie e atenda automaticamente 24 horas por dia.
+            </p>
+          </div>
+
+          {/* Product */}
+          <div>
+            <h3 className="font-semibold text-white mb-4">Produto</h3>
+            <ul className="space-y-3">
+              <li><Link href="#features" className="text-sm hover:text-green-400 transition-colors">Funcionalidades</Link></li>
+              <li><Link href="#pricing" className="text-sm hover:text-green-400 transition-colors">Pre\u00e7os</Link></li>
+              <li><Link href="#demo" className="text-sm hover:text-green-400 transition-colors">Demonstra\u00e7\u00e3o</Link></li>
+              <li><Link href="/register" className="text-sm hover:text-green-400 transition-colors">Come\u00e7ar gr\u00e1tis</Link></li>
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h3 className="font-semibold text-white mb-4">Empresa</h3>
+            <ul className="space-y-3">
+              <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Sobre n\u00f3s</span></li>
+              <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Blog</span></li>
+              <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Carreira</span></li>
+              <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Contato</span></li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h3 className="font-semibold text-white mb-4">Legal</h3>
+            <ul className="space-y-3">
+              <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Termos de uso</span></li>
+              <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Pol\u00edtica de privacidade</span></li>
+              <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">LGPD</span></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-gray-800 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm">
+              &copy; {new Date().getFullYear()} WhatsAI. Todos os direitos reservados.
+            </p>
+            <div className="flex items-center gap-6">
+              <span className="text-sm text-gray-500">Feito com \u2764\ufe0f pela equipe WhatsAI</span>
+              <div className="flex gap-4">
+                <span className="w-5 h-5 rounded bg-gray-800 flex items-center justify-center text-xs cursor-pointer hover:bg-green-600 hover:text-white transition-colors">in</span>
+                <span className="w-5 h-5 rounded bg-gray-800 flex items-center justify-center text-xs cursor-pointer hover:bg-green-600 hover:text-white transition-colors">ig</span>
+                <span className="w-5 h-5 rounded bg-gray-800 flex items-center justify-center text-xs cursor-pointer hover:bg-green-600 hover:text-white transition-colors">yt</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}

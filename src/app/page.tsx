@@ -1,171 +1,126 @@
-import Link from 'next/link'
+'use client'
+
+import { useEffect } from 'react'
+import Hero from '@/components/landing/hero'
+import Features from '@/components/landing/features'
+import HowItWorks from '@/components/landing/how-it-works'
+import Pricing from '@/components/landing/pricing'
+import Testimonials from '@/components/landing/testimonials'
+import FAQ from '@/components/landing/faq'
+import Footer from '@/components/landing/footer'
+import Particles from '@/components/landing/particles'
 
 export default function Home() {
+  useEffect(() => {
+    // Intersection Observer for reveal animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed')
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-green-50 to-white">
+    <main className="relative min-h-screen">
+      {/* Particles Background */}
+      <Particles />
+
       {/* Header */}
-      <header className="border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+      <header className="fixed top-0 left-0 right-0 z-50">
+        <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 mt-4 px-6 rounded-2xl bg-white/80 backdrop-blur-xl border border-white/20 shadow-lg shadow-black/5">
+            <a href="/" className="flex items-center gap-2.5">
+              <div className="w-9 h-9 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20">
                 <span className="text-white font-bold text-sm">W</span>
               </div>
-              <span className="font-bold text-xl">WhatsAI</span>
+              <span className="font-bold text-xl text-gray-900">WhatsAI</span>
+            </a>
+
+            <div className="hidden md:flex items-center gap-8">
+              <a href="#features" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Funcionalidades</a>
+              <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Como funciona</a>
+              <a href="#pricing" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Pre\u00e7os</a>
+              <a href="#faq" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">FAQ</a>
             </div>
-            <nav className="flex items-center gap-4">
-              <Link href="/login" className="text-gray-600 hover:text-gray-900 font-medium">
-                Entrar
-              </Link>
-              <Link
-                href="/register"
-                className="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg font-medium transition-all"
+
+            <div className="flex items-center gap-3">
+              <a
+                href="/login"
+                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
               >
-                Come\u00e7ar Gr\u00e1tis
-              </Link>
-            </nav>
+                Entrar
+              </a>
+              <a
+                href="/register"
+                className="px-5 py-2.5 text-sm font-semibold bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-0.5 transition-all duration-300"
+              >
+                Come\u00e7ar gr\u00e1tis
+              </a>
+            </div>
           </div>
-        </div>
+        </nav>
       </header>
 
-      {/* Hero */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-        <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            IA em tempo real
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight mb-6">
-            Seu funcion\u00e1rio digital
-            <span className="text-green-500"> para WhatsApp</span>
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            A IA que vende, negocia, or\u00e7a, atende e fecha pedidos
-            automaticamente pelo WhatsApp. Como um funcion\u00e1rio experiente, 24h por dia.
+      {/* Hero Section */}
+      <Hero />
+
+      {/* Features Section */}
+      <Features />
+
+      {/* How It Works Section */}
+      <HowItWorks />
+
+      {/* Pricing Section */}
+      <Pricing />
+
+      {/* Testimonials Section */}
+      <Testimonials />
+
+      {/* FAQ Section */}
+      <FAQ />
+
+      {/* CTA Section */}
+      <section className="relative py-32 bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-1/4 w-64 h-64 bg-white/10 rounded-full blur-[80px]" />
+          <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-white/10 rounded-full blur-[80px]" />
+        </div>
+        
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+            Pronto para transformar seu atendimento?
+          </h2>
+          <p className="text-xl text-green-100 mb-10 max-w-2xl mx-auto">
+            Junte-se a mais de 1.000 empresas que j\u00e1 automatizaram suas vendas no WhatsApp.
+            Comece gr\u00e1tis, sem cart\u00e3o de cr\u00e9dito.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
+            <a
               href="/register"
-              className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
+              className="px-8 py-4 bg-white text-green-700 font-bold rounded-xl text-lg shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
             >
-              Testar Gr\u00e1tis por 7 Dias
-            </Link>
-            <Link
-              href="/login"
-              className="border-2 border-gray-300 hover:border-gray-400 text-gray-700 px-8 py-4 rounded-xl text-lg font-semibold transition-all"
+              Come\u00e7ar gr\u00e1tis agora
+            </a>
+            <a
+              href="#features"
+              className="px-8 py-4 bg-white/10 border border-white/20 text-white font-semibold rounded-xl text-lg hover:bg-white/20 transition-all duration-300"
             >
-              Ver Demonstra\u00e7\u00e3o
-            </Link>
+              Ver funcionalidades
+            </a>
           </div>
-          <p className="text-gray-400 text-sm mt-4">Sem cart\u00e3o de cr\u00e9dito • Cancele quando quiser</p>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-          O que seu neg\u00f3cio ganha
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            {
-              emoji: '\u{1F4B0}',
-              title: 'Vende 24h por dia',
-              desc: 'Enquanto voc\u00ea dorme, a IA atende, negocia e fecha vendas pelos seus clientes.'
-            },
-            {
-              emoji: '\u{1F916}',
-              title: 'Intelig\u00eancia de verdade',
-              desc: 'N\u00e3o \u00e9 um chatbot burro. A IA entende contexto, negocia pre\u00e7os e cria relacionamento.'
-            },
-            {
-              emoji: '\u{1F4CA}',
-              title: 'Dashboard completo',
-              desc: 'Veja vendas, clientes, hist\u00f3rico e m\u00e9tricas em tempo real do seu neg\u00f3cio.'
-            },
-            {
-              emoji: '\u{1F4E6}',
-              title: 'Cat\u00e1logo inteligente',
-              desc: 'Cadastre produtos, pre\u00e7os e categorias. A IA consulta e or\u00e7a automaticamente.'
-            },
-            {
-              emoji: '\u{1F4AC}',
-              title: 'Mem\u00f3ria de cliente',
-              desc: 'A IA lembra de cada cliente: hist\u00f3rico, prefer\u00eancias, \u00faltimas compras.'
-            },
-            {
-              emoji: '\u{1F504}',
-              title: 'P\u00f3s-venda autom\u00e1tico',
-              desc: 'Recupera clientes, faz follow-up e mant\u00e9m relacionamento sem voc\u00ea fazer nada.'
-            }
-          ].map((item, i) => (
-            <div key={i} className="bg-white p-8 rounded-2xl border border-gray-100 hover:border-green-200 hover:shadow-lg transition-all animate-fade-in" style={{ animationDelay: `${i * 100}ms` }}>
-              <div className="text-4xl mb-4">{item.emoji}</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">{item.title}</h3>
-              <p className="text-gray-600">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">
-          Planos simples
-        </h2>
-        <p className="text-gray-500 text-center mb-12 max-w-xl mx-auto">
-          Escolha o plano ideal para seu neg\u00f3cio. Cancele quando quiser.
-        </p>
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {[
-            {
-              name: 'B\u00e1sico',
-              price: 'R$ 97',
-              features: ['1 n\u00famero WhatsApp', '500 conversas/m\u00eas', 'Cat\u00e1logo de produtos', 'Dashboard', 'Suporte email']
-            },
-            {
-              name: 'Profissional',
-              price: 'R$ 197',
-              popular: true,
-              features: ['1 n\u00famero WhatsApp', 'Conversas ilimitadas', 'Cat\u00e1logo + estoque', 'Dashboard completo', 'Mem\u00f3ria de clientes', 'P\u00f3s-venda autom\u00e1tico', 'Suporte priorit\u00e1rio']
-            },
-            {
-              name: 'Premium',
-              price: 'R$ 297',
-              features: ['2 n\u00fameros WhatsApp', 'Conversas ilimitadas', 'Tudo do Profissional', 'Relat\u00f3rios avan\u00e7ados', 'API p\u00fablica', 'Gerente de sucesso', 'SLA 99.9%']
-            }
-          ].map((plan, i) => (
-            <div key={i} className={`relative bg-white p-8 rounded-2xl border-2 transition-all animate-fade-in ${
-              plan.popular
-                ? 'border-green-500 shadow-xl scale-105'
-                : 'border-gray-100 hover:border-gray-300'
-            }`}>
-              {plan.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-1 rounded-full text-sm font-medium">
-                  Mais popular
-                </div>
-              )}
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">{plan.name}</h3>
-              <div className="text-4xl font-bold text-gray-900 mb-6">
-                {plan.price}
-                <span className="text-base font-normal text-gray-500">/m\u00eas</span>
-              </div>
-              <ul className="space-y-3 mb-8">
-                {plan.features.map((feat, j) => (
-                  <li key={j} className="flex items-center gap-2 text-gray-600">
-                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    {feat}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/register"
-                className={`block text-center py-3 rounded-xl font-semibold transition-all ${
-                  plan.popular
-                    ? 'bg-green-500 hover:bg-green-600 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
-                }`}
-              >
-                Come\u00e7ar 
+      {/* Footer */}
+      <Footer />
+    </main>
+  )
+}

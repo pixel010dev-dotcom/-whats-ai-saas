@@ -1,10 +1,13 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+
 }
 
 enum TenantStatus {
@@ -18,6 +21,28 @@ enum PlanType {
   BASICO
   PROFISSIONAL
   PREMIUM
+}
+
+enum ConversationStatus {
+  ACTIVE
+  WAITING
+  CLOSED
+  TRANSFERRED
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  REFUNDED
+  CANCELLED
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+  EXPIRED
+  PENDING
 }
 
 model Tenant {
@@ -43,47 +68,47 @@ model Tenant {
 }
 
 model TenantSettings {
-  id            String @id @default(cuid())
-  tenantId      String @unique
-  tenant        Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  businessHours Json?  
-  welcomeMsg    String?
-  aiPersonality String?
-  autoReply     Boolean @default(true)
-  workingDays   Int     @default(6)
-  workingStart  String  @default("08:00")
-  workingEnd    String  @default("18:00")
+  id              String   @id @default(cuid())
+  tenantId        String   @unique
+  tenant          Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  businessHours   String?
+  welcomeMessage  String?
+  aiPersonality   String?
+  autoReply       Boolean  @default(true)
+  workingHours    Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  password  String?
-  image     String?
-  role      String   @default("owner")
-  tenantId  String?
-  tenant    Tenant?  @relation(fields: [tenantId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  accounts  Account[]
-  sessions  Session[]
+  id              String   @id @default(cuid())
+  name            String?
+  email           String   @unique
+  emailVerified   DateTime?
+  image           String?
+  tenantId        String?
+  tenant          Tenant?  @relation(fields: [tenantId], references: [id])
+  role            String   @default("owner")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  accounts        Account[]
+  sessions        Session[]
 }
 
 model Account {
   id                String  @id @default(cuid())
   userId            String
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? 
-  access_token      String? 
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? 
+  id_token          String?
   session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -92,28 +117,27 @@ model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Customer {
   id          String   @id @default(cuid())
   tenantId    String
   tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  phone       String?
   name        String?
-  phone       String   @unique
   email       String?
-  notes       String?  
-  tags        String[] @default([])
-  totalSpent  Float    @default(0)
+  tags        String?
   totalOrders Int      @default(0)
+  totalSpent  Float    @default(0)
   lastContact DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   conversations Conversation[]
 
+  @@unique([phone, tenantId])
   @@index([tenantId])
-  @@index([phone])
 }
 
 model Category {
@@ -121,38 +145,31 @@ model Category {
   tenantId  String
   tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   name      String
+  slug      String?
   parentId  String?
   parent    Category? @relation("CategoryHierarchy", fields: [parentId], references: [id])
   children  Category[] @relation("CategoryHierarchy")
   products  Product[]
   createdAt DateTime  @default(now())
 
-  @@unique([tenantId, name])
-}
-
-model Product {
-  id          String    @id @default(cuid())
-  tenantId    String
-  tenant      Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  name        String
-  description String?   
-  price       Float
-  cost        Float?
-  categoryId  String?
-  category    Category? @relation(fields: [categoryId], references: [id])
-  image       String?
-  active      Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
   @@index([tenantId])
 }
 
-enum ConversationStatus {
-  ACTIVE
-  WAITING
-  CLOSED
-  TRANSFERRED
+model Product {
+  id          String     @id @default(cuid())
+  tenantId    String
+  tenant      Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  price       Float
+  image       String?
+  active      Boolean    @default(true)
+  categoryId  String?
+  category    Category?  @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([tenantId])
 }
 
 model Conversation {
@@ -163,24 +180,22 @@ model Conversation {
   customer      Customer?          @relation(fields: [customerId], references: [id])
   status        ConversationStatus @default(ACTIVE)
   channel       String             @default("whatsapp")
-  messages      Message[]
-  lastMessageAt DateTime?
+  lastMessageAt DateTime           @default(now())
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
+  messages      Message[]
 
   @@index([tenantId])
   @@index([customerId])
 }
 
 model Message {
-  id             String       @id @default(cuid())
-  conversationId String
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  role           String       @default("user")
-  content        String       
-  type           String       @default("text")
-  metadata       Json?        
-  createdAt      DateTime     @default(now())
+  id              String       @id @default(cuid())
+  conversationId  String
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role            String
+  content         String
+  createdAt       DateTime     @default(now())
 
   @@index([conversationId])
 }
@@ -190,8 +205,8 @@ model Knowledge {
   tenantId  String
   tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   title     String
-  content   String   
-  category  String?
+  content   String
+  tags      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -199,68 +214,48 @@ model Knowledge {
 }
 
 model WhatsApp {
-  id        String   @id @default(cuid())
-  tenantId  String
-  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  number    String   @unique
-  name      String?
-  provider  String   @default("evolution")
-  instance  String?
-  connected Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String  @id @default(cuid())
+  tenantId     String
+  tenant       Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  phone        String?
+  provider     String  @default("evolution")
+  instanceName String?
+  qrCode       String?
+  status       String  @default("DISCONNECTED")
+  webhookUrl   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@index([tenantId])
-}
-
-enum PaymentStatus {
-  PENDING
-  APPROVED
-  REFUNDED
-  CANCELLED
 }
 
 model Payment {
-  id              String        @id @default(cuid())
-  tenantId        String
-  tenant          Tenant        @relation(fields: [tenantId], references: [id])
-  amount          Float
-  currency        String        @default("BRL")
-  status          PaymentStatus @default(PENDING)
-  method          String?       
-  mpPaymentId     String?       @unique
-  mpPreferenceId  String?
-  description     String?
-  paidAt          DateTime?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  subscriptionId  String?
-  subscription    Subscription? @relation(fields: [subscriptionId], references: [id])
+  id           String        @id @default(cuid())
+  tenantId     String
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  amount       Float
+  currency     String        @default("BRL")
+  status       PaymentStatus @default(PENDING)
+  method       String?
+  mpPaymentId  String?
+  mpPreferenceId String?
+  paidAt       DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
   @@index([tenantId])
-  @@index([mpPaymentId])
-}
-
-enum SubscriptionStatus {
-  ACTIVE
-  PAUSED
-  CANCELLED
-  EXPIRED
-  PENDING
 }
 
 model Subscription {
   id            String             @id @default(cuid())
-  tenantId      String
-  tenant        Tenant             @relation(fields: [tenantId], references: [id])
-  plan          PlanType           @default(PROFISSIONAL)
+  tenantId      String             @unique
+  tenant        Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  plan          PlanType           @default(BASICO)
   status        SubscriptionStatus @default(PENDING)
-  mpSubscriptionId String?         @unique
-  currentPeriodStart DateTime?
+  mpId          String?
+  currentPeriodStart DateTime?     @default(now())
   currentPeriodEnd   DateTime?
-  payments      Payment[]
+  cancelAt      DateTime?
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
-
-  @@index([tenantId])
 }
