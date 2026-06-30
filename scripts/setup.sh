@@ -1,0 +1,27 @@
+#!/bin/bash
+# WhatsAI - Setup Script
+# Run this after deploying to Railway
+
+echo ""
+echo "=============================="
+echo "  WhatsAI - Setup Autom\u00e1tico"
+echo "=============================="
+echo ""
+echo "Passo 1: Acesse o Supabase SQL Editor"
+echo "Link: https://supabase.com/dashboard/project/plbtzopcqtberxhxktaw/sql/new"
+echo ""
+echo "Passo 2: Copie e cole o conte\u00fado de:"
+echo "  supabase/migrations/001_initial_schema.sql"
+echo "  e clique em RUN"
+echo ""
+echo "Passo 3: No Railway, adicione as vari\u00e1veis de ambiente"
+echo "  (veja o .env.example para refer\u00eancia)"
+echo ""
+echo "Passo 4: Configure o webhook do Mercado Pago:"
+echo "  URL: https://seu-app.railway.app/api/webhooks/mercadopago"
+echo "  Eventos: payment.created, payment.updated"
+echo ""
+echo "Passo 5: Instale a Evolution API no Railway"
+echo "  railway run --service evolution evolution-api/evolution-api"
+echo ""
+echo "Pronto! Seu WhatsAI est\u00e1 no ar!"
