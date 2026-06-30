@@ -1,7 +1,7 @@
 [build]
   builder = "nixpacks"
   buildCommand = "npx prisma generate && npm run build"
-  startCommand = "npx prisma db push --accept-data-loss && npm start"
+  startCommand = "npx prisma db push && npm start"
 
 [deploy]
   healthcheckPath = "/"
