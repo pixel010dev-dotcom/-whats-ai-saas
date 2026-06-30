@@ -124,4 +124,17 @@ export default function Register() {
                 <div className="flex gap-3">
                   <button type="button" onClick={() => setStep(1)} className="flex-1 bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl font-semibold transition-all duration-300 border border-white/10">Voltar</button>
                   <button type="submit" disabled={loading} className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white py-3 rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 shadow-lg shadow-green-500/25">{loading ? 'Criando...' : 'Criar conta gratuita'}</button>
-                <
+
+                </div>
+              </>
+            )}
+          </form>
+          <p className="text-center text-sm text-gray-500 mt-6">
+            Ja tem conta?{" "}
+            <Link href="/login" className="text-green-400 hover:text-green-300 font-medium transition-colors">Fazer login</Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
