@@ -5,36 +5,36 @@ import { useState, useEffect, useRef } from 'react'
 
 const faqs = [
   {
-    q: 'Como funciona a conex\ão com o WhatsApp?',
-    a: 'Voc\ê escaneia um QR Code pelo aplicativo do WhatsApp (WhatsApp Web). A conex\ão \é criptografada e segura. Em menos de 1 minuto seu WhatsApp j\á est\á conectado \à nossa IA.'
+    q: 'Como funciona a conexão com o WhatsApp?',
+    a: 'Você escaneia um QR Code pelo aplicativo do WhatsApp (WhatsApp Web). A conexão é criptografada e segura. Em menos de 1 minuto seu WhatsApp já está conectado à nossa IA.'
   },
   {
     q: 'Preciso deixar o WhatsApp Web aberto?',
-    a: 'N\ão! Diferente do WhatsApp Web tradicional, nossa tecnologia Evolution API mant\ém seu n\úmero conectado 24/7 sem precisar de celular ligado ou browser aberto.'
+    a: 'Não! Diferente do WhatsApp Web tradicional, nossa tecnologia Evolution API mantém seu número conectado 24/7 sem precisar de celular ligado ou browser aberto.'
   },
   {
-    q: 'A IA entende do meu neg\ócio?',
-    a: 'Sim! Voc\ê cadastra seus produtos, pre\ços e regras. A IA aprende com o tempo e se adapta ao seu jeito de vender. Quanto mais usa, mais inteligente fica.'
+    q: 'A IA entende do meu negócio?',
+    a: 'Sim! Você cadastra seus produtos, preços e regras. A IA aprende com o tempo e se adapta ao seu jeito de vender. Quanto mais usa, mais inteligente fica.'
   },
   {
     q: 'Posso acompanhar as conversas em tempo real?',
-    a: 'Sim! Pelo dashboard voc\ê v\ê todas as conversas acontecendo em tempo real. Pode intervir quando quiser e analisar m\étricas de desempenho.'
+    a: 'Sim! Pelo dashboard você vê todas as conversas acontecendo em tempo real. Pode intervir quando quiser e analisar métricas de desempenho.'
   },
   {
-    q: 'E se a IA n\ão souber responder algo?',
-    a: 'A IA \é treinada para identificar quando n\ão sabe algo e pode transferir a conversa para voc\ê automaticamente. Voc\ê define as regras de transfer\ência no dashboard.'
+    q: 'E se a IA não souber responder algo?',
+    a: 'A IA é treinada para identificar quando não sabe algo e pode transferir a conversa para você automaticamente. Você define as regras de transferência no dashboard.'
   },
   {
     q: 'Como funciona o pagamento?',
-    a: 'Aceitamos PIX, cart\ão de cr\édito e boleto via Mercado Pago. Os primeiros 7 dias s\ão gr\átis sem compromisso.'
+    a: 'Aceitamos PIX, cartão de crédito e boleto via Mercado Pago. Os primeiros 7 dias são grátis sem compromisso.'
   },
   {
     q: 'Posso cancelar quando quiser?',
-    a: 'Sim! Sem multa, sem burocracia. Voc\ê cancela pelo dashboard e o plano continua at\é o final do per\íodo j\á pago.'
+    a: 'Sim! Sem multa, sem burocracia. Você cancela pelo dashboard e o plano continua até o final do período já pago.'
   },
   {
     q: 'Quantas pessoas podem usar ao mesmo tempo?',
-    a: 'Depende do seu plano. No B\ásico \é 1 usu\ário, no Profissional at\é 3, e no Premium ilimitado.'
+    a: 'Depende do seu plano. No Básico é 1 usuário, no Profissional até 3, e no Premium ilimitado.'
   }
 ]
 

@@ -6,19 +6,19 @@ import Link from 'next/link'
 
 const plans = [
   {
-    name: 'B\ásico',
+    name: 'Básico',
     monthlyPrice: 97,
     yearlyPrice: 77,
-    description: 'Perfeito para quem est\á come\çando',
+    description: 'Perfeito para quem está começando',
     features: [
-      '500 conversas por m\ês',
-      '1 n\úmero WhatsApp',
-      'Cat\álogo de at\é 50 produtos',
-      'Respostas autom\áticas',
-      'Dashboard b\ásico',
+      '500 conversas por mês',
+      '1 número WhatsApp',
+      'Catálogo de até 50 produtos',
+      'Respostas automáticas',
+      'Dashboard básico',
       'Suporte por email'
     ],
-    cta: 'Come\çar gr\átis',
+    cta: 'Começar grátis',
     popular: false
   },
   {
@@ -28,30 +28,30 @@ const plans = [
     description: 'Mais popular - ideal para crescer',
     features: [
       'Conversas ilimitadas',
-      '2 n\úmeros WhatsApp',
-      'Cat\álogo ilimitado',
-      'IA avan\çada com contexto',
+      '2 números WhatsApp',
+      'Catálogo ilimitado',
+      'IA avançada com contexto',
       'Vendas automatizadas',
-      'Dashboard completo com m\étricas',
-      'Recupera\ç\ão de carrinho',
-      'Suporte priorit\ário'
+      'Dashboard completo com métricas',
+      'Recuperação de carrinho',
+      'Suporte prioritário'
     ],
-    cta: 'Come\çar gr\átis',
+    cta: 'Começar grátis',
     popular: true
   },
   {
     name: 'Premium',
     monthlyPrice: 297,
     yearlyPrice: 237,
-    description: 'Para quem quer tudo ao m\áximo',
+    description: 'Para quem quer tudo ao máximo',
     features: [
       'Conversas ilimitadas',
-      '5 n\úmeros WhatsApp',
-      'Cat\álogo ilimitado',
+      '5 números WhatsApp',
+      'Catálogo ilimitado',
       'IA premium com GPT-4',
-      'Relat\órios avan\çados',
-      'Integra\ç\ões API',
-      'M\últiplos atendentes',
+      'Relatórios avançados',
+      'Integrações API',
+      'Múltiplos atendentes',
       'Gerente de conta dedicado',
       'SLA 99.9%'
     ],
@@ -89,10 +89,10 @@ export default function Pricing() {
         >
           <span className="text-sm font-semibold text-green-600 uppercase tracking-widest">Planos</span>
           <h2 className="mt-4 text-4xl sm:text-5xl font-bold text-gray-900">
-            Pre\ços que cabem no seu <span className="gradient-text">bolso</span>
+            Preços que cabem no seu <span className="gradient-text">bolso</span>
           </h2>
           <p className="mt-6 text-xl text-gray-600">
-            Invista menos que um estagi\ário e tenha um time de vendas completo.
+            Invista menos que um estagiário e tenha um time de vendas completo.
           </p>
         </motion.div>
 
@@ -106,7 +106,7 @@ export default function Pricing() {
           </button>
           <span className={`text-sm font-medium ${annual ? 'text-gray-900' : 'text-gray-500'}`}>
             Anual
-            <span className="ml-1.5 px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded-full font-semibold">2 meses gr\átis</span>
+            <span className="ml-1.5 px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded-full font-semibold">2 meses grátis</span>
           </span>
         </div>
 
@@ -139,7 +139,7 @@ export default function Pricing() {
                   <span className="text-4xl font-bold text-gray-900">
                     R$ {annual ? plan.yearlyPrice : plan.monthlyPrice}
                   </span>
-                  <span className="text-gray-500">/m\ês</span>
+                  <span className="text-gray-500">/mês</span>
                 </div>
                 {annual && (
                   <p className="text-sm text-green-600 font-medium mt-1">

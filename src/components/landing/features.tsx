@@ -7,44 +7,44 @@ const features = [
   {
     icon: '\u{1F4AC}',
     title: 'Vende 24h por dia',
-    description: 'Seu WhatsApp funciona enquanto voc\ê dorme. A IA atende, negocia e fecha vendas automaticamente.',
+    description: 'Seu WhatsApp funciona enquanto você dorme. A IA atende, negocia e fecha vendas automaticamente.',
     gradient: 'from-green-400 to-emerald-600',
     stats: 'Aumento de 40% nas vendas'
   },
   {
     icon: '\u{1F9E0}',
-    title: 'Intelig\ência de verdade',
-    description: 'N\ão \é um rob\ô burro. Usa GPT e outros modelos avan\çados para entender contexto.',
+    title: 'Inteligência de verdade',
+    description: 'Não é um robô burro. Usa GPT e outros modelos avançados para entender contexto.',
     gradient: 'from-blue-400 to-indigo-600',
     stats: '98% de acerto nas respostas'
   },
   {
     icon: '\u{1F4CA}',
     title: 'Dashboard completo',
-    description: 'Veja vendas, leads, conversas e desempenho em tempo real. Decis\ões baseadas em dados.',
+    description: 'Veja vendas, leads, conversas e desempenho em tempo real. Decisões baseadas em dados.',
     gradient: 'from-purple-400 to-pink-600',
-    stats: 'M\étricas em tempo real'
+    stats: 'Métricas em tempo real'
   },
   {
     icon: '\u{1F4E6}',
-    title: 'Cat\álogo inteligente',
-    description: 'Cadastre seus produtos e a IA recomenda, mostra pre\ços e detalhes certos para cada cliente.',
+    title: 'Catálogo inteligente',
+    description: 'Cadastre seus produtos e a IA recomenda, mostra preços e detalhes certos para cada cliente.',
     gradient: 'from-orange-400 to-red-600',
-    stats: 'Cat\álogo autom\ático'
+    stats: 'Catálogo automático'
   },
   {
     icon: '\u{1F464}',
-    title: 'Mem\ória de cliente',
-    description: 'A IA lembra de cada cliente: hist\órico, prefer\ências, \última compra. Atendimento personalizado.',
+    title: 'Memória de cliente',
+    description: 'A IA lembra de cada cliente: histórico, preferências, última compra. Atendimento personalizado.',
     gradient: 'from-teal-400 to-cyan-600',
-    stats: 'CRM autom\ático'
+    stats: 'CRM automático'
   },
   {
     icon: '\u{1F501}',
-    title: 'P\ós-venda autom\ático',
-    description: 'Acompanhamento de pedidos, pesquisas de satisfa\ç\ão e recupera\ç\ão de clientes inativos.',
+    title: 'Pós-venda automático',
+    description: 'Acompanhamento de pedidos, pesquisas de satisfação e recuperação de clientes inativos.',
     gradient: 'from-rose-400 to-pink-600',
-    stats: 'Reten\ç\ão de 60%'
+    stats: 'Retenção de 60%'
   }
 ]
 
@@ -76,10 +76,10 @@ export default function Features() {
           className="text-center max-w-3xl mx-auto mb-20"
         >
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
-            Tudo que voc\ê precisa para <span className="gradient-text">vender mais no WhatsApp</span>
+            Tudo que você precisa para <span className="gradient-text">vender mais no WhatsApp</span>
           </h2>
           <p className="mt-6 text-xl text-gray-600">
-            Uma plataforma completa com intelig\ência artificial para automatizar seu atendimento e aumentar suas vendas.
+            Uma plataforma completa com inteligência artificial para automatizar seu atendimento e aumentar suas vendas.
           </p>
         </motion.div>
 

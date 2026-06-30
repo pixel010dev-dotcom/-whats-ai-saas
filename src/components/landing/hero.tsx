@@ -30,19 +30,19 @@ export default function Hero() {
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100/80 border border-green-200/50 mb-6">
                 <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-sm font-medium text-green-700">Nova ferramenta revolucion\ária</span>
+                <span className="text-sm font-medium text-green-700">Nova ferramenta revolucionária</span>
               </div>
             </motion.div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
-              <span className="text-gray-900">Seu funcion\ário</span>
+              <span className="text-gray-900">Seu funcionário</span>
               <br />
               <span className="gradient-text">digital para WhatsApp</span>
             </h1>
 
             <p className="mt-6 text-xl text-gray-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
               Venda, negocie, atenda e feche pedidos automaticamente 24 horas por dia. 
-              Sua intelig\ência artificial que aprende sobre seu neg\ócio e funciona como um atendente nota 10.
+              Sua inteligência artificial que aprende sobre seu negócio e funciona como um atendente nota 10.
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -50,7 +50,7 @@ export default function Hero() {
                 href="/register"
                 className="group relative px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-xl text-lg shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden"
               >
-                <span className="relative z-10">Come\çar gr\átis →</span>
+                <span className="relative z-10">Começar grátis →</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </Link>
               <Link
@@ -72,7 +72,7 @@ export default function Hero() {
                   +1k
                 </div>
               </div>
-              <span className="font-medium">Mais de <strong className="text-gray-900">1.000 empresas</strong> j\á usam</span>
+              <span className="font-medium">Mais de <strong className="text-gray-900">1.000 empresas</strong> já usam</span>
             </div>
           </motion.div>
 

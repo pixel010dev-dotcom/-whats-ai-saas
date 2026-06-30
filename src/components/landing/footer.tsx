@@ -18,7 +18,7 @@ export default function Footer() {
               <span className="font-bold text-xl text-white">WhatsAI</span>
             </div>
             <p className="text-sm leading-relaxed">
-              Seu funcion\ário digital para WhatsApp. Venda, negocie e atenda automaticamente 24 horas por dia.
+              Seu funcionário digital para WhatsApp. Venda, negocie e atenda automaticamente 24 horas por dia.
             </p>
           </div>
 
@@ -27,9 +27,9 @@ export default function Footer() {
             <h3 className="font-semibold text-white mb-4">Produto</h3>
             <ul className="space-y-3">
               <li><Link href="#features" className="text-sm hover:text-green-400 transition-colors">Funcionalidades</Link></li>
-              <li><Link href="#pricing" className="text-sm hover:text-green-400 transition-colors">Pre\ços</Link></li>
-              <li><Link href="#demo" className="text-sm hover:text-green-400 transition-colors">Demonstra\ç\ão</Link></li>
-              <li><Link href="/register" className="text-sm hover:text-green-400 transition-colors">Come\çar gr\átis</Link></li>
+              <li><Link href="#pricing" className="text-sm hover:text-green-400 transition-colors">Preços</Link></li>
+              <li><Link href="#demo" className="text-sm hover:text-green-400 transition-colors">Demonstração</Link></li>
+              <li><Link href="/register" className="text-sm hover:text-green-400 transition-colors">Começar grátis</Link></li>
             </ul>
           </div>
 
@@ -37,7 +37,7 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">Empresa</h3>
             <ul className="space-y-3">
-              <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Sobre n\ós</span></li>
+              <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Sobre nós</span></li>
               <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Blog</span></li>
               <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Carreira</span></li>
               <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Contato</span></li>
@@ -49,7 +49,7 @@ export default function Footer() {
             <h3 className="font-semibold text-white mb-4">Legal</h3>
             <ul className="space-y-3">
               <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Termos de uso</span></li>
-              <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Pol\ítica de privacidade</span></li>
+              <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">Política de privacidade</span></li>
               <li><span className="text-sm hover:text-green-400 transition-colors cursor-pointer">LGPD</span></li>
             </ul>
           </div>

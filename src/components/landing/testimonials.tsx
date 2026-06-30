@@ -7,7 +7,7 @@ const testimonials = [
   {
     name: 'Carlos Silva',
     role: 'Padaria do Carlos',
-    content: 'Minhas vendas pelo WhatsApp aumentaram 340% em 2 meses. A IA n\ão deixa nenhum cliente sem resposta, mesmo quando estou dormindo. Melhor investimento que j\á fiz.',
+    content: 'Minhas vendas pelo WhatsApp aumentaram 340% em 2 meses. A IA não deixa nenhum cliente sem resposta, mesmo quando estou dormindo. Melhor investimento que já fiz.',
     rating: 5,
     initials: 'CS',
     color: 'from-green-400 to-emerald-600'
@@ -15,23 +15,23 @@ const testimonials = [
   {
     name: 'Ana Oliveira',
     role: 'Moda Feminina LOOK',
-    content: '\u201CAtendo 3x mais clientes com metade do esfor\ço. A intelig\ência artificial \é t\ão boa que os clientes acham que sou eu respondendo. Simplesmente incr\ível!\u201D',
+    content: '\u201CAtendo 3x mais clientes com metade do esforço. A inteligência artificial é tão boa que os clientes acham que sou eu respondendo. Simplesmente incrível!\u201D',
     rating: 5,
     initials: 'AO',
     color: 'from-purple-400 to-pink-600'
   },
   {
     name: 'Roberto Mendes',
-    role: 'Auto Pe\ças FM',
-    content: '\u201CJ\á testei v\ários chatbots. Esse \é o \único que realmente entende do que o cliente precisa e consegue fechar vendas sozinho. Recomendo de olhos fechados.\u201D',
+    role: 'Auto Peças FM',
+    content: '\u201CJá testei vários chatbots. Esse é o único que realmente entende do que o cliente precisa e consegue fechar vendas sozinho. Recomendo de olhos fechados.\u201D',
     rating: 5,
     initials: 'RM',
     color: 'from-blue-400 to-indigo-600'
   },
   {
     name: 'Juliana Costa',
-    role: 'Doces e Del\ícias',
-    content: '\u201CO p\ós-venda autom\ático recuperou 15 clientes que n\ão compravam h\á meses. Minha receita subiu 50% sem eu fazer nada.\u201D',
+    role: 'Doces e Delícias',
+    content: '\u201CO pós-venda automático recuperou 15 clientes que não compravam há meses. Minha receita subiu 50% sem eu fazer nada.\u201D',
     rating: 5,
     initials: 'JC',
     color: 'from-orange-400 to-red-600'
