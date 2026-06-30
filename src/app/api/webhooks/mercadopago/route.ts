@@ -1,8 +1,26 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import crypto from 'crypto'
 
 export async function POST(req: Request) {
   try {
+    const secret = process.env.MERCADO_PAGO_WEBHOOK_SECRET
+    if (secret) {
+      const rawBody = await req.clone().text()
+      const signature = req.headers.get('x-signature') || ''
+      const [hashPart] = signature.split(',')
+      const receivedHash = hashPart?.split('=')[1]
+      if (receivedHash) {
+        const expectedHash = crypto
+          .createHmac('sha256', secret)
+          .update(rawBody)
+          .digest('hex')
+        if (receivedHash !== expectedHash) {
+          return NextResponse.json({ error: 'invalid signature' }, { status: 401 })
+        }
+      }
+    }
+
     const body = await req.json()
     const { action, data } = body
     if (action === 'payment.created' || action === 'payment.updated') {

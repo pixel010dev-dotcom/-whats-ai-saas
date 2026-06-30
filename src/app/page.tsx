@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import Link from 'next/link'
 import Hero from '@/components/landing/hero'
 import Features from '@/components/landing/features'
 import HowItWorks from '@/components/landing/how-it-works'
@@ -37,12 +38,12 @@ export default function Home() {
       <header className="fixed top-0 left-0 right-0 z-50">
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 mt-4 px-6 rounded-2xl bg-white/80 backdrop-blur-xl border border-white/20 shadow-lg shadow-black/5">
-            <a href="/" className="flex items-center gap-2.5">
+            <Link href="/" className="flex items-center gap-2.5">
               <div className="w-9 h-9 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20">
                 <span className="text-white font-bold text-sm">W</span>
               </div>
               <span className="font-bold text-xl text-gray-900">WhatsAI</span>
-            </a>
+            </Link>
 
             <div className="hidden md:flex items-center gap-8">
               <a href="#features" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Funcionalidades</a>
@@ -52,18 +53,18 @@ export default function Home() {
             </div>
 
             <div className="flex items-center gap-3">
-              <a
+              <Link
                 href="/login"
                 className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
               >
                 Entrar
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/register"
                 className="px-5 py-2.5 text-sm font-semibold bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-0.5 transition-all duration-300"
               >
                 Come\çar gr\átis
-              </a>
+              </Link>
             </div>
           </div>
         </nav>
@@ -103,12 +104,12 @@ export default function Home() {
             Comece gr\átis, sem cart\ão de cr\édito.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
+            <Link
               href="/register"
               className="px-8 py-4 bg-white text-green-700 font-bold rounded-xl text-lg shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
             >
               Come\çar gr\átis agora
-            </a>
+            </Link>
             <a
               href="#features"
               className="px-8 py-4 bg-white/10 border border-white/20 text-white font-semibold rounded-xl text-lg hover:bg-white/20 transition-all duration-300"

@@ -1,14 +1,17 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { generateChatResponse } from '@/lib/ai/client'
+import { chatSchema } from '@/lib/validations'
 import type { Knowledge, Message } from '@prisma/client'
 
 export async function POST(req: Request) {
   try {
-    const { message, tenantId, customerPhone, customerName } = await req.json()
-    if (!message || !tenantId) {
-      return NextResponse.json({ error: 'Campos obrigat\órios' }, { status: 400 })
+    const body = await req.json()
+    const parsed = chatSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
     }
+    const { message, tenantId, customerPhone, customerName } = parsed.data
 
     let customer = null
     if (customerPhone) {
