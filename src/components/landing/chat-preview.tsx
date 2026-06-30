@@ -7,12 +7,12 @@ export default function ChatPreview() {
   const [showCursor, setShowCursor] = useState(true)
 
   const allMessages = [
-    { role: 'user', text: 'Bom dia! Quanto fica um bolo de chocolate m\u00e9dio?', delay: 500 },
-    { role: 'ai', text: 'Bom dia! \ud83d\ude0a O bolo de chocolate m\u00e9dio \u00e9 R$ 89,90. Posso deixar separado pra voc\u00ea!', delay: 2500 },
-    { role: 'user', text: 'Fica pronto pra s\u00e1bado? Tem cobertura?', delay: 4500 },
-    { role: 'ai', text: 'Claro! Fica pronto s\u00e1bado pela manh\u00e3 \u2705 Posso adicionar cobertura de brigadeiro sem custo extra. Confirma o pedido? \ud83c\udf82', delay: 6500 },
-    { role: 'user', text: 'Fechou! Vou buscar s\u00e1bado as 10h', delay: 8500 },
-    { role: 'ai', text: 'Pedido confirmado! \u2705\n\n\ud83c\udf82 1x Bolo de chocolate m\u00e9dio c/ brigadeiro\n\ud83d\udcc5 Retirada: S\u00e1bado \u00e0s 10h\n\ud83d\udcb0 Total: R$ 89,90\n\nAceita PIX? Envio o QR code! \ud83d\udcb3', delay: 10500 }
+    { role: 'user', text: 'Bom dia! Quanto fica um bolo de chocolate m\édio?', delay: 500 },
+    { role: 'ai', text: 'Bom dia! \ud83d\ude0a O bolo de chocolate m\édio \é R$ 89,90. Posso deixar separado pra voc\ê!', delay: 2500 },
+    { role: 'user', text: 'Fica pronto pra s\ábado? Tem cobertura?', delay: 4500 },
+    { role: 'ai', text: 'Claro! Fica pronto s\ábado pela manh\ã \u2705 Posso adicionar cobertura de brigadeiro sem custo extra. Confirma o pedido? \ud83c\udf82', delay: 6500 },
+    { role: 'user', text: 'Fechou! Vou buscar s\ábado as 10h', delay: 8500 },
+    { role: 'ai', text: 'Pedido confirmado! \u2705\n\n\ud83c\udf82 1x Bolo de chocolate m\édio c/ brigadeiro\n\ud83d\udcc5 Retirada: S\ábado \às 10h\n\ud83d\udcb0 Total: R$ 89,90\n\nAceita PIX? Envio o QR code! \ud83d\udcb3', delay: 10500 }
   ]
 
   useEffect(() => {

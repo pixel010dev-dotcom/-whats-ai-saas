@@ -47,7 +47,7 @@ export default function Home() {
             <div className="hidden md:flex items-center gap-8">
               <a href="#features" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Funcionalidades</a>
               <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Como funciona</a>
-              <a href="#pricing" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Pre\u00e7os</a>
+              <a href="#pricing" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Pre\ços</a>
               <a href="#faq" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">FAQ</a>
             </div>
 
@@ -62,7 +62,7 @@ export default function Home() {
                 href="/register"
                 className="px-5 py-2.5 text-sm font-semibold bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-0.5 transition-all duration-300"
               >
-                Come\u00e7ar gr\u00e1tis
+                Come\çar gr\átis
               </a>
             </div>
           </div>
@@ -99,15 +99,15 @@ export default function Home() {
             Pronto para transformar seu atendimento?
           </h2>
           <p className="text-xl text-green-100 mb-10 max-w-2xl mx-auto">
-            Junte-se a mais de 1.000 empresas que j\u00e1 automatizaram suas vendas no WhatsApp.
-            Comece gr\u00e1tis, sem cart\u00e3o de cr\u00e9dito.
+            Junte-se a mais de 1.000 empresas que j\á automatizaram suas vendas no WhatsApp.
+            Comece gr\átis, sem cart\ão de cr\édito.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="/register"
               className="px-8 py-4 bg-white text-green-700 font-bold rounded-xl text-lg shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
             >
-              Come\u00e7ar gr\u00e1tis agora
+              Come\çar gr\átis agora
             </a>
             <a
               href="#features"

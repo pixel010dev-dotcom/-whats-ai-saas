@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   try {
     const { message, tenantId, customerPhone, customerName } = await req.json()
     if (!message || !tenantId) {
-      return NextResponse.json({ error: 'Campos obrigat\u00f3rios' }, { status: 400 })
+      return NextResponse.json({ error: 'Campos obrigat\órios' }, { status: 400 })
     }
 
     let customer = null
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
       ? knowledgeEntries.map((k: Knowledge) => `- ${k.title}: ${k.content}`).join('\n')
       : 'Nenhum conhecimento cadastrado'
 
-    const systemPrompt = `Voc\u00ea \u00e9 um atendente digital da empresa.\nPersonalidade: ${settings?.aiPersonality || 'Educado, profissional e amig\u00e1vel'}\n\nRegras:\n- Seja educado e profissional\n- Ajude o cliente com suas d\u00favidas\n- Se n\u00e3o souber responder, pe\u00e7a desculpas e diga que vai transferir\n- Responda em portugu\u00eas do Brasil\n- N\u00e3o invente informa\u00e7\u00f5es\n\nConhecimento da empresa:\n${knowledgeStr}`
+    const systemPrompt = `Voc\ê \é um atendente digital da empresa.\nPersonalidade: ${settings?.aiPersonality || 'Educado, profissional e amig\ável'}\n\nRegras:\n- Seja educado e profissional\n- Ajude o cliente com suas d\úvidas\n- Se n\ão souber responder, pe\ça desculpas e diga que vai transferir\n- Responda em portugu\ês do Brasil\n- N\ão invente informa\ç\ões\n\nConhecimento da empresa:\n${knowledgeStr}`
 
     const history = conversation.messages.map((m: Message) => ({
       role: m.role === 'assistant' ? 'assistant' as const : 'user' as const,

@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { AuthProvider } from '@/app/context/AuthProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'WhatsAI - Funcion\u00e1rio Digital para WhatsApp',
+  title: 'WhatsAI - Funcionario Digital para WhatsApp',
   description: 'Seu atendente virtual inteligente para WhatsApp. Venda, negocie, atenda e feche pedidos automaticamente.',
   keywords: ['whatsapp', 'ia', 'atendimento', 'chatbot', 'vendas', 'saas'],
 }
@@ -17,7 +18,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   )
 }

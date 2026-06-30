@@ -5,36 +5,36 @@ import { useState, useEffect, useRef } from 'react'
 
 const faqs = [
   {
-    q: 'Como funciona a conex\u00e3o com o WhatsApp?',
-    a: 'Voc\u00ea escaneia um QR Code pelo aplicativo do WhatsApp (WhatsApp Web). A conex\u00e3o \u00e9 criptografada e segura. Em menos de 1 minuto seu WhatsApp j\u00e1 est\u00e1 conectado \u00e0 nossa IA.'
+    q: 'Como funciona a conex\ão com o WhatsApp?',
+    a: 'Voc\ê escaneia um QR Code pelo aplicativo do WhatsApp (WhatsApp Web). A conex\ão \é criptografada e segura. Em menos de 1 minuto seu WhatsApp j\á est\á conectado \à nossa IA.'
   },
   {
     q: 'Preciso deixar o WhatsApp Web aberto?',
-    a: 'N\u00e3o! Diferente do WhatsApp Web tradicional, nossa tecnologia Evolution API mant\u00e9m seu n\u00famero conectado 24/7 sem precisar de celular ligado ou browser aberto.'
+    a: 'N\ão! Diferente do WhatsApp Web tradicional, nossa tecnologia Evolution API mant\ém seu n\úmero conectado 24/7 sem precisar de celular ligado ou browser aberto.'
   },
   {
-    q: 'A IA entende do meu neg\u00f3cio?',
-    a: 'Sim! Voc\u00ea cadastra seus produtos, pre\u00e7os e regras. A IA aprende com o tempo e se adapta ao seu jeito de vender. Quanto mais usa, mais inteligente fica.'
+    q: 'A IA entende do meu neg\ócio?',
+    a: 'Sim! Voc\ê cadastra seus produtos, pre\ços e regras. A IA aprende com o tempo e se adapta ao seu jeito de vender. Quanto mais usa, mais inteligente fica.'
   },
   {
     q: 'Posso acompanhar as conversas em tempo real?',
-    a: 'Sim! Pelo dashboard voc\u00ea v\u00ea todas as conversas acontecendo em tempo real. Pode intervir quando quiser e analisar m\u00e9tricas de desempenho.'
+    a: 'Sim! Pelo dashboard voc\ê v\ê todas as conversas acontecendo em tempo real. Pode intervir quando quiser e analisar m\étricas de desempenho.'
   },
   {
-    q: 'E se a IA n\u00e3o souber responder algo?',
-    a: 'A IA \u00e9 treinada para identificar quando n\u00e3o sabe algo e pode transferir a conversa para voc\u00ea automaticamente. Voc\u00ea define as regras de transfer\u00eancia no dashboard.'
+    q: 'E se a IA n\ão souber responder algo?',
+    a: 'A IA \é treinada para identificar quando n\ão sabe algo e pode transferir a conversa para voc\ê automaticamente. Voc\ê define as regras de transfer\ência no dashboard.'
   },
   {
     q: 'Como funciona o pagamento?',
-    a: 'Aceitamos PIX, cart\u00e3o de cr\u00e9dito e boleto via Mercado Pago. Os primeiros 7 dias s\u00e3o gr\u00e1tis sem compromisso.'
+    a: 'Aceitamos PIX, cart\ão de cr\édito e boleto via Mercado Pago. Os primeiros 7 dias s\ão gr\átis sem compromisso.'
   },
   {
     q: 'Posso cancelar quando quiser?',
-    a: 'Sim! Sem multa, sem burocracia. Voc\u00ea cancela pelo dashboard e o plano continua at\u00e9 o final do per\u00edodo j\u00e1 pago.'
+    a: 'Sim! Sem multa, sem burocracia. Voc\ê cancela pelo dashboard e o plano continua at\é o final do per\íodo j\á pago.'
   },
   {
     q: 'Quantas pessoas podem usar ao mesmo tempo?',
-    a: 'Depende do seu plano. No B\u00e1sico \u00e9 1 usu\u00e1rio, no Profissional at\u00e9 3, e no Premium ilimitado.'
+    a: 'Depende do seu plano. No B\ásico \é 1 usu\ário, no Profissional at\é 3, e no Premium ilimitado.'
   }
 ]
 

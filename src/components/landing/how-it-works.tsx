@@ -7,28 +7,28 @@ const steps = [
   {
     number: '01',
     title: 'Conecte seu WhatsApp',
-    description: 'Escaneie o QR Code com seu WhatsApp e pronto. A IA come\u00e7a a aprender sobre seu neg\u00f3cio.',
+    description: 'Escaneie o QR Code com seu WhatsApp e pronto. A IA come\ça a aprender sobre seu neg\ócio.',
     icon: '\u{1F4F1}',
     gradient: 'from-green-400 to-emerald-500'
   },
   {
     number: '02',
     title: 'Configure seus produtos',
-    description: 'Adicione seu cat\u00e1logo, pre\u00e7os e regras de neg\u00f3cio. A IA se adapta ao seu jeito de vender.',
+    description: 'Adicione seu cat\álogo, pre\ços e regras de neg\ócio. A IA se adapta ao seu jeito de vender.',
     icon: '\u2699\uFE0F',
     gradient: 'from-blue-400 to-indigo-500'
   },
   {
     number: '03',
     title: 'Treine a IA',
-    description: 'Personalize o tom de voz, respostas autom\u00e1ticas e gatilhos de venda. Fica do seu jeito.',
+    description: 'Personalize o tom de voz, respostas autom\áticas e gatilhos de venda. Fica do seu jeito.',
     icon: '\u{1F9E0}',
     gradient: 'from-purple-400 to-pink-500'
   },
   {
     number: '04',
     title: 'Venda automaticamente',
-    description: 'A IA atende, negocia e fecha pedidos 24h. Voc\u00ea s\u00f3 acompanha os resultados.',
+    description: 'A IA atende, negocia e fecha pedidos 24h. Voc\ê s\ó acompanha os resultados.',
     icon: '\u{1F4B0}',
     gradient: 'from-orange-400 to-red-500'
   }
@@ -63,10 +63,10 @@ export default function HowItWorks() {
         >
           <span className="text-sm font-semibold text-green-600 uppercase tracking-widest">Como funciona</span>
           <h2 className="mt-4 text-4xl sm:text-5xl font-bold text-gray-900">
-            Come\u00e7a a vender em <span className="gradient-text">5 minutos</span>
+            Come\ça a vender em <span className="gradient-text">5 minutos</span>
           </h2>
           <p className="mt-6 text-xl text-gray-600">
-            Mais r\u00e1pido que contratar um funcion\u00e1rio. Mais barato que um estagi\u00e1rio.
+            Mais r\ápido que contratar um funcion\ário. Mais barato que um estagi\ário.
           </p>
         </motion.div>
 

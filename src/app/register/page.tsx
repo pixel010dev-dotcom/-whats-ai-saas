@@ -18,7 +18,7 @@ export default function Register() {
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault()
     if (form.password !== form.confirmPassword) {
-      setError('Senhas n\u00e3o conferem')
+      setError('Senhas n\ão conferem')
       return
     }
     setLoading(true)
@@ -51,7 +51,7 @@ export default function Register() {
             <span className="font-bold text-xl">WhatsAI</span>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Criar conta</h1>
-          <p className="text-gray-500 mt-1">Teste gr\u00e1tis por 7 dias</p>
+          <p className="text-gray-500 mt-1">Teste gr\átis por 7 dias</p>
         </div>
 
         {/* Progress */}
@@ -73,7 +73,7 @@ export default function Register() {
                   value={form.empresa}
                   onChange={e => update('empresa', e.target.value)}
                   className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="Ex: Padaria do Jos\u00e9"
+                  placeholder="Ex: Padaria do Jos\é"
                   required
                 />
               </div>
@@ -113,7 +113,7 @@ export default function Register() {
                   value={form.password}
                   onChange={e => update('password', e.target.value)}
                   className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="M\u00ednimo 6 caracteres"
+                  placeholder="M\ínimo 6 caracteres"
                   minLength={6}
                   required
                 />
@@ -146,7 +146,7 @@ export default function Register() {
         </form>
 
         <p className="text-center text-sm text-gray-500 mt-6">
-          J\u00e1 tem conta?{' '}
+          J\á tem conta?{' '}
           <Link href="/login" className="text-green-600 hover:text-green-700 font-medium">Fazer login</Link>
         </p>
       </div>

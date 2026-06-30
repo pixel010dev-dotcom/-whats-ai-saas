@@ -7,10 +7,10 @@ export async function POST(req: Request) {
   try {
     const { name, email, password, empresa } = await req.json()
     if (!email || !password || !empresa) {
-      return NextResponse.json({ error: 'Campos obrigat\u00f3rios' }, { status: 400 })
+      return NextResponse.json({ error: 'Campos obrigat\órios' }, { status: 400 })
     }
     const existing = await prisma.user.findUnique({ where: { email } })
-    if (existing) return NextResponse.json({ error: 'Email j\u00e1 cadastrado' }, { status: 400 })
+    if (existing) return NextResponse.json({ error: 'Email j\á cadastrado' }, { status: 400 })
     const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email, password, email_confirm: true,
       user_metadata: { name, empresa }
