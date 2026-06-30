@@ -2,34 +2,35 @@
 
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { Smartphone, Settings, Brain, DollarSign } from 'lucide-react'
 
 const steps = [
   {
     number: '01',
     title: 'Conecte seu WhatsApp',
     description: 'Escaneie o QR Code com seu WhatsApp e pronto. A IA começa a aprender sobre seu negócio.',
-    icon: '\u{1F4F1}',
-    gradient: 'from-green-400 to-emerald-500'
+    icon: Smartphone,
+    gradient: 'from-emerald-400 to-emerald-500'
   },
   {
     number: '02',
     title: 'Configure seus produtos',
     description: 'Adicione seu catálogo, preços e regras de negócio. A IA se adapta ao seu jeito de vender.',
-    icon: '\u2699\uFE0F',
+    icon: Settings,
     gradient: 'from-blue-400 to-indigo-500'
   },
   {
     number: '03',
     title: 'Treine a IA',
     description: 'Personalize o tom de voz, respostas automáticas e gatilhos de venda. Fica do seu jeito.',
-    icon: '\u{1F9E0}',
+    icon: Brain,
     gradient: 'from-purple-400 to-pink-500'
   },
   {
     number: '04',
     title: 'Venda automaticamente',
     description: 'A IA atende, negocia e fecha pedidos 24h. Você só acompanha os resultados.',
-    icon: '\u{1F4B0}',
+    icon: DollarSign,
     gradient: 'from-orange-400 to-red-500'
   }
 ]
@@ -48,9 +49,9 @@ export default function HowItWorks() {
   }, [])
 
   return (
-    <section id="how-it-works" ref={ref} className="relative py-32 bg-gray-50 overflow-hidden">
+    <section id="how-it-works" ref={ref} className="relative py-32 bg-zinc-950 overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-64 h-64 bg-green-500/10 rounded-full blur-[80px]" />
+        <div className="absolute top-0 left-1/4 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px]" />
         <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px]" />
       </div>
 
@@ -61,11 +62,11 @@ export default function HowItWorks() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-20"
         >
-          <span className="text-sm font-semibold text-green-600 uppercase tracking-widest">Como funciona</span>
-          <h2 className="mt-4 text-4xl sm:text-5xl font-bold text-gray-900">
+          <span className="text-sm font-semibold text-emerald-400 uppercase tracking-widest">Como funciona</span>
+          <h2 className="mt-4 text-4xl sm:text-5xl font-bold text-zinc-100">
             Começa a vender em <span className="gradient-text">5 minutos</span>
           </h2>
-          <p className="mt-6 text-xl text-gray-600">
+          <p className="mt-6 text-xl text-zinc-400">
             Mais rápido que contratar um funcionário. Mais barato que um estagiário.
           </p>
         </motion.div>
@@ -80,18 +81,18 @@ export default function HowItWorks() {
               className="relative text-center"
             >
               {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-green-300 to-green-100">
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 border-t-2 border-r-2 border-green-400 rotate-45" />
+                <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-emerald-800 to-emerald-900">
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 border-t-2 border-r-2 border-emerald-600 rotate-45" />
                 </div>
               )}
-              <div className={`w-24 h-24 mx-auto rounded-2xl bg-gradient-to-br ${step.gradient} flex items-center justify-center text-4xl shadow-lg mb-6 relative`}>
-                <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-white border-2 border-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">
+              <div className={`w-24 h-24 mx-auto rounded-2xl bg-gradient-to-br ${step.gradient} flex items-center justify-center shadow-lg mb-6 relative`}>
+                <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-400">
                   {step.number}
                 </div>
-                {step.icon}
+                <step.icon className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{step.description}</p>
+              <h3 className="text-xl font-bold text-zinc-100 mb-3">{step.title}</h3>
+              <p className="text-zinc-400 leading-relaxed">{step.description}</p>
             </motion.div>
           ))}
         </div>

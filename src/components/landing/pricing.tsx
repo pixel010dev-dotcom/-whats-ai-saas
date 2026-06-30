@@ -87,26 +87,26 @@ export default function Pricing() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <span className="text-sm font-semibold text-green-600 uppercase tracking-widest">Planos</span>
-          <h2 className="mt-4 text-4xl sm:text-5xl font-bold text-gray-900">
+          <span className="text-sm font-semibold text-emerald-400 uppercase tracking-widest">Planos</span>
+          <h2 className="mt-4 text-4xl sm:text-5xl font-bold text-zinc-100">
             Preços que cabem no seu <span className="gradient-text">bolso</span>
           </h2>
-          <p className="mt-6 text-xl text-gray-600">
+          <p className="mt-6 text-xl text-zinc-400">
             Invista menos que um estagiário e tenha um time de vendas completo.
           </p>
         </motion.div>
 
         <div className="flex items-center justify-center gap-4 mb-16">
-          <span className={`text-sm font-medium ${!annual ? 'text-gray-900' : 'text-gray-500'}`}>Mensal</span>
+          <span className={`text-sm font-medium ${!annual ? 'text-zinc-100' : 'text-zinc-500'}`}>Mensal</span>
           <button
             onClick={() => setAnnual(!annual)}
-            className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${annual ? 'bg-green-500' : 'bg-gray-200'}`}
+            className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${annual ? 'bg-emerald-500' : 'bg-zinc-700'}`}
           >
             <div className={`absolute top-1 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300 ${annual ? 'left-8' : 'left-1'}`} />
           </button>
-          <span className={`text-sm font-medium ${annual ? 'text-gray-900' : 'text-gray-500'}`}>
+          <span className={`text-sm font-medium ${annual ? 'text-zinc-100' : 'text-zinc-500'}`}>
             Anual
-            <span className="ml-1.5 px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded-full font-semibold">2 meses grátis</span>
+            <span className="ml-1.5 px-2 py-0.5 text-xs bg-green-100 text-emerald-400 rounded-full font-semibold">2 meses grátis</span>
           </span>
         </div>
 
@@ -120,29 +120,29 @@ export default function Pricing() {
               className={`relative p-8 rounded-2xl border-2 transition-all duration-300 hover-card ${
                 plan.popular
                   ? 'border-green-500 bg-white shadow-xl shadow-green-500/10'
-                  : 'border-gray-100 bg-white hover:border-gray-200'
+                  : 'border-zinc-800 bg-white hover:border-zinc-700'
               }`}
             >
               {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm font-semibold rounded-full">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-semibold rounded-full">
                   Mais popular
                 </div>
               )}
 
               <div className="mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                <p className="text-gray-500 text-sm">{plan.description}</p>
+                <h3 className="text-xl font-bold text-zinc-100 mb-2">{plan.name}</h3>
+                <p className="text-zinc-500 text-sm">{plan.description}</p>
               </div>
 
               <div className="mb-8">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-gray-900">
+                  <span className="text-4xl font-bold text-zinc-100">
                     R$ {annual ? plan.yearlyPrice : plan.monthlyPrice}
                   </span>
-                  <span className="text-gray-500">/mês</span>
+                  <span className="text-zinc-500">/mês</span>
                 </div>
                 {annual && (
-                  <p className="text-sm text-green-600 font-medium mt-1">
+                  <p className="text-sm text-emerald-400 font-medium mt-1">
                     Economia de R$ {(plan.monthlyPrice - plan.yearlyPrice) * 12}/ano
                   </p>
                 )}
@@ -150,7 +150,7 @@ export default function Pricing() {
 
               <ul className="space-y-4 mb-8">
                 {plan.features.map((feature, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
+                  <li key={i} className="flex items-start gap-3 text-sm text-zinc-400">
                     <svg className="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
@@ -163,8 +163,8 @@ export default function Pricing() {
                 href={plan.name === 'Premium' ? '/contact' : '/register'}
                 className={`block w-full py-3 rounded-xl text-center font-semibold transition-all duration-300 ${
                   plan.popular
-                    ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/30 hover:shadow-xl hover:-translate-y-0.5'
-                    : 'bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100 hover:-translate-y-0.5'
+                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-green-500/30 hover:shadow-xl hover:-translate-y-0.5'
+                    : 'bg-zinc-950 text-zinc-300 border border-zinc-700 hover:bg-gray-100 hover:-translate-y-0.5'
                 }`}
               >
                 {plan.cta}

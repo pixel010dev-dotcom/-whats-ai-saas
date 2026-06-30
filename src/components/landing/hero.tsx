@@ -28,19 +28,19 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100/80 border border-green-200/50 mb-6">
-                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-sm font-medium text-green-700">Nova ferramenta revolucionária</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-sm font-medium text-emerald-400">Nova ferramenta revolucionária</span>
               </div>
             </motion.div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
-              <span className="text-gray-900">Seu funcionário</span>
+              <span className="text-zinc-100">Seu funcionário</span>
               <br />
               <span className="gradient-text">digital para WhatsApp</span>
             </h1>
 
-            <p className="mt-6 text-xl text-gray-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            <p className="mt-6 text-xl text-zinc-400 max-w-xl mx-auto lg:mx-0 leading-relaxed">
               Venda, negocie, atenda e feche pedidos automaticamente 24 horas por dia. 
               Sua inteligência artificial que aprende sobre seu negócio e funciona como um atendente nota 10.
             </p>
@@ -48,31 +48,31 @@ export default function Hero() {
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link
                 href="/register"
-                className="group relative px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-xl text-lg shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden"
+                className="group relative px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold rounded-xl text-lg shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden"
               >
                 <span className="relative z-10">Começar grátis →</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </Link>
               <Link
                 href="#features"
-                className="px-8 py-4 bg-white border border-gray-200 text-gray-700 font-semibold rounded-xl text-lg hover:border-gray-300 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                className="px-8 py-4 bg-zinc-900/50 border-zinc-800 text-zinc-300 font-semibold rounded-xl text-lg hover:border-zinc-600 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
               >
                 Ver funcionalidades
               </Link>
             </div>
 
-            <div className="mt-12 flex items-center gap-8 justify-center lg:justify-start text-sm text-gray-500">
+            <div className="mt-12 flex items-center gap-8 justify-center lg:justify-start text-sm text-zinc-500">
               <div className="flex -space-x-2">
                 {[1,2,3,4].map((i) => (
-                  <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-white text-xs font-bold border-2 border-white">
+                  <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xs font-bold border-2 border-white">
                     {String.fromCharCode(64 + i)}
                   </div>
                 ))}
-                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-500 border-2 border-white">
+                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-zinc-500 border-2 border-white">
                   +1k
                 </div>
               </div>
-              <span className="font-medium">Mais de <strong className="text-gray-900">1.000 empresas</strong> já usam</span>
+              <span className="font-medium">Mais de <strong className="text-zinc-100">1.000 empresas</strong> já usam</span>
             </div>
           </motion.div>
 
@@ -101,7 +101,7 @@ export default function Hero() {
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="w-6 h-10 rounded-full border-2 border-gray-300 flex items-start justify-center pt-2"
+          className="w-6 h-10 rounded-full border-2 border-zinc-600 flex items-start justify-center pt-2"
         >
           <div className="w-1.5 h-1.5 rounded-full bg-gray-400" />
         </motion.div>

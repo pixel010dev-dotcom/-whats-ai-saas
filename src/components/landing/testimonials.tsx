@@ -10,7 +10,7 @@ const testimonials = [
     content: 'Minhas vendas pelo WhatsApp aumentaram 340% em 2 meses. A IA não deixa nenhum cliente sem resposta, mesmo quando estou dormindo. Melhor investimento que já fiz.',
     rating: 5,
     initials: 'CS',
-    color: 'from-green-400 to-emerald-600'
+    color: 'from-emerald-400 to-emerald-600'
   },
   {
     name: 'Ana Oliveira',
@@ -60,9 +60,9 @@ export default function Testimonials() {
   }, [])
 
   return (
-    <section ref={ref} className="relative py-32 bg-gradient-to-b from-white via-gray-50/30 to-white overflow-hidden">
+    <section ref={ref} className="relative py-32 bg-zinc-950 overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-green-500/5 rounded-full blur-[120px]" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px]" />
       </div>
 
@@ -73,8 +73,8 @@ export default function Testimonials() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <span className="text-sm font-semibold text-green-600 uppercase tracking-widest">Depoimentos</span>
-          <h2 className="mt-4 text-4xl sm:text-5xl font-bold text-gray-900">
+          <span className="text-sm font-semibold text-emerald-400 uppercase tracking-widest">Depoimentos</span>
+          <h2 className="mt-4 text-4xl sm:text-5xl font-bold text-zinc-100">
             Quem usa, <span className="gradient-text">aprova</span>
           </h2>
         </motion.div>
@@ -91,7 +91,7 @@ export default function Testimonials() {
                   scale: activeIndex === index ? 1 : 0.95,
                 }}
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className={`p-8 rounded-2xl bg-white border border-gray-100 shadow-xl ${
+                className={`p-8 rounded-2xl bg-white border border-zinc-800 shadow-xl ${
                   activeIndex !== index ? 'hidden' : ''
                 }`}
               >
@@ -103,7 +103,7 @@ export default function Testimonials() {
                   ))}
                 </div>
 
-                <p className="text-lg text-gray-700 leading-relaxed mb-8 italic">
+                <p className="text-lg text-zinc-300 leading-relaxed mb-8 italic">
                   &ldquo;{testimonial.content}&rdquo;
                 </p>
 
@@ -112,8 +112,8 @@ export default function Testimonials() {
                     {testimonial.initials}
                   </div>
                   <div>
-                    <p className="font-bold text-gray-900">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.role}</p>
+                    <p className="font-bold text-zinc-100">{testimonial.name}</p>
+                    <p className="text-sm text-zinc-500">{testimonial.role}</p>
                   </div>
                 </div>
               </motion.div>
@@ -127,8 +127,8 @@ export default function Testimonials() {
                 onClick={() => setActiveIndex(index)}
                 className={`w-2.5 h-2.5 rounded-full transition-all duration-500 ${
                   activeIndex === index
-                    ? 'bg-green-500 w-8'
-                    : 'bg-gray-300 hover:bg-gray-400'
+                    ? 'bg-emerald-500 w-8'
+                    : 'bg-zinc-700 hover:bg-gray-400'
                 }`}
               />
             ))}

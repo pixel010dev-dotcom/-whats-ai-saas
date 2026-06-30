@@ -53,9 +53,9 @@ export default function FAQ() {
   }, [])
 
   return (
-    <section id="faq" ref={ref} className="relative py-32 bg-gray-50 overflow-hidden">
+    <section id="faq" ref={ref} className="relative py-32 bg-zinc-950 overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-green-500/5 rounded-full blur-[150px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-[150px]" />
       </div>
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,8 +65,8 @@ export default function FAQ() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="text-sm font-semibold text-green-600 uppercase tracking-widest">FAQ</span>
-          <h2 className="mt-4 text-4xl sm:text-5xl font-bold text-gray-900">
+          <span className="text-sm font-semibold text-emerald-400 uppercase tracking-widest">FAQ</span>
+          <h2 className="mt-4 text-4xl sm:text-5xl font-bold text-zinc-100">
             Perguntas <span className="gradient-text">frequentes</span>
           </h2>
         </motion.div>
@@ -78,13 +78,13 @@ export default function FAQ() {
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, delay: index * 0.05 }}
-              className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-all duration-300 hover:border-gray-300"
+              className="bg-white rounded-xl border border-zinc-700 overflow-hidden transition-all duration-300 hover:border-zinc-600"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 className="w-full flex items-center justify-between p-6 text-left"
               >
-                <span className="font-semibold text-gray-900 pr-4">{faq.q}</span>
+                <span className="font-semibold text-zinc-100 pr-4">{faq.q}</span>
                 <svg
                   className={`w-5 h-5 text-green-500 shrink-0 transition-transform duration-300 ${
                     openIndex === index ? 'rotate-180' : ''
@@ -105,7 +105,7 @@ export default function FAQ() {
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 className="overflow-hidden"
               >
-                <p className="px-6 pb-6 text-gray-600 leading-relaxed">{faq.a}</p>
+                <p className="px-6 pb-6 text-zinc-400 leading-relaxed">{faq.a}</p>
               </motion.div>
             </motion.div>
           ))}
