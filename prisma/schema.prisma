@@ -5,7 +5,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  extensions = [citext]
 }
 
 enum TenantStatus {
@@ -47,7 +46,7 @@ model TenantSettings {
   id            String @id @default(cuid())
   tenantId      String @unique
   tenant        Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  businessHours Json?  @default("{}")
+  businessHours Json?  
   welcomeMsg    String?
   aiPersonality String?
   autoReply     Boolean @default(true)
@@ -78,12 +77,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String? 
+  access_token      String? 
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String? 
   session_state     String?
 
   @@unique([provider, providerAccountId])
@@ -104,7 +103,7 @@ model Customer {
   name        String?
   phone       String   @unique
   email       String?
-  notes       String?  @db.Text
+  notes       String?  
   tags        String[] @default([])
   totalSpent  Float    @default(0)
   totalOrders Int      @default(0)
@@ -112,7 +111,6 @@ model Customer {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   conversations Conversation[]
-  embedding   Unsupported("vector(1536)")?
 
   @@index([tenantId])
   @@index([phone])
@@ -137,7 +135,7 @@ model Product {
   tenantId    String
   tenant      Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   name        String
-  description String?   @db.Text
+  description String?   
   price       Float
   cost        Float?
   categoryId  String?
@@ -178,10 +176,10 @@ model Message {
   id             String       @id @default(cuid())
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  role           String       @default("user") // user, assistant, system
-  content        String       @db.Text
-  type           String       @default("text") // text, image, audio, document
-  metadata       Json?        @default("{}")
+  role           String       @default("user")
+  content        String       
+  type           String       @default("text")
+  metadata       Json?        
   createdAt      DateTime     @default(now())
 
   @@index([conversationId])
@@ -192,9 +190,8 @@ model Knowledge {
   tenantId  String
   tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   title     String
-  content   String   @db.Text
+  content   String   
   category  String?
-  embedding Unsupported("vector(1536)")?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -219,7 +216,6 @@ model WhatsApp {
 enum PaymentStatus {
   PENDING
   APPROVED
-  RECUSED
   REFUNDED
   CANCELLED
 }
@@ -231,7 +227,7 @@ model Payment {
   amount          Float
   currency        String        @default("BRL")
   status          PaymentStatus @default(PENDING)
-  method          String?       // pix, credit_card, boleto
+  method          String?       
   mpPaymentId     String?       @unique
   mpPreferenceId  String?
   description     String?
