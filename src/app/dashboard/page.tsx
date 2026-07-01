@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '@/app/context/AuthProvider'
 import { formatCurrency, formatDate } from '@/lib/utils'
 import WhatsAppConnect from '@/components/dashboard/WhatsAppConnect'
+import TimelineCharts from '@/components/dashboard/TimelineCharts'
 import type { DashboardMetrics, ConversationSummary } from '@/types'
 import { MessageSquare, Users, SendHorizonal, DollarSign, MessageCircle } from 'lucide-react'
+import Link from 'next/link'
 
 function MetricCard({ label, value, icon: Icon, loading }: { label: string; value: string; icon: React.ComponentType<{ className?: string }>; loading?: boolean }) {
   return (
@@ -102,6 +104,8 @@ export default function DashboardHome() {
         />
       </div>
 
+      {tenantId && <TimelineCharts tenantId={tenantId} />}
+
       <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl">
         <h2 className="text-lg font-semibold text-zinc-100 mb-4">Últimas conversas</h2>
         {loading ? (
@@ -119,9 +123,15 @@ export default function DashboardHome() {
         ) : (
           <div className="space-y-2">
             {conversations.map(conv => (
-              <div key={conv.id} className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors">
+              <Link
+                key={conv.id}
+                href={`/dashboard/atendimentos/${conv.id}`}
+                className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors group"
+              >
                 <div className="min-w-0 flex-1">
-                  <p className="font-medium text-zinc-200 truncate">{conv.customerName || 'Cliente'}</p>
+                  <p className="font-medium text-zinc-200 truncate group-hover:text-emerald-400 transition-colors">
+                    {conv.customerName || 'Cliente'}
+                  </p>
                   <p className="text-sm text-zinc-500 truncate">{conv.lastMessage}</p>
                 </div>
                 <div className="text-right shrink-0 ml-4">
@@ -132,7 +142,7 @@ export default function DashboardHome() {
                   </span>
                   <p className="text-xs text-zinc-600 mt-1">{formatDate(conv.lastMessageAt)}</p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}

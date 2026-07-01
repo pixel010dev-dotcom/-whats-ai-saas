@@ -12,6 +12,10 @@ export function formatCurrency(value: number): string {
   }).format(value)
 }
 
+export function formatDateShort(date: string): string {
+  return new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short' }).format(new Date(date + 'T12:00:00'))
+}
+
 export function formatDate(date: Date | string): string {
   return new Intl.DateTimeFormat('pt-BR', {
     dateStyle: 'short',

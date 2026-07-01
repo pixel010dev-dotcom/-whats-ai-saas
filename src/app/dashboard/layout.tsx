@@ -6,12 +6,17 @@ import { useAuth } from '@/app/context/AuthProvider'
 import { Toaster } from 'sonner'
 import { useState } from 'react'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
-import { LayoutDashboard, MessageSquare, Users, Settings } from 'lucide-react'
+import { LayoutDashboard, MessageSquare, Users, ShoppingBag, Package, BrainCircuit, CreditCard, Smartphone, Settings } from 'lucide-react'
 
 const menu = [
   { href: '/dashboard', label: 'Visão Geral', icon: LayoutDashboard },
   { href: '/dashboard/atendimentos', label: 'Atendimentos', icon: MessageSquare },
   { href: '/dashboard/clientes', label: 'Clientes', icon: Users },
+  { href: '/dashboard/whatsapp', label: 'WhatsApp', icon: Smartphone },
+  { href: '/dashboard/produtos', label: 'Produtos', icon: Package },
+  { href: '/dashboard/conhecimento', label: 'Conhecimento', icon: BrainCircuit },
+  { href: '/dashboard/planos', label: 'Planos', icon: CreditCard },
+  { href: '/dashboard/assinatura', label: 'Assinatura', icon: ShoppingBag },
   { href: '/dashboard/configuracoes', label: 'Configurações', icon: Settings },
 ]
 

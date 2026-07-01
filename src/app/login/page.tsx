@@ -1,15 +1,23 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/app/context/AuthProvider'
+import { useSearchParams } from 'next/navigation'
 
-export default function Login() {
+function LoginForm() {
   const { signIn, signInWithGoogle } = useAuth()
+  const searchParams = useSearchParams()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    if (searchParams.get('error') === 'auth_failed') {
+      setError('Falha na autenticação com Google. Tente novamente.')
+    }
+  }, [searchParams])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -72,5 +80,13 @@ export default function Login() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-gray-900 via-green-950 to-gray-900" />}>
+      <LoginForm />
+    </Suspense>
   )
 }
