@@ -75,7 +75,7 @@ export default function Pricing() {
   }, [])
 
   return (
-    <section id="pricing" ref={ref} className="relative py-32 bg-white overflow-hidden">
+    <section id="pricing" ref={ref} className="relative py-32 bg-zinc-900 overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[600px] bg-gradient-to-b from-green-500/5 to-transparent blur-[150px]" />
       </div>
@@ -102,7 +102,7 @@ export default function Pricing() {
             onClick={() => setAnnual(!annual)}
             className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${annual ? 'bg-emerald-500' : 'bg-zinc-700'}`}
           >
-            <div className={`absolute top-1 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300 ${annual ? 'left-8' : 'left-1'}`} />
+            <div className={`absolute top-1 w-5 h-5 rounded-full bg-zinc-900 shadow-md transition-all duration-300 ${annual ? 'left-8' : 'left-1'}`} />
           </button>
           <span className={`text-sm font-medium ${annual ? 'text-zinc-100' : 'text-zinc-500'}`}>
             Anual
@@ -119,8 +119,8 @@ export default function Pricing() {
               transition={{ duration: 0.5, delay: index * 0.15 }}
               className={`relative p-8 rounded-2xl border-2 transition-all duration-300 hover-card ${
                 plan.popular
-                  ? 'border-green-500 bg-white shadow-xl shadow-green-500/10'
-                  : 'border-zinc-800 bg-white hover:border-zinc-700'
+                  ? 'border-green-500 bg-zinc-900 shadow-xl shadow-green-500/10'
+                  : 'border-zinc-700 bg-zinc-900 hover:border-zinc-700'
               }`}
             >
               {plan.popular && (
@@ -164,7 +164,7 @@ export default function Pricing() {
                 className={`block w-full py-3 rounded-xl text-center font-semibold transition-all duration-300 ${
                   plan.popular
                     ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-green-500/30 hover:shadow-xl hover:-translate-y-0.5'
-                    : 'bg-zinc-950 text-zinc-300 border border-zinc-700 hover:bg-gray-100 hover:-translate-y-0.5'
+                    : 'bg-zinc-950 text-zinc-300 border border-zinc-700 hover:bg-zinc-800 hover:-translate-y-0.5'
                 }`}
               >
                 {plan.cta}

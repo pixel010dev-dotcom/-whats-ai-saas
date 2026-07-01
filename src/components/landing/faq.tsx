@@ -78,7 +78,7 @@ export default function FAQ() {
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, delay: index * 0.05 }}
-              className="bg-white rounded-xl border border-zinc-700 overflow-hidden transition-all duration-300 hover:border-zinc-600"
+              className="bg-zinc-900 rounded-xl border border-zinc-700 bg-zinc-900 overflow-hidden transition-all duration-300 hover:border-zinc-600"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
