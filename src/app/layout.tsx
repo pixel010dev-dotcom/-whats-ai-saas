@@ -6,9 +6,31 @@ import { AuthProvider } from '@/app/context/AuthProvider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'WhatsAI - Funcionario Digital para WhatsApp',
-  description: 'Seu atendente virtual inteligente para WhatsApp. Venda, negocie, atenda e feche pedidos automaticamente.',
-  keywords: ['whatsapp', 'ia', 'atendimento', 'chatbot', 'vendas', 'saas'],
+  title: {
+    template: '%s | WhatsAI',
+    default: 'WhatsAI - Funcionario Digital para WhatsApp',
+  },
+  description: 'Seu atendente virtual inteligente para WhatsApp. Venda, negocie, atenda e feche pedidos automaticamente com IA.',
+  keywords: ['whatsapp', 'ia', 'atendimento', 'chatbot', 'vendas', 'saas', 'inteligencia artificial', 'automatizacao'],
+  authors: [{ name: 'WhatsAI' }],
+  creator: 'WhatsAI',
+  publisher: 'WhatsAI',
+  robots: { index: true, follow: true },
+  openGraph: {
+    type: 'website',
+    locale: 'pt_BR',
+    siteName: 'WhatsAI',
+    title: 'WhatsAI - Funcionario Digital para WhatsApp',
+    description: 'Seu atendente virtual inteligente para WhatsApp. Venda, negocie, atenda e feche pedidos automaticamente com IA.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'WhatsAI - Funcionario Digital para WhatsApp',
+    description: 'Seu atendente virtual inteligente para WhatsApp.',
+  },
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({

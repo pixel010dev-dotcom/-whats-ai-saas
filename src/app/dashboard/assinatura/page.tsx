@@ -1,5 +1,5 @@
 'use client'
-
+export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/app/context/AuthProvider'
 import { formatCurrency, formatDate } from '@/lib/utils'
