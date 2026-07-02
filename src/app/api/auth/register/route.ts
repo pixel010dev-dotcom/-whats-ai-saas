@@ -23,7 +23,7 @@ export async function POST(req: Request) {
       data: {
         name: empresa,
         slug: slugify(empresa) + '-' + Math.random().toString(36).slice(2, 6),
-        plan: 'UNICO', status: 'TRIAL', settings: { create: {} },
+        plan: 'UNICO', status: 'ACTIVE', settings: { create: {} },
         subscriptions: {
           create: { plan: 'UNICO', status: 'PENDING' }
         }

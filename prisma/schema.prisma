@@ -51,7 +51,7 @@ model Tenant {
   slug        String       @unique
   cnpj        String?
   phone       String?
-  status      TenantStatus @default(TRIAL)
+  status      TenantStatus @default(ACTIVE)
   plan        PlanType     @default(UNICO)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
