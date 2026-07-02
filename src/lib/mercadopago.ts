@@ -108,6 +108,7 @@ export async function createPixPayment(params: {
   name: string
   externalReference?: string
 }) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://whatsai-app-production.up.railway.app'
   const body = {
     transaction_amount: params.amount,
     description: params.description,
@@ -117,7 +118,8 @@ export async function createPixPayment(params: {
       first_name: params.name.split(' ')[0],
       last_name: params.name.split(' ').slice(1).join(' ') || params.name
     },
-    external_reference: params.externalReference
+    external_reference: params.externalReference,
+    notification_url: `${appUrl}/api/webhooks/mercadopago`
   }
 
   return api('/v1/payments', {
