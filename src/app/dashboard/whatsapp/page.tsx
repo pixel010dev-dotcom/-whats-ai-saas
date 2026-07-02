@@ -82,8 +82,8 @@ export default function WhatsAppPage() {
       const d = await r.json()
       setWhatsApp({ id: d.id || '', instanceName: d.instanceName, qrCode: d.qrcode, status: 'WAITING_QR' })
       toast.success('Instancia WhatsApp criada! Escaneie o QR Code.')
-    } catch (err: any) {
-      const msg = err?.message || err || 'Erro ao conectar'
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Erro ao conectar'
       setError(msg)
       toast.error(msg)
     } finally {
@@ -105,8 +105,8 @@ export default function WhatsAppPage() {
       const d = await r.json()
       setWhatsApp({ id: d.id || '', instanceName: d.instanceName, pairingCode: d.pairingCode, status: 'PAIRING' })
       toast.success('Código de pareamento gerado!')
-    } catch (err: any) {
-      const msg = err?.message || err || 'Erro ao conectar'
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Erro ao conectar'
       setError(msg)
       toast.error(msg)
     } finally {
@@ -126,7 +126,7 @@ export default function WhatsAppPage() {
       if (!r.ok) throw new Error('Falha ao desconectar')
       setWhatsApp(null)
       toast.success('WhatsApp desconectado.')
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast.error(err?.message || 'Erro ao desconectar')
     } finally {
       setConnecting(false)
