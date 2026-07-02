@@ -32,8 +32,8 @@ export async function createInstance(config: EvolutionAPIConfig) {
     body: JSON.stringify({
       instanceName: config.instanceName,
       token: config.token || config.instanceName,
-      qrcode: true,
-      number: ''
+      integration: 'WHATSAPP-BAILEYS',
+      qrcode: true
     })
   })
   if (!res.ok) throw new Error(`Evolution create: ${res.status}`)
@@ -54,6 +54,7 @@ export async function createInstanceWithNumber(config: EvolutionAPIConfig & { nu
     body: JSON.stringify({
       instanceName: config.instanceName,
       token: config.token || config.instanceName,
+      integration: 'WHATSAPP-BAILEYS',
       qrcode: false,
       number: config.number
     })
