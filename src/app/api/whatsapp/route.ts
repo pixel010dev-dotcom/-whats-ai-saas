@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   try {
     const { action, tenantId } = await req.json()
     if (!tenantId) {
-      return NextResponse.json({ error: 'tenantId é obrigatório' }, { status: 400 })
+      return NextResponse.json({ error: 'tenantId � obrigat�rio' }, { status: 400 })
     }
 
     if (action === 'connect' || action === 'connect-pairing') {
@@ -33,6 +33,18 @@ export async function POST(req: Request) {
 
       try {
         await createInstance({ instanceName })
+      } catch (err: unknown) {
+        // If instance already exists (403), try to get QR directly
+        const msg = err instanceof Error ? err.message : ''
+        if (msg.includes('403') || msg.includes('already in use')) {
+          console.log('Instance already exists, getting QR code...')
+        } else {
+          console.error('WhatsApp create error:', err)
+          return NextResponse.json({ error: 'Erro ao criar inst�ncia WhatsApp' }, { status: 500 })
+        }
+      }
+
+      try {
         const qrData = await getQRCode(instanceName)
         await prisma.whatsApp.update({
           where: { id: wa.id },
@@ -45,15 +57,15 @@ export async function POST(req: Request) {
           status: 'WAITING_QR',
         })
       } catch (err) {
-        console.error('WhatsApp create error:', err)
-        return NextResponse.json({ error: 'Erro ao criar instância WhatsApp' }, { status: 500 })
+        console.error('QR Code error:', err)
+        return NextResponse.json({ error: 'Erro ao obter QR Code' }, { status: 500 })
       }
     }
 
     if (action === 'connect-pairing') {
       const { number } = await req.json()
       if (!number) {
-        return NextResponse.json({ error: 'Número de telefone é obrigatório' }, { status: 400 })
+        return NextResponse.json({ error: 'N�mero de telefone � obrigat�rio' }, { status: 400 })
       }
 
       let wa = await prisma.whatsApp.findFirst({ where: { tenantId } })
@@ -67,6 +79,17 @@ export async function POST(req: Request) {
 
       try {
         await createInstanceWithNumber({ instanceName, number })
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : ''
+        if (msg.includes('403') || msg.includes('already in use')) {
+          console.log('Instance already exists, getting pairing code...')
+        } else {
+          console.error('WhatsApp pairing error:', err)
+          return NextResponse.json({ error: 'Erro ao gerar c�digo de pareamento' }, { status: 500 })
+        }
+      }
+
+      try {
         const pairData = await getPairingCode(instanceName, number)
         await prisma.whatsApp.update({
           where: { id: wa.id },
@@ -79,8 +102,8 @@ export async function POST(req: Request) {
           status: 'PAIRING',
         })
       } catch (err) {
-        console.error('WhatsApp pairing error:', err)
-        return NextResponse.json({ error: 'Erro ao gerar código de pareamento' }, { status: 500 })
+        console.error('Pairing code error:', err)
+        return NextResponse.json({ error: 'Erro ao gerar c�digo de pareamento' }, { status: 500 })
       }
     }
 
@@ -116,9 +139,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true })
     }
 
-    return NextResponse.json({ error: 'Ação inválida' }, { status: 400 })
+    return NextResponse.json({ error: 'A��o inv�lida' }, { status: 400 })
   } catch (err) {
     console.error('WhatsApp API error:', err)
     return NextResponse.json({ error: 'Erro interno' }, { status: 500 })
   }
 }
+
+
+
