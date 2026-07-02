@@ -16,6 +16,11 @@ export async function POST(req: Request) {
     }
 
     const tenantId = wa.tenantId
+
+    const sub = await prisma.subscription.findUnique({ where: { tenantId } })
+    if (!sub || sub.status !== 'ACTIVE') {
+      return NextResponse.json({ error: 'subscription inactive' }, { status: 402 })
+    }
     const remoteJid = data.key?.remoteJid || ''
     const phone = remoteJid.replace('@s.whatsapp.net', '').replace(/\D/g, '')
     const text = data.message?.conversation || data.message?.extendedTextMessage?.text || ''

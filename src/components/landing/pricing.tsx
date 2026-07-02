@@ -4,66 +4,25 @@ import { motion } from 'framer-motion'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 
-const plans = [
-  {
-    name: 'Básico',
-    monthlyPrice: 97,
-    yearlyPrice: 77,
-    description: 'Perfeito para quem está começando',
-    features: [
-      '500 conversas por mês',
-      '1 número WhatsApp',
-      'Catálogo de até 50 produtos',
-      'Respostas automáticas',
-      'Dashboard básico',
-      'Suporte por email'
-    ],
-    cta: 'Começar grátis',
-    popular: false
-  },
-  {
-    name: 'Profissional',
-    monthlyPrice: 197,
-    yearlyPrice: 157,
-    description: 'Mais popular - ideal para crescer',
-    features: [
-      'Conversas ilimitadas',
-      '2 números WhatsApp',
-      'Catálogo ilimitado',
-      'IA avançada com contexto',
-      'Vendas automatizadas',
-      'Dashboard completo com métricas',
-      'Recuperação de carrinho',
-      'Suporte prioritário'
-    ],
-    cta: 'Começar grátis',
-    popular: true
-  },
-  {
-    name: 'Premium',
-    monthlyPrice: 297,
-    yearlyPrice: 237,
-    description: 'Para quem quer tudo ao máximo',
-    features: [
-      'Conversas ilimitadas',
-      '5 números WhatsApp',
-      'Catálogo ilimitado',
-      'IA premium com GPT-4',
-      'Relatórios avançados',
-      'Integrações API',
-      'Múltiplos atendentes',
-      'Gerente de conta dedicado',
-      'SLA 99.9%'
-    ],
-    cta: 'Falar com vendas',
-    popular: false
-  }
-]
+const plan = {
+  name: 'WhatsAI',
+  monthlyPrice: 29.90,
+  description: 'Tudo que você precisa para vender no WhatsApp',
+  features: [
+    'Conversas ilimitadas',
+    '1 número WhatsApp',
+    'IA com conhecimento da sua empresa',
+    'Respostas automáticas inteligentes',
+    'Catálogo de produtos',
+    'Dashboard completo com métricas',
+    'Suporte prioritário'
+  ],
+  cta: 'Começar grátis'
+}
 
 export default function Pricing() {
   const ref = useRef<HTMLDivElement>(null)
   const [inView, setInView] = useState(false)
-  const [annual, setAnnual] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -96,81 +55,50 @@ export default function Pricing() {
           </p>
         </motion.div>
 
-        <div className="flex items-center justify-center gap-4 mb-16">
-          <span className={`text-sm font-medium ${!annual ? 'text-zinc-100' : 'text-zinc-500'}`}>Mensal</span>
-          <button
-            onClick={() => setAnnual(!annual)}
-            className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${annual ? 'bg-emerald-500' : 'bg-zinc-700'}`}
+        <div className="max-w-md mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="relative p-8 rounded-2xl border-2 border-green-500 bg-zinc-900 shadow-xl shadow-green-500/10"
           >
-            <div className={`absolute top-1 w-5 h-5 rounded-full bg-zinc-900 shadow-md transition-all duration-300 ${annual ? 'left-8' : 'left-1'}`} />
-          </button>
-          <span className={`text-sm font-medium ${annual ? 'text-zinc-100' : 'text-zinc-500'}`}>
-            Anual
-            <span className="ml-1.5 px-2 py-0.5 text-xs bg-green-100 text-emerald-400 rounded-full font-semibold">2 meses grátis</span>
-          </span>
-        </div>
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-semibold rounded-full whitespace-nowrap">
+              30 dias · Renova automaticamente
+            </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {plans.map((plan, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 40 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
-              className={`relative p-8 rounded-2xl border-2 transition-all duration-300 hover-card ${
-                plan.popular
-                  ? 'border-green-500 bg-zinc-900 shadow-xl shadow-green-500/10'
-                  : 'border-zinc-700 bg-zinc-900 hover:border-zinc-700'
-              }`}
+            <div className="mb-6">
+              <h3 className="text-xl font-bold text-zinc-100 mb-2">{plan.name}</h3>
+              <p className="text-zinc-500 text-sm">{plan.description}</p>
+            </div>
+
+            <div className="mb-8">
+              <div className="flex items-baseline gap-1">
+                <span className="text-4xl font-bold text-zinc-100">
+                  R$ {plan.monthlyPrice.toFixed(2).replace('.', ',')}
+                </span>
+                <span className="text-zinc-500">/mês</span>
+              </div>
+              <p className="text-xs text-zinc-600 mt-1">Menos que um estagiário · Cancele quando quiser</p>
+            </div>
+
+            <ul className="space-y-4 mb-8">
+              {plan.features.map((feature, i) => (
+                <li key={i} className="flex items-start gap-3 text-sm text-zinc-400">
+                  <svg className="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+
+            <Link
+              href="/register"
+              className="block w-full py-3 rounded-xl text-center font-semibold transition-all duration-300 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-green-500/30 hover:shadow-xl hover:-translate-y-0.5"
             >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-semibold rounded-full">
-                  Mais popular
-                </div>
-              )}
-
-              <div className="mb-6">
-                <h3 className="text-xl font-bold text-zinc-100 mb-2">{plan.name}</h3>
-                <p className="text-zinc-500 text-sm">{plan.description}</p>
-              </div>
-
-              <div className="mb-8">
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-zinc-100">
-                    R$ {annual ? plan.yearlyPrice : plan.monthlyPrice}
-                  </span>
-                  <span className="text-zinc-500">/mês</span>
-                </div>
-                {annual && (
-                  <p className="text-sm text-emerald-400 font-medium mt-1">
-                    Economia de R$ {(plan.monthlyPrice - plan.yearlyPrice) * 12}/ano
-                  </p>
-                )}
-              </div>
-
-              <ul className="space-y-4 mb-8">
-                {plan.features.map((feature, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-zinc-400">
-                    <svg className="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <Link
-                href={plan.name === 'Premium' ? '/contact' : '/register'}
-                className={`block w-full py-3 rounded-xl text-center font-semibold transition-all duration-300 ${
-                  plan.popular
-                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-green-500/30 hover:shadow-xl hover:-translate-y-0.5'
-                    : 'bg-zinc-950 text-zinc-300 border border-zinc-700 hover:bg-zinc-800 hover:-translate-y-0.5'
-                }`}
-              >
-                {plan.cta}
-              </Link>
-            </motion.div>
-          ))}
+              {plan.cta}
+            </Link>
+          </motion.div>
         </div>
       </div>
     </section>

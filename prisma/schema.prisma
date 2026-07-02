@@ -17,6 +17,7 @@ enum TenantStatus {
 }
 
 enum PlanType {
+  UNICO
   BASICO
   PROFISSIONAL
   PREMIUM
@@ -51,7 +52,7 @@ model Tenant {
   cnpj        String?
   phone       String?
   status      TenantStatus @default(TRIAL)
-  plan        PlanType     @default(BASICO)
+  plan        PlanType     @default(UNICO)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   users       User[]
@@ -221,7 +222,7 @@ model Subscription {
   id            String             @id @default(cuid())
   tenantId      String             @unique
   tenant        Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  plan          PlanType           @default(BASICO)
+  plan          PlanType           @default(UNICO)
   status        SubscriptionStatus @default(PENDING)
   mpId          String?
   currentPeriodStart DateTime?     @default(now())

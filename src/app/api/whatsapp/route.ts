@@ -2,11 +2,23 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { createInstance, createInstanceWithNumber, getQRCode, getPairingCode, getInstanceStatus, disconnectInstance } from '@/lib/whatsapp/evolution'
 
+async function checkSubscription(tenantId: string): Promise<boolean> {
+  const sub = await prisma.subscription.findUnique({ where: { tenantId } })
+  return sub?.status === 'ACTIVE'
+}
+
 export async function POST(req: Request) {
   try {
     const { action, tenantId } = await req.json()
     if (!tenantId) {
       return NextResponse.json({ error: 'tenantId é obrigatório' }, { status: 400 })
+    }
+
+    if (action === 'connect' || action === 'connect-pairing') {
+      const hasActiveSub = await checkSubscription(tenantId)
+      if (!hasActiveSub) {
+        return NextResponse.json({ error: 'Assinatura inativa. Acesse /dashboard/planos para pagar.', status: 'SUBSCRIPTION_REQUIRED' }, { status: 402 })
+      }
     }
 
     if (action === 'connect') {

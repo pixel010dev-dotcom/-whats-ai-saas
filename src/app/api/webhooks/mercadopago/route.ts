@@ -31,7 +31,12 @@ export async function POST(req: Request) {
       if (payment.status === 'approved') {
         await prisma.payment.updateMany({ where: { mpPaymentId: String(paymentId) }, data: { status: 'APPROVED', paidAt: new Date() } })
         if (payment.external_reference) {
-          await prisma.subscription.updateMany({ where: { tenantId: payment.external_reference }, data: { status: 'ACTIVE' } })
+          const thirtyDays = 30 * 24 * 60 * 60 * 1000
+          await prisma.subscription.upsert({
+            where: { tenantId: payment.external_reference },
+            update: { status: 'ACTIVE', currentPeriodStart: new Date(), currentPeriodEnd: new Date(Date.now() + thirtyDays) },
+            create: { tenantId: payment.external_reference, plan: 'UNICO', status: 'ACTIVE', currentPeriodStart: new Date(), currentPeriodEnd: new Date(Date.now() + thirtyDays) },
+          })
           await prisma.tenant.update({ where: { id: payment.external_reference }, data: { status: 'ACTIVE' } })
         }
       }

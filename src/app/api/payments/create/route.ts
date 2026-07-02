@@ -7,20 +7,11 @@ export async function POST(req: Request) {
     const body = await req.json()
     const { tenantId, plan, period } = body
 
-    if (!tenantId || !plan) {
-      return NextResponse.json({ error: 'tenantId e plan são obrigatórios' }, { status: 400 })
+    if (!tenantId) {
+      return NextResponse.json({ error: 'tenantId é obrigatório' }, { status: 400 })
     }
 
-    const planPrices: Record<string, number> = {
-      BASICO: 97,
-      PROFISSIONAL: 197,
-      PREMIUM: 297,
-    }
-
-    const amount = planPrices[plan]
-    if (!amount) {
-      return NextResponse.json({ error: 'Plano inválido' }, { status: 400 })
-    }
+    const amount = 29.90
 
     // Busca tenant para pegar dados do usuário
     const tenant = await prisma.tenant.findUnique({
