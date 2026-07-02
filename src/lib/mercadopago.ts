@@ -21,12 +21,17 @@ interface CreateSubscriptionParams {
   externalReference?: string
 }
 
+function idempotencyKey() {
+  return crypto.randomUUID?.() || Math.random().toString(36).slice(2) + Date.now().toString(36)
+}
+
 async function api(path: string, options: RequestInit = {}) {
   const res = await fetch(`${API_URL}${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${MP_ACCESS_TOKEN}`,
+      'X-Idempotency-Key': idempotencyKey(),
       ...options.headers
     }
   })
