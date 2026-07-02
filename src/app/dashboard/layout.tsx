@@ -26,11 +26,6 @@ const menu = [
   { href: '/dashboard/configuracoes', label: 'Configurações', icon: Settings },
 ]
 
-const sidebarVariants = {
-  open: { x: 0, transition: { type: 'spring' as const, stiffness: 300, damping: 30 } },
-  closed: { x: '-100%', transition: { type: 'spring' as const, stiffness: 300, damping: 30 } },
-} satisfies import('framer-motion').Variants
-
 const menuItemVariants = {
   hidden: { opacity: 0, x: -20 },
   visible: (i: number) => ({
@@ -114,11 +109,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           )}
         </AnimatePresence>
 
-        <motion.aside
-          initial={false}
-          animate={sidebarOpen ? 'open' : 'closed'}
-          variants={sidebarVariants}
-          className="fixed lg:static inset-y-0 left-0 z-40 w-60 bg-page-secondary border-r border-theme h-[calc(100vh-3.5rem)] top-14 overflow-y-auto lg:translate-x-0"
+        <aside
+          className={`fixed lg:static inset-y-0 left-0 z-40 w-60 bg-page-secondary border-r border-theme h-[calc(100vh-3.5rem)] top-14 overflow-y-auto transition-transform duration-300 ${
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          }`}
         >
           <nav className="p-3 space-y-1 pt-4">
             {menu.map((item, i) => {
@@ -156,7 +150,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="p-3 border-t border-theme mt-2">
             <p className="text-xs text-muted px-3">WhatsAI v1.0</p>
           </div>
-        </motion.aside>
+        </aside>
 
         <motion.main
           initial={{ opacity: 0, y: 10 }}
