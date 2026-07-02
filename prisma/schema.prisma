@@ -78,6 +78,8 @@ model TenantSettings {
   workingHours    Boolean  @default(true)
   supportPhone    String?
   supportActive   Boolean  @default(false)
+  supportPersonality  String?
+  supportWelcomeMessage String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

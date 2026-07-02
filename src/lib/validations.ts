@@ -1,4 +1,4 @@
-import { z } from 'zod'
+﻿import { z } from 'zod'
 
 export const loginSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -26,6 +26,8 @@ export const settingsSchema = z.object({
   autoReply: z.boolean().optional(),
   supportPhone: z.string().regex(/^\d{10,13}$/, "Telefone invalido").optional().or(z.literal("")),
   supportActive: z.boolean().optional(),
+  supportPersonality: z.string().max(500, 'Maximo 500 caracteres').optional(),
+  supportWelcomeMessage: z.string().max(200, 'Maximo 200 caracteres').optional(),
 })
 
 export const createPaymentSchema = z.object({

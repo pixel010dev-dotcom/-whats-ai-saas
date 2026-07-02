@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿import { NextResponse } from 'next/server'
+﻿﻿﻿﻿﻿﻿﻿﻿﻿import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { generateChatResponse } from '@/lib/ai/client'
 import { sendMessage } from '@/lib/whatsapp/evolution'
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
       : 'Nenhum conhecimento cadastrado'
 
     const systemPrompt = 'Voce e um atendente digital.' +
-      ' Personalidade: ' + (settings?.aiPersonality || 'Educado, profissional e amigavel') +
+      ' Personalidade: ' + (settings?.supportPersonality || settings?.aiPersonality || 'Educado, profissional e amigavel') +
       ' Regras: Seja educado e profissional. ' +
       'Ajude o cliente com suas duvidas. ' +
       'Se nao souber responder com base no conhecimento, inicie sua resposta com exatamente [TRANSFER]. ' +

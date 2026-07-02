@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/app/context/AuthProvider'
@@ -15,6 +15,10 @@ export default function ConfiguracoesPage() {
     welcomeMessage: '',
     businessHours: '',
     autoReply: true,
+    supportPhone: '',
+    supportActive: false,
+    supportPersonality: '',
+    supportWelcomeMessage: '',
   })
 
   useEffect(() => {
@@ -35,6 +39,10 @@ export default function ConfiguracoesPage() {
             welcomeMessage: data.welcomeMessage || '',
             businessHours: data.businessHours || '',
             autoReply: data.autoReply ?? true,
+            supportPhone: data.supportPhone || '',
+            supportActive: data.supportActive ?? false,
+            supportPersonality: data.supportPersonality || '',
+            supportWelcomeMessage: data.supportWelcomeMessage || '',
           })
         }
       } catch (err) {
@@ -130,6 +138,63 @@ export default function ConfiguracoesPage() {
             <p className="text-xs text-zinc-500">Responder automaticamente mensagens dos clientes</p>
           </div>
         </label>
+      </div>
+
+      <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 space-y-5">
+        <h2 className="text-lg font-semibold text-zinc-200">Suporte & Atendimento Humano</h2>
+        <p className="text-sm text-zinc-500">Configure o chat de suporte do site e o encaminhamento para seu WhatsApp</p>
+
+        <div>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">WhatsApp para receber atendimentos</label>
+          <input
+            value={settings.supportPhone}
+            onChange={e => setSettings({ ...settings, supportPhone: e.target.value.replace(/\D/g, '') })}
+            placeholder="554598566730"
+            className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          />
+          <p className="text-xs text-zinc-500 mt-1">Número com DDI e DDD, apenas números. Ex: 5511999999999</p>
+        </div>
+
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={settings.supportActive}
+            onChange={e => setSettings({ ...settings, supportActive: e.target.checked })}
+            className="w-4 h-4 rounded border-zinc-600 bg-zinc-800 text-emerald-500 focus:ring-emerald-500"
+          />
+          <div>
+            <span className="text-sm font-medium text-zinc-200">Ativar encaminhamento para WhatsApp</span>
+            <p className="text-xs text-zinc-500">Quando a IA não souber responder, encaminha pro seu WhatsApp</p>
+          </div>
+        </label>
+      </div>
+
+      <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 space-y-5">
+        <h2 className="text-lg font-semibold text-zinc-200">Personalidade da IA do Suporte</h2>
+        <p className="text-sm text-zinc-500">Configurações específicas para o chat de suporte do site (widget flutuante)</p>
+
+        <div>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Personalidade</label>
+          <textarea
+            value={settings.supportPersonality}
+            onChange={e => setSettings({ ...settings, supportPersonality: e.target.value })}
+            placeholder="Ex: Você é um atendente de suporte simpático e prestativo..."
+            className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[100px] resize-y"
+            maxLength={500}
+          />
+          <p className="text-xs text-zinc-600 mt-1">{settings.supportPersonality?.length || 0}/500 caracteres</p>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Mensagem de boas-vindas do suporte</label>
+          <textarea
+            value={settings.supportWelcomeMessage}
+            onChange={e => setSettings({ ...settings, supportWelcomeMessage: e.target.value })}
+            placeholder="Olá! Precisa de ajuda? Estou aqui para ajudar!"
+            className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[80px] resize-y"
+            maxLength={200}
+          />
+        </div>
       </div>
 
       <button

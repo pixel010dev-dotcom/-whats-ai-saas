@@ -27,6 +27,17 @@ export default function ChatWidget({ slug, title = 'Precisa de ajuda?' }: Props)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    // Load support settings
+    fetch('/api/settings?slug=' + slug)
+      .then(r => r.json())
+      .then(data => {
+        const msg = data.supportWelcomeMessage || data.welcomeMessage || ''
+        if (msg) setWelcomeMsg(msg)
+      })
+      .catch(() => {})
+  }, [slug])
+
+  useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
     }
@@ -70,7 +81,8 @@ export default function ChatWidget({ slug, title = 'Precisa de ajuda?' }: Props)
     e.preventDefault()
     if (!name.trim()) return
     setShowForm(false)
-    setMessages([{ role: 'assistant', content: 'Ola ' + name + '! Como posso ajudar voce hoje?' }])
+    const greeting = welcomeMsg || 'Ola ' + name + '! Como posso ajudar voce hoje?'
+    setMessages([{ role: 'assistant', content: greeting }])
   }
 
   return (

@@ -1,4 +1,4 @@
-export interface DashboardMetrics {
+﻿export interface DashboardMetrics {
   conversationsToday: number
   totalConversations: number
   customers: number
@@ -34,6 +34,8 @@ export interface SettingsData {
   autoReply: boolean
   supportPhone?: string
   supportActive?: boolean
+  supportPersonality?: string
+  supportWelcomeMessage?: string
 }
 
 export interface PriceInfo {

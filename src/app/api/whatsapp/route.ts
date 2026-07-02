@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server'
+﻿import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createInstance, createInstanceWithNumber, getQRCode, getPairingCode, getInstanceStatus, disconnectInstance } from '@/lib/whatsapp/evolution'
+import { createInstance, createInstanceWithNumber, getQRCode, getPairingCode, getInstanceStatus, disconnectInstance, fetchInstances } from '@/lib/whatsapp/evolution'
 
 async function checkSubscription(tenantId: string): Promise<boolean> {
   const sub = await prisma.subscription.findUnique({ where: { tenantId } })

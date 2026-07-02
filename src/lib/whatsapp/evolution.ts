@@ -1,4 +1,4 @@
-// Evolution API Integration
+﻿// Evolution API Integration
 
 const EVOLUTION_URL = process.env.EVOLUTION_API_URL || 'http://localhost:8080'
 const EVOLUTION_KEY = process.env.EVOLUTION_API_KEY || ''
@@ -89,6 +89,16 @@ export async function sendImage(instanceName: string, to: string, imageUrl: stri
       caption: caption || ''
     })
   })
+}
+
+export async function fetchInstances() {
+  const url = process.env.EVOLUTION_API_URL || 'http://localhost:8080'
+  const apiKey = process.env.EVOLUTION_API_KEY || ''
+  const res = await fetch(`${url}/instance/fetchInstances`, {
+    headers: { 'apiKey': apiKey }
+  })
+  if (!res.ok) throw new Error(`Evolution API: ${res.status}`)
+  return res.json()
 }
 
 export async function disconnectInstance(instanceName: string) {
