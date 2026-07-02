@@ -3,11 +3,6 @@ import { prisma } from '@/lib/prisma'
 
 export async function POST(req: Request) {
   try {
-    const authHeader = req.headers.get('authorization')
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-      return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
-    }
-
     const { email } = await req.json()
     if (!email) {
       return NextResponse.json({ error: 'email is required' }, { status: 400 })
