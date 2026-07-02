@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json()
     const { instanceName, data } = body
-    if (!instanceName || !data?.message?.fromMe === false) {
+    if (!instanceName || data?.message?.fromMe !== false) {
       return NextResponse.json({ error: 'invalid payload' }, { status: 400 })
     }
 
@@ -93,3 +93,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'internal error' }, { status: 500 })
   }
 }
+

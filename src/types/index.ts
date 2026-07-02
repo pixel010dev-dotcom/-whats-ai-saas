@@ -32,6 +32,8 @@ export interface SettingsData {
   welcomeMessage: string
   businessHours: string
   autoReply: boolean
+  supportPhone?: string
+  supportActive?: boolean
 }
 
 export interface PriceInfo {
@@ -93,3 +95,6 @@ export interface KnowledgeData {
   content: string
   tags: string | null
 }
+
+
+

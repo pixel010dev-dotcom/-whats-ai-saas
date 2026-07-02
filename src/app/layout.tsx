@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '@/app/context/AuthProvider'
 import { ThemeProvider } from '@/components/theme/ThemeProvider'
+import ChatWidget from '@/components/ChatWidget'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -44,8 +45,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>
+          <ChatWidget slug="whatsai" />
         </ThemeProvider>
       </body>
     </html>
   )
 }
+
+

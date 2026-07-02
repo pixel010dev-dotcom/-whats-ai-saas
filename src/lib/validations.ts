@@ -24,6 +24,8 @@ export const settingsSchema = z.object({
   welcomeMessage: z.string().max(200, 'Máximo 200 caracteres').optional(),
   businessHours: z.string().max(100, 'Máximo 100 caracteres').optional(),
   autoReply: z.boolean().optional(),
+  supportPhone: z.string().regex(/^\d{10,13}$/, "Telefone invalido").optional().or(z.literal("")),
+  supportActive: z.boolean().optional(),
 })
 
 export const createPaymentSchema = z.object({
@@ -53,3 +55,5 @@ export const knowledgeSchema = z.object({
   content: z.string().min(1, 'Conteúdo é obrigatório'),
   tags: z.string().optional(),
 })
+
+

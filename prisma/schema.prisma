@@ -76,6 +76,8 @@ model TenantSettings {
   aiPersonality   String?
   autoReply       Boolean  @default(true)
   workingHours    Boolean  @default(true)
+  supportPhone    String?
+  supportActive   Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
@@ -231,3 +233,4 @@ model Subscription {
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
 }
+
