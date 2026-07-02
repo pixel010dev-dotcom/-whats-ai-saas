@@ -44,6 +44,28 @@ export async function getQRCode(instanceName: string) {
   return api(instanceName, '/qrcode')
 }
 
+export async function createInstanceWithNumber(config: EvolutionAPIConfig & { number: string }) {
+  const res = await fetch(`${EVOLUTION_URL}/instance/create`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apiKey': EVOLUTION_KEY
+    },
+    body: JSON.stringify({
+      instanceName: config.instanceName,
+      token: config.token || config.instanceName,
+      qrcode: false,
+      number: config.number
+    })
+  })
+  if (!res.ok) throw new Error(`Evolution create: ${res.status}`)
+  return res.json()
+}
+
+export async function getPairingCode(instanceName: string, number: string) {
+  return api(instanceName, `/connect?number=${number}`)
+}
+
 export async function sendMessage(instanceName: string, to: string, text: string) {
   const phone = to.replace(/\D/g, '') + '@s.whatsapp.net'
   return api(instanceName, '/send-message', {

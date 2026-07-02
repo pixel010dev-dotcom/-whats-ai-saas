@@ -2,22 +2,24 @@
 
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/app/context/AuthProvider'
-import { Smartphone, QrCode, Link2, Link2Off, RefreshCw, Loader2, CheckCircle2, XCircle, AlertCircle } from 'lucide-react'
+import { Smartphone, QrCode, Link2, Link2Off, RefreshCw, Loader2, CheckCircle2, XCircle, AlertCircle, KeyRound } from 'lucide-react'
 import { toast } from 'sonner'
 
-type WhatsAppStatus = 'DISCONNECTED' | 'CREATING' | 'WAITING_QR' | 'CONNECTED' | 'ERROR'
+type WhatsAppStatus = 'DISCONNECTED' | 'CREATING' | 'WAITING_QR' | 'PAIRING' | 'CONNECTED' | 'ERROR'
 
 interface WhatsAppData {
   id: string
   phone?: string
   instanceName?: string
   qrCode?: string
+  pairingCode?: string
   status: WhatsAppStatus
 }
 
 const STATUS_CONFIG = {
   CONNECTED: { label: 'Conectado', icon: 'CheckCircle2', color: 'text-emerald-400' },
   WAITING_QR: { label: 'Aguardando QR Code', icon: 'QrCode', color: 'text-yellow-400' },
+  PAIRING: { label: 'Código de pareamento', icon: 'KeyRound', color: 'text-yellow-400' },
   CREATING: { label: 'Criando instancia...', icon: 'Loader2', color: 'text-blue-400' },
   DISCONNECTED: { label: 'Desconectado', icon: 'XCircle', color: 'text-zinc-400' },
   ERROR: { label: 'Erro', icon: 'AlertCircle', color: 'text-red-400' },
@@ -30,6 +32,8 @@ export default function WhatsAppPage() {
   const [tenantId, setTenantId] = useState<string | null>(null)
   const [whatsApp, setWhatsApp] = useState<WhatsAppData | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [connectMode, setConnectMode] = useState<'qr' | 'pairing'>('qr')
 
   useEffect(() => {
     if (!user?.id) return
@@ -78,6 +82,29 @@ export default function WhatsAppPage() {
       const d = await r.json()
       setWhatsApp({ id: d.id || '', instanceName: d.instanceName, qrCode: d.qrcode, status: 'WAITING_QR' })
       toast.success('Instancia WhatsApp criada! Escaneie o QR Code.')
+    } catch (err: any) {
+      const msg = err?.message || err || 'Erro ao conectar'
+      setError(msg)
+      toast.error(msg)
+    } finally {
+      setConnecting(false)
+    }
+  }
+
+  async function handleConnectPairing() {
+    if (!tenantId || !phoneNumber) return
+    setConnecting(true)
+    setError(null)
+    try {
+      const r = await fetch('/api/whatsapp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tenantId, action: 'connect-pairing', number: phoneNumber.replace(/\D/g, '') }),
+      })
+      if (!r.ok) { const e = await r.json(); throw new Error(e.error || 'Falha ao gerar código') }
+      const d = await r.json()
+      setWhatsApp({ id: d.id || '', instanceName: d.instanceName, pairingCode: d.pairingCode, status: 'PAIRING' })
+      toast.success('Código de pareamento gerado!')
     } catch (err: any) {
       const msg = err?.message || err || 'Erro ao conectar'
       setError(msg)
@@ -160,6 +187,19 @@ export default function WhatsAppPage() {
           </div>
         )}
 
+        {whatsApp?.pairingCode && currentStatus === 'PAIRING' && (
+          <div className="mt-8 flex flex-col items-center gap-4 p-6 bg-zinc-950 rounded-xl border border-zinc-800">
+            <p className="text-sm text-zinc-400">Digite o código abaixo no seu WhatsApp</p>
+            <div className="bg-zinc-900 px-8 py-4 rounded-xl border border-zinc-700">
+              <span className="text-3xl font-bold text-emerald-400 tracking-widest">{whatsApp.pairingCode}</span>
+            </div>
+            <div className="text-xs text-zinc-500 space-y-1 text-center">
+              <p>WhatsApp &gt; Aparelhos conectados &gt; Conectar dispositivo</p>
+              <p>Escolha &quot;Conectar com número de telefone&quot; e digite o código acima</p>
+            </div>
+          </div>
+        )}
+
         {error && (
           <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-sm text-red-400 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
@@ -167,36 +207,79 @@ export default function WhatsAppPage() {
           </div>
         )}
 
-        <div className="mt-6 flex gap-3">
-          {currentStatus !== 'CONNECTED' ? (
-            <button
-              onClick={handleConnect}
-              disabled={connecting || currentStatus === 'CREATING'}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition-colors text-sm"
-            >
-              {connecting ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Link2 className="w-4 h-4" />}
-              {connecting ? 'Conectando...' : 'Conectar WhatsApp'}
-            </button>
-          ) : (
-            <button
-              onClick={handleDisconnect}
-              disabled={connecting}
-              className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors text-sm"
-            >
-              <Link2Off className="w-4 h-4" />
-              Desconectar
-            </button>
+        <div className="mt-6 space-y-4">
+          {currentStatus === 'DISCONNECTED' && (
+            <div className="flex gap-2">
+              <button
+                onClick={() => setConnectMode('qr')}
+                className={'flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm ' + (connectMode === 'qr' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-zinc-800 text-zinc-400 border border-zinc-700')}
+              >
+                <QrCode className="w-4 h-4" />
+                QR Code
+              </button>
+              <button
+                onClick={() => setConnectMode('pairing')}
+                className={'flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm ' + (connectMode === 'pairing' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-zinc-800 text-zinc-400 border border-zinc-700')}
+              >
+                <KeyRound className="w-4 h-4" />
+                Código de pareamento
+              </button>
+            </div>
           )}
-          {whatsApp?.instanceName && (
-            <button
-              onClick={handleConnect}
-              disabled={connecting}
-              className="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg transition-colors text-sm"
-            >
-              <RefreshCw className={'w-4 h-4 ' + (connecting ? 'animate-spin' : '')} />
-              Novo QR Code
-            </button>
+
+          {currentStatus === 'DISCONNECTED' && connectMode === 'pairing' && (
+            <div className="flex gap-3">
+              <input
+                type="text"
+                placeholder="Número do WhatsApp (com DDD, ex: 5511999999999)"
+                value={phoneNumber}
+                onChange={e => setPhoneNumber(e.target.value)}
+                className="flex-1 px-4 py-2 bg-zinc-950 border border-zinc-700 rounded-lg text-zinc-100 placeholder-zinc-500 text-sm focus:outline-none focus:border-emerald-500"
+              />
+              <button
+                onClick={handleConnectPairing}
+                disabled={connecting || !phoneNumber}
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition-colors text-sm"
+              >
+                {connecting ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <KeyRound className="w-4 h-4" />}
+                {connecting ? 'Gerando...' : 'Gerar código'}
+              </button>
+            </div>
           )}
+
+          <div className="flex gap-3">
+            {currentStatus !== 'CONNECTED' && currentStatus !== 'PAIRING' ? (
+              connectMode === 'qr' && (
+                <button
+                  onClick={handleConnect}
+                  disabled={connecting || currentStatus === 'CREATING'}
+                  className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition-colors text-sm"
+                >
+                  {connecting ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <QrCode className="w-4 h-4" />}
+                  {connecting ? 'Conectando...' : 'Gerar QR Code'}
+                </button>
+              )
+            ) : (
+              <button
+                onClick={handleDisconnect}
+                disabled={connecting}
+                className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors text-sm"
+              >
+                <Link2Off className="w-4 h-4" />
+                Desconectar
+              </button>
+            )}
+            {whatsApp?.instanceName && currentStatus === 'WAITING_QR' && (
+              <button
+                onClick={handleConnect}
+                disabled={connecting}
+                className="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg transition-colors text-sm"
+              >
+                <RefreshCw className={'w-4 h-4 ' + (connecting ? 'animate-spin' : '')} />
+                Novo QR Code
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

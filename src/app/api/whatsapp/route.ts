@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createInstance, getQRCode, getInstanceStatus, disconnectInstance } from '@/lib/whatsapp/evolution'
+import { createInstance, createInstanceWithNumber, getQRCode, getPairingCode, getInstanceStatus, disconnectInstance } from '@/lib/whatsapp/evolution'
 
 export async function POST(req: Request) {
   try {
@@ -35,6 +35,40 @@ export async function POST(req: Request) {
       } catch (err) {
         console.error('WhatsApp create error:', err)
         return NextResponse.json({ error: 'Erro ao criar instância WhatsApp' }, { status: 500 })
+      }
+    }
+
+    if (action === 'connect-pairing') {
+      const { number } = await req.json()
+      if (!number) {
+        return NextResponse.json({ error: 'Número de telefone é obrigatório' }, { status: 400 })
+      }
+
+      let wa = await prisma.whatsApp.findFirst({ where: { tenantId } })
+      const instanceName = `wa-${tenantId.slice(0, 8)}`
+
+      if (!wa) {
+        wa = await prisma.whatsApp.create({
+          data: { tenantId, instanceName, status: 'CREATING' },
+        })
+      }
+
+      try {
+        await createInstanceWithNumber({ instanceName, number })
+        const pairData = await getPairingCode(instanceName, number)
+        await prisma.whatsApp.update({
+          where: { id: wa.id },
+          data: { status: 'WAITING_QR', qrCode: null },
+        })
+        return NextResponse.json({
+          success: true,
+          pairingCode: pairData?.pairingCode || '',
+          instanceName,
+          status: 'PAIRING',
+        })
+      } catch (err) {
+        console.error('WhatsApp pairing error:', err)
+        return NextResponse.json({ error: 'Erro ao gerar código de pareamento' }, { status: 500 })
       }
     }
 
