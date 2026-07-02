@@ -36,12 +36,22 @@ export default function WhatsAppPage() {
   const [connectMode, setConnectMode] = useState<'qr' | 'pairing'>('qr')
 
   useEffect(() => {
-    if (!user?.id) return
+    let cancelled = false
+    if (!user?.id) {
+      setLoading(false) // eslint-disable-line react-hooks/set-state-in-effect
+      return
+    }
+    const timeout = setTimeout(() => { if (!cancelled) setLoading(false) }, 5000)
     fetch('/api/auth/profile')
       .then(r => r.json())
-      .then(d => setTenantId(d.tenant?.id))
-      .catch(() => {})
-      .finally(() => setLoading(false))
+      .then(d => {
+        if (cancelled) return
+        if (d.tenant?.id) { setTenantId(d.tenant.id) }
+        else { setError('Perfil sem tenant vinculado. Crie uma conta pelo formulário.') }
+      })
+      .catch(() => { if (!cancelled) setError('Erro ao carregar perfil') })
+      .finally(() => { if (!cancelled) { clearTimeout(timeout); setLoading(false) } })
+    return () => { cancelled = true }
   }, [user])
 
   useEffect(() => {
@@ -53,6 +63,10 @@ export default function WhatsAppPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ tenantId, action: 'status' }),
         })
+        if (!r.ok && r.status === 402) {
+          setError('Assinatura inativa. Acesse /dashboard/planos para pagar.')
+          return
+        }
         if (!r.ok) return
         const d = await r.json()
         if (d.qrCode) {
@@ -68,8 +82,17 @@ export default function WhatsAppPage() {
     return () => clearInterval(interval)
   }, [tenantId])
 
+  function showFeedback() {
+    if (!tenantId) {
+      toast.error('Faça login novamente para conectar o WhatsApp')
+      setError('Sessão expirada. Faça login novamente.')
+      return false
+    }
+    return true
+  }
+
   async function handleConnect() {
-    if (!tenantId) return
+    if (!showFeedback()) return
     setConnecting(true)
     setError(null)
     try {
@@ -92,7 +115,7 @@ export default function WhatsAppPage() {
   }
 
   async function handleConnectPairing() {
-    if (!tenantId || !phoneNumber) return
+    if (!showFeedback() || !phoneNumber) return
     setConnecting(true)
     setError(null)
     try {

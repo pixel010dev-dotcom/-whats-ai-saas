@@ -1,8 +1,28 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { slugify } from '@/lib/utils'
 
 export const dynamic = 'force-dynamic'
+
+async function ensureTenant(userId: string, email: string, name?: string, avatar?: string) {
+  const existing = await prisma.user.findUnique({ where: { id: userId } })
+  if (existing) return
+
+  const empresa = name ? `${name} Empresa` : 'Minha Empresa'
+  const tenant = await prisma.tenant.create({
+    data: {
+      name: empresa,
+      slug: slugify(empresa) + '-' + Math.random().toString(36).slice(2, 6),
+      plan: 'UNICO', status: 'ACTIVE', settings: { create: {} },
+      subscriptions: { create: { plan: 'UNICO', status: 'PENDING' } }
+    }
+  })
+  await prisma.user.create({
+      data: { id: userId, email, name: name || email, role: 'owner', tenantId: tenant.id, image: avatar }
+  })
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -18,9 +38,7 @@ export async function GET(request: Request) {
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {
           cookies: {
-            getAll() {
-              return cookieStore.getAll()
-            },
+            getAll() { return cookieStore.getAll() },
             setAll(cookiesToSet) {
               cookiesToSet.forEach(({ name, value, options }) =>
                 cookieStore.set(name, value, options)
@@ -29,8 +47,17 @@ export async function GET(request: Request) {
           },
         }
       )
-      const { error } = await supabase.auth.exchangeCodeForSession(code)
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code)
       if (!error) {
+        const sessionUser = data?.session?.user
+        if (sessionUser?.email) {
+          await ensureTenant(
+            sessionUser.id,
+            sessionUser.email,
+            sessionUser.user_metadata?.name || sessionUser.email?.split('@')[0],
+            sessionUser.user_metadata?.avatar_url
+          )
+        }
         return NextResponse.redirect(`${appUrl}${next}`)
       }
       console.error('Auth callback exchangeCodeForSession error:', error)
