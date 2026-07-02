@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/app/context/AuthProvider'
-import { Smartphone, QrCode, Link2, Link2Off, RefreshCw, Loader2, CheckCircle2, XCircle, AlertCircle, KeyRound } from 'lucide-react'
+import { Smartphone, QrCode, Link2Off, RefreshCw, AlertCircle, KeyRound } from 'lucide-react'
 import { toast } from 'sonner'
 
 type WhatsAppStatus = 'DISCONNECTED' | 'CREATING' | 'WAITING_QR' | 'PAIRING' | 'CONNECTED' | 'ERROR'
@@ -127,7 +127,7 @@ export default function WhatsAppPage() {
       setWhatsApp(null)
       toast.success('WhatsApp desconectado.')
     } catch (err: unknown) {
-      toast.error(err?.message || 'Erro ao desconectar')
+      toast.error(err instanceof Error ? err.message : 'Erro ao desconectar')
     } finally {
       setConnecting(false)
     }
