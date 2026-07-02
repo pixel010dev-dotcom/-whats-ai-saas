@@ -10,7 +10,7 @@ import { ErrorBoundary } from '@/components/ui/error-boundary'
 import {
   LayoutDashboard, MessageSquare, Users, ShoppingBag, Package,
   BrainCircuit, CreditCard, Smartphone, Settings, Sun, Moon, LogOut,
-  Menu, X, ChevronRight
+  Menu, X
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
