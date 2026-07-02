@@ -5,7 +5,7 @@ import { createPixPayment } from '@/lib/mercadopago'
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { tenantId, plan, period } = body
+    const { tenantId, plan } = body
 
     if (!tenantId) {
       return NextResponse.json({ error: 'tenantId é obrigatório' }, { status: 400 })

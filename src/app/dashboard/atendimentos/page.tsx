@@ -12,7 +12,6 @@ export default function AtendimentosPage() {
   const [conversations, setConversations] = useState<ConversationSummary[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('')
-  const [tenantId, setTenantId] = useState<string | null>(null)
 
   useEffect(() => {
     async function load() {
@@ -22,7 +21,6 @@ export default function AtendimentosPage() {
         const profile = await profileRes.json()
         const tid = profile.tenant?.id
         if (!tid) return
-        setTenantId(tid)
 
         const statusParam = filter ? `&status=${filter}` : ''
         const res = await fetch(`/api/conversations?tenantId=${tid}${statusParam}`)
