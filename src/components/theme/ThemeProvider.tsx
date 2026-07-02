@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react'
 
 type Theme = 'dark' | 'light'
 
@@ -18,20 +18,18 @@ const ThemeContext = createContext<ThemeContextType>({
 
 export const useTheme = () => useContext(ThemeContext)
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('dark')
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
+function getInitialTheme(): Theme {
+  if (typeof window !== 'undefined') {
     const stored = localStorage.getItem('whatsai-theme') as Theme | null
-    if (stored === 'light' || stored === 'dark') {
-      setThemeState(stored)
-    }
-    setMounted(true)
-  }, [])
+    if (stored === 'light' || stored === 'dark') return stored
+  }
+  return 'dark'
+}
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setThemeState] = useState<Theme>(getInitialTheme)
 
   useEffect(() => {
-    if (!mounted) return
     const root = document.documentElement
     if (theme === 'light') {
       root.classList.add('light')
@@ -39,10 +37,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       root.classList.remove('light')
     }
     localStorage.setItem('whatsai-theme', theme)
-  }, [theme, mounted])
+  }, [theme])
 
-  const toggleTheme = () => setThemeState(t => t === 'dark' ? 'light' : 'dark')
-  const setTheme = (t: Theme) => setThemeState(t)
+  const toggleTheme = useCallback(() => {
+    setThemeState(t => t === 'dark' ? 'light' : 'dark')
+  }, [])
+
+  const setTheme = useCallback((t: Theme) => {
+    setThemeState(t)
+  }, [])
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
