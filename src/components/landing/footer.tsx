@@ -27,9 +27,9 @@ export default function Footer() {
             <h3 className="font-semibold text-white mb-4">Produto</h3>
             <ul className="space-y-3">
               <li><Link href="#features" className="text-sm hover:text-emerald-400 transition-colors">Funcionalidades</Link></li>
-              <li><Link href="#pricing" className="text-sm hover:text-emerald-400 transition-colors">Preços</Link></li>
-              <li><Link href="#demo" className="text-sm hover:text-emerald-400 transition-colors">Demonstração</Link></li>
+              <li><Link href="/pricing" className="text-sm hover:text-emerald-400 transition-colors">Preços</Link></li>
               <li><Link href="/register" className="text-sm hover:text-emerald-400 transition-colors">Começar grátis</Link></li>
+              <li><Link href="/login" className="text-sm hover:text-emerald-400 transition-colors">Entrar</Link></li>
             </ul>
           </div>
 
@@ -37,10 +37,9 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">Empresa</h3>
             <ul className="space-y-3">
-              <li><span className="text-sm hover:text-emerald-400 transition-colors cursor-pointer">Sobre nós</span></li>
-              <li><span className="text-sm hover:text-emerald-400 transition-colors cursor-pointer">Blog</span></li>
-              <li><span className="text-sm hover:text-emerald-400 transition-colors cursor-pointer">Carreira</span></li>
-              <li><span className="text-sm hover:text-emerald-400 transition-colors cursor-pointer">Contato</span></li>
+              <li><Link href="/pricing" className="text-sm hover:text-emerald-400 transition-colors">Planos</Link></li>
+              <li><span className="text-sm text-zinc-600">Blog (em breve)</span></li>
+              <li><a href="mailto:pixel010dev@gmail.com" className="text-sm hover:text-emerald-400 transition-colors">Contato</a></li>
             </ul>
           </div>
 
@@ -48,9 +47,8 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">Legal</h3>
             <ul className="space-y-3">
-              <li><span className="text-sm hover:text-emerald-400 transition-colors cursor-pointer">Termos de uso</span></li>
-              <li><span className="text-sm hover:text-emerald-400 transition-colors cursor-pointer">Política de privacidade</span></li>
-              <li><span className="text-sm hover:text-emerald-400 transition-colors cursor-pointer">LGPD</span></li>
+              <li><Link href="/terms" className="text-sm hover:text-emerald-400 transition-colors">Termos de uso</Link></li>
+              <li><Link href="/privacy" className="text-sm hover:text-emerald-400 transition-colors">Política de privacidade</Link></li>
             </ul>
           </div>
         </div>

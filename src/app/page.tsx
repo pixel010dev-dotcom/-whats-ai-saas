@@ -48,7 +48,7 @@ export default function Home() {
             <div className="hidden md:flex items-center gap-8">
               <a href="#features" className="text-sm font-medium text-zinc-400 hover:text-zinc-100 transition-colors">Funcionalidades</a>
               <a href="#how-it-works" className="text-sm font-medium text-zinc-400 hover:text-zinc-100 transition-colors">Como funciona</a>
-              <a href="#pricing" className="text-sm font-medium text-zinc-400 hover:text-zinc-100 transition-colors">Preços</a>
+              <Link href="/pricing" className="text-sm font-medium text-zinc-400 hover:text-zinc-100 transition-colors">Preços</Link>
               <a href="#faq" className="text-sm font-medium text-zinc-400 hover:text-zinc-100 transition-colors">FAQ</a>
             </div>
 
