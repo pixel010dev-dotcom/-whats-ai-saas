@@ -168,18 +168,29 @@ export default function WhatsAppConnect({ tenantId }: Props) {
       const res = await fetch('/api/whatsapp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'connect', tenantId }),
+        body: JSON.stringify({ action: 'refresh-qr', tenantId }),
       })
       const data = await res.json()
       if (res.ok) {
         setQrCode(data.qrcode)
+        setStatus('WAITING_QR')
         toast.success('Novo QR Code gerado')
+      } else {
+        toast.error(data.error || 'Erro ao gerar novo QR')
       }
     } catch {
       toast.error('Erro ao gerar novo QR')
     } finally {
       setLoading(false)
     }
+  }
+
+  function formatPhone(value: string) {
+    const digits = value.replace(/\D/g, '').slice(0, 13)
+    if (digits.length <= 2) return digits
+    if (digits.length <= 4) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`
+    if (digits.length <= 9) return `(${digits.slice(0, 2)}) ${digits.slice(2, 4)}-${digits.slice(4)}`
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`
   }
 
   async function handleDisconnect() {
@@ -360,10 +371,13 @@ export default function WhatsAppConnect({ tenantId }: Props) {
             <div className="flex gap-2">
               <input
                 type="tel"
-                placeholder="55DDNUMERO (so numeros)"
-                value={pairingNumber}
-                onChange={e => setPairingNumber(e.target.value.replace(/\D/g, ''))}
-                className="flex-1 px-3 py-2 bg-surface-hover border border-theme rounded-lg text-sm text-primary placeholder:text-muted focus:outline-none focus:border-emerald-500/50"
+                placeholder="(55) 11 99999-9999"
+                value={formatPhone(pairingNumber)}
+                onChange={e => {
+                  const raw = e.target.value.replace(/\D/g, '').slice(0, 13)
+                  setPairingNumber(raw)
+                }}
+                className="flex-1 px-3 py-2 bg-surface-hover border border-theme rounded-lg text-sm font-mono text-primary placeholder:text-muted focus:outline-none focus:border-emerald-500/50"
               />
             </div>
           )}

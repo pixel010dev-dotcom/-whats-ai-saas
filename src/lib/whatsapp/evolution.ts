@@ -44,7 +44,16 @@ export async function createInstance(config: EvolutionAPIConfig) {
 }
 
 export async function getQRCode(instanceName: string) {
-  return api(instanceName, '/connect')
+  const url = `${EVOLUTION_URL}/instance/connect/${instanceName}`
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: { 'apiKey': EVOLUTION_KEY }
+  })
+  if (!res.ok && res.status === 404) {
+    return { base64: '', count: 0 }
+  }
+  if (!res.ok) throw new Error(`Evolution API: ${res.status}`)
+  return res.json()
 }
 
 export async function createInstanceWithNumber(config: EvolutionAPIConfig & { number: string }) {

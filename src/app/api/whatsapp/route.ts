@@ -106,6 +106,23 @@ export async function POST(req: Request) {
       }
     }
 
+    if (action === 'refresh-qr') {
+      const wa = await prisma.whatsApp.findFirst({ where: { tenantId } })
+      if (!wa || !wa.instanceName) {
+        return NextResponse.json({ error: 'Instância não encontrada' }, { status: 404 })
+      }
+      const qrData = await getQRCode(wa.instanceName)
+      await prisma.whatsApp.update({
+        where: { id: wa.id },
+        data: { status: 'WAITING_QR', qrCode: qrData?.base64 || '' },
+      })
+      return NextResponse.json({
+        success: true,
+        qrcode: qrData?.base64 || '',
+        status: 'WAITING_QR',
+      })
+    }
+
     if (action === 'status') {
       const wa = await prisma.whatsApp.findFirst({ where: { tenantId } })
       if (!wa || !wa.instanceName) {
