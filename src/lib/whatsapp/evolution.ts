@@ -33,7 +33,10 @@ export async function createInstance(config: EvolutionAPIConfig) {
       instanceName: config.instanceName,
       token: config.token || config.instanceName,
       integration: 'WHATSAPP-BAILEYS',
-      qrcode: true
+      qrcode: true,
+      alwaysOnline: true,
+      readMessages: true,
+      readStatus: true
     })
   })
   if (!res.ok) throw new Error(`Evolution create: ${res.status}`)
@@ -56,7 +59,10 @@ export async function createInstanceWithNumber(config: EvolutionAPIConfig & { nu
       token: config.token || config.instanceName,
       integration: 'WHATSAPP-BAILEYS',
       qrcode: false,
-      number: config.number
+      number: config.number,
+      alwaysOnline: true,
+      readMessages: true,
+      readStatus: true
     })
   })
   if (!res.ok) throw new Error(`Evolution create: ${res.status}`)
@@ -124,4 +130,25 @@ export async function disconnectInstance(instanceName: string) {
 
 export async function getInstanceStatus(instanceName: string) {
   return api(instanceName, '/connectionState')
+}
+
+export async function setSettings(instanceName: string) {
+  const url = `${EVOLUTION_URL}/settings/set/${instanceName}`
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apiKey': EVOLUTION_KEY
+    },
+    body: JSON.stringify({
+      alwaysOnline: true,
+      readMessages: true,
+      readStatus: true,
+      rejectCall: false,
+      groupsIgnore: false,
+      syncFullHistory: false
+    })
+  })
+  if (!res.ok) throw new Error(`Evolution API: ${res.status}`)
+  return res.json()
 }
