@@ -100,7 +100,7 @@ export default function Home() {
             Pronto para transformar seu atendimento?
           </h2>
           <p className="text-xl text-green-100 mb-10 max-w-2xl mx-auto">
-            Junte-se a mais de 1.000 empresas que já automatizaram suas vendas no WhatsApp.
+            Automatize suas vendas no WhatsApp em 5 minutos e nunca mais perca um cliente.
             Comece grátis, sem cartão de crédito.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

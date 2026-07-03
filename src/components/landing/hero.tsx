@@ -30,7 +30,7 @@ export default function Hero() {
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-sm font-medium text-emerald-400">Nova ferramenta revolucionária</span>
+                <span className="text-sm font-medium text-emerald-400">Lançamento 2026</span>
               </div>
             </motion.div>
 
@@ -61,18 +61,17 @@ export default function Hero() {
               </Link>
             </div>
 
-            <div className="mt-12 flex items-center gap-8 justify-center lg:justify-start text-sm text-zinc-500">
-              <div className="flex -space-x-2">
-                {[1,2,3,4].map((i) => (
-                  <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xs font-bold border-2 border-white">
-                    {String.fromCharCode(64 + i)}
-                  </div>
-                ))}
-                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-zinc-500 border-2 border-white">
-                  +1k
+            <div className="mt-12 flex items-center gap-6 justify-center lg:justify-start text-sm text-zinc-500">
+              <div className="flex items-center gap-2">
+                <div className="flex -space-x-2">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xs font-bold border-2 border-white">D</div>
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xs font-bold border-2 border-white">M</div>
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white text-xs font-bold border-2 border-white">R</div>
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white text-xs font-bold border-2 border-white">L</div>
+                  <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-xs font-medium text-emerald-600 border-2 border-white">+12</div>
                 </div>
               </div>
-              <span className="font-medium">Mais de <strong className="text-zinc-100">1.000 empresas</strong> já usam</span>
+              <span className="font-medium"><strong className="text-zinc-100">+12 clientes</strong> ativaram hoje</span>
             </div>
           </motion.div>
 
