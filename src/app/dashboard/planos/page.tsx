@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Check, Copy, CheckCheck, QrCode, ArrowRight, Zap } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Check, Copy, CheckCheck, QrCode, ArrowRight, Zap, X, Shield, Clock, Smartphone } from 'lucide-react'
 import { toast } from 'sonner'
 import { formatCurrency } from '@/lib/utils'
 
