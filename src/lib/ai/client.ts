@@ -41,7 +41,7 @@ class OpenAICompatibleProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || this.defaultModel
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 15000)
+    const timeout = setTimeout(() => controller.abort(), 180000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -79,7 +79,7 @@ class OpenCodeZenProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'deepseek-v4-flash-free'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 15000)
+    const timeout = setTimeout(() => controller.abort(), 180000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -116,7 +116,7 @@ class GroqProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'llama-3.3-70b-versatile'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 15000)
+    const timeout = setTimeout(() => controller.abort(), 180000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -153,7 +153,7 @@ class OpenRouterProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'google/gemini-2.0-flash-001'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 15000)
+    const timeout = setTimeout(() => controller.abort(), 180000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -240,7 +240,7 @@ class CerebrasProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'gemma-4-31b'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 15000)
+    const timeout = setTimeout(() => controller.abort(), 180000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -289,7 +289,7 @@ class MistralProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'mistral-small-latest'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 15000)
+    const timeout = setTimeout(() => controller.abort(), 180000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -424,7 +424,7 @@ export async function completeAI(
       return { ...result, provider: provider.name }
     } catch (err) {
       if ((err as any)?.name === 'AbortError') {
-        errors.push(provider.name + ': timeout after 15s')
+        errors.push(provider.name + ': timeout after 3min')
         console.warn('[AI Fallback] ' + provider.name + ' timed out, trying next...')
       } else {
         errors.push(

@@ -18,7 +18,9 @@ export default function WhatsAppConnect({ tenantId }: Props) {
   const [pairingNumber, setPairingNumber] = useState('')
   const [mode, setMode] = useState<'qr' | 'pairing'>('qr')
   const [loading, setLoading] = useState(false)
+  const [timer, setTimer] = useState(0)
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined)
+  const timerRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined)
 
   useEffect(() => {
     async function check() {
@@ -47,6 +49,31 @@ export default function WhatsAppConnect({ tenantId }: Props) {
       }
     }
   }, [status])
+
+  useEffect(() => {
+    if (status === 'WAITING_QR' || status === 'PAIRING') {
+      setTimer(180)
+      timerRef.current = setInterval(() => {
+        setTimer(prev => {
+          if (prev <= 1) {
+            clearInterval(timerRef.current)
+            if (status === 'WAITING_QR') handleRefreshQR()
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
+  }, [status])
+
+  function formatTime(sec: number) {
+    const m = Math.floor(sec / 60)
+    const s = sec % 60
+    return `${m}:${s.toString().padStart(2, '0')}`
+  }
 
   async function handleConnect() {
     setLoading(true)
@@ -178,6 +205,10 @@ export default function WhatsAppConnect({ tenantId }: Props) {
             exit={{ opacity: 0, height: 0 }}
             className="mb-4 overflow-hidden"
           >
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <span className="text-xs text-muted">Expira em</span>
+              <span className="text-xs font-mono text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded">{formatTime(timer)}</span>
+            </div>
             <div className="p-4 bg-white rounded-xl flex items-center justify-center">
               {qrCode.startsWith('data:') ? (
                 <motion.img
@@ -206,6 +237,10 @@ export default function WhatsAppConnect({ tenantId }: Props) {
             exit={{ opacity: 0, height: 0 }}
             className="mb-4 overflow-hidden"
           >
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <span className="text-xs text-muted">Expira em</span>
+              <span className="text-xs font-mono text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded">{formatTime(timer)}</span>
+            </div>
             <div className="p-4 bg-zinc-800/50 rounded-xl text-center">
               <KeyRound className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
               <p className="text-sm text-secondary mb-1">Codigo de pareamento</p>
