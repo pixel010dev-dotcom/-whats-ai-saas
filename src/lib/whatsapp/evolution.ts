@@ -8,8 +8,8 @@ interface EvolutionAPIConfig {
   token?: string
 }
 
-async function api(instance: string, path: string, options: RequestInit = {}) {
-  const url = `${EVOLUTION_URL}/instance/${instance}${path}`
+async function api(instance: string, endpoint: string, options: RequestInit = {}) {
+  const url = `${EVOLUTION_URL}/instance${endpoint}/${instance}`
   const res = await fetch(url, {
     ...options,
     headers: {
@@ -41,7 +41,7 @@ export async function createInstance(config: EvolutionAPIConfig) {
 }
 
 export async function getQRCode(instanceName: string) {
-  return api(instanceName, '/qrcode')
+  return api(instanceName, '/connect')
 }
 
 export async function createInstanceWithNumber(config: EvolutionAPIConfig & { number: string }) {
@@ -64,31 +64,42 @@ export async function createInstanceWithNumber(config: EvolutionAPIConfig & { nu
 }
 
 export async function getPairingCode(instanceName: string, number: string) {
-  return api(instanceName, `/connect?number=${number}`)
+  const url = `${EVOLUTION_URL}/instance/connect/${instanceName}?number=${number}`
+  const res = await fetch(url, {
+    headers: { 'apiKey': EVOLUTION_KEY }
+  })
+  if (!res.ok) throw new Error(`Evolution API: ${res.status}`)
+  return res.json()
 }
 
 export async function sendMessage(instanceName: string, to: string, text: string) {
-  const phone = to.replace(/\D/g, '') + '@s.whatsapp.net'
-  return api(instanceName, '/send-message', {
+  const phone = to.replace(/\D/g, '')
+  const url = `${EVOLUTION_URL}/message/sendText/${instanceName}`
+  const res = await fetch(url, {
     method: 'POST',
-    body: JSON.stringify({
-      number: phone,
-      text,
-      delay: 1000
-    })
+    headers: {
+      'Content-Type': 'application/json',
+      'apiKey': EVOLUTION_KEY
+    },
+    body: JSON.stringify({ number: phone, text, delay: 1000 })
   })
+  if (!res.ok) throw new Error(`Evolution API: ${res.status}`)
+  return res.json()
 }
 
 export async function sendImage(instanceName: string, to: string, imageUrl: string, caption?: string) {
-  const phone = to.replace(/\D/g, '') + '@s.whatsapp.net'
-  return api(instanceName, '/send-image', {
+  const phone = to.replace(/\D/g, '')
+  const url = `${EVOLUTION_URL}/message/sendMedia/${instanceName}`
+  const res = await fetch(url, {
     method: 'POST',
-    body: JSON.stringify({
-      number: phone,
-      image: imageUrl,
-      caption: caption || ''
-    })
+    headers: {
+      'Content-Type': 'application/json',
+      'apiKey': EVOLUTION_KEY
+    },
+    body: JSON.stringify({ number: phone, media: imageUrl, caption: caption || '' })
   })
+  if (!res.ok) throw new Error(`Evolution API: ${res.status}`)
+  return res.json()
 }
 
 export async function fetchInstances() {
@@ -102,9 +113,15 @@ export async function fetchInstances() {
 }
 
 export async function disconnectInstance(instanceName: string) {
-  return api(instanceName, '/logout', { method: 'POST' })
+  const url = `${EVOLUTION_URL}/instance/delete/${instanceName}`
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: { 'apiKey': EVOLUTION_KEY }
+  })
+  if (!res.ok) throw new Error(`Evolution API: ${res.status}`)
+  return res.json()
 }
 
 export async function getInstanceStatus(instanceName: string) {
-  return api(instanceName, '/connection-state')
+  return api(instanceName, '/connectionState')
 }

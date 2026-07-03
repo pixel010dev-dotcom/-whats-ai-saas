@@ -36,3 +36,8 @@ next-env.d.ts
 # Supabase temp
 tudo.zip
 supabase/.temp/
+
+# Windows reserved names
+nul
+NUL
+Nul

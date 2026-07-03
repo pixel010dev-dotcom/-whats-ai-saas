@@ -48,12 +48,12 @@ export async function POST(req: Request) {
         const qrData = await getQRCode(instanceName)
         await prisma.whatsApp.update({
           where: { id: wa.id },
-          data: { status: 'WAITING_QR', qrCode: qrData?.qrcode || '' },
+          data: { status: 'WAITING_QR', qrCode: qrData?.base64 || '' },
         })
         return NextResponse.json({
           success: true,
           id: wa.id,
-          qrcode: qrData?.qrcode || '',
+          qrcode: qrData?.base64 || '',
           instanceName,
           status: 'WAITING_QR',
         })
@@ -76,22 +76,13 @@ export async function POST(req: Request) {
         wa = await prisma.whatsApp.create({
           data: { tenantId, instanceName, status: 'CREATING' },
         })
+      } else {
+        // Delete existing instance so pairing code can be generated
+        await disconnectInstance(instanceName).catch(() => {})
       }
 
       try {
-        await createInstanceWithNumber({ instanceName, number })
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : ''
-        if (msg.includes('403') || msg.includes('already in use')) {
-          console.log('Instance already exists, getting pairing code...')
-        } else {
-          console.error('WhatsApp pairing error:', err)
-          return NextResponse.json({ error: 'Erro ao gerar c�digo de pareamento' }, { status: 500 })
-        }
-      }
-
-      try {
-        const pairData = await getPairingCode(instanceName, number)
+        const pairData = await createInstanceWithNumber({ instanceName, number })
         await prisma.whatsApp.update({
           where: { id: wa.id },
           data: { status: 'WAITING_QR', qrCode: null },
