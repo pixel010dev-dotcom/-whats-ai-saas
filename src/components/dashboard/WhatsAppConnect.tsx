@@ -58,6 +58,7 @@ export default function WhatsAppConnect({ tenantId }: Props) {
           if (prev <= 1) {
             clearInterval(timerRef.current)
             if (status === 'WAITING_QR') handleRefreshQR()
+            else handlePairingRefresh()
             return 0
           }
           return prev - 1
@@ -68,6 +69,27 @@ export default function WhatsAppConnect({ tenantId }: Props) {
       if (timerRef.current) clearInterval(timerRef.current)
     }
   }, [status])
+
+  async function handlePairingRefresh() {
+    if (!tenantId || !pairingNumber.replace(/\D/g, '')) return
+    setLoading(true)
+    try {
+      const res = await fetch('/api/whatsapp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'connect-pairing', tenantId, number: pairingNumber.replace(/\D/g, '') }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setPairingCode(data.pairingCode)
+        toast.success('Novo codigo gerado')
+      }
+    } catch {
+      toast.error('Erro ao renovar pareamento')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   function formatTime(sec: number) {
     const m = Math.floor(sec / 60)
@@ -205,9 +227,9 @@ export default function WhatsAppConnect({ tenantId }: Props) {
             exit={{ opacity: 0, height: 0 }}
             className="mb-4 overflow-hidden"
           >
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <span className="text-xs text-muted">Expira em</span>
-              <span className="text-xs font-mono text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded">{formatTime(timer)}</span>
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <span className="text-sm text-muted">Expira em</span>
+              <span className="text-lg font-mono font-bold text-zinc-300 bg-zinc-800 px-3 py-1 rounded-lg border border-zinc-700">{formatTime(timer)}</span>
             </div>
             <div className="p-4 bg-white rounded-xl flex items-center justify-center">
               {qrCode.startsWith('data:') ? (
@@ -237,9 +259,9 @@ export default function WhatsAppConnect({ tenantId }: Props) {
             exit={{ opacity: 0, height: 0 }}
             className="mb-4 overflow-hidden"
           >
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <span className="text-xs text-muted">Expira em</span>
-              <span className="text-xs font-mono text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded">{formatTime(timer)}</span>
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <span className="text-sm text-muted">Expira em</span>
+              <span className="text-lg font-mono font-bold text-zinc-300 bg-zinc-800 px-3 py-1 rounded-lg border border-zinc-700">{formatTime(timer)}</span>
             </div>
             <div className="p-4 bg-zinc-800/50 rounded-xl text-center">
               <KeyRound className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
