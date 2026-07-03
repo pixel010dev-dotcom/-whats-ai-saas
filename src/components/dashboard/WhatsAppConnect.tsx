@@ -1,20 +1,24 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { toast } from 'sonner'
-import { Smartphone, QrCode, Wifi, WifiOff } from 'lucide-react'
+import { Smartphone, QrCode, Wifi, WifiOff, KeyRound } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface Props {
   tenantId: string
 }
 
-type WAStatus = 'DISCONNECTED' | 'CREATING' | 'WAITING_QR' | 'CONNECTED' | 'open' | 'close'
+type WAStatus = 'DISCONNECTED' | 'CREATING' | 'WAITING_QR' | 'PAIRING' | 'CONNECTED' | 'open' | 'close'
 
 export default function WhatsAppConnect({ tenantId }: Props) {
   const [status, setStatus] = useState<WAStatus>('DISCONNECTED')
   const [qrCode, setQrCode] = useState('')
+  const [pairingCode, setPairingCode] = useState('')
+  const [pairingNumber, setPairingNumber] = useState('')
+  const [mode, setMode] = useState<'qr' | 'pairing'>('qr')
   const [loading, setLoading] = useState(false)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined)
 
   useEffect(() => {
     async function check() {
@@ -31,9 +35,18 @@ export default function WhatsAppConnect({ tenantId }: Props) {
       } catch {}
     }
     check()
-    const interval = setInterval(check, 5000)
-    return () => clearInterval(interval)
+    intervalRef.current = setInterval(check, 5000)
+    return () => clearInterval(intervalRef.current)
   }, [tenantId])
+
+  useEffect(() => {
+    if (status === 'CONNECTED' || status === 'open' || status === 'close') {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = undefined
+      }
+    }
+  }, [status])
 
   async function handleConnect() {
     setLoading(true)
@@ -58,6 +71,54 @@ export default function WhatsAppConnect({ tenantId }: Props) {
     }
   }
 
+  async function handlePairing() {
+    if (!pairingNumber.replace(/\D/g, '')) {
+      toast.error('Digite um numero de telefone valido')
+      return
+    }
+    setLoading(true)
+    try {
+      const res = await fetch('/api/whatsapp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'connect-pairing', tenantId, number: pairingNumber.replace(/\D/g, '') }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setPairingCode(data.pairingCode)
+        setStatus('PAIRING')
+        toast.success('Codigo de pareamento gerado')
+      } else {
+        toast.error(data.error || 'Erro no pareamento')
+      }
+    } catch {
+      toast.error('Erro ao conectar via pareamento')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleRefreshQR() {
+    if (!tenantId) return
+    setLoading(true)
+    try {
+      const res = await fetch('/api/whatsapp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'connect', tenantId }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setQrCode(data.qrcode)
+        toast.success('Novo QR Code gerado')
+      }
+    } catch {
+      toast.error('Erro ao gerar novo QR')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   async function handleDisconnect() {
     try {
       await fetch('/api/whatsapp', {
@@ -67,6 +128,7 @@ export default function WhatsAppConnect({ tenantId }: Props) {
       })
       setStatus('DISCONNECTED')
       setQrCode('')
+      setPairingCode('')
       toast.success('WhatsApp desconectado')
     } catch {
       toast.error('Erro ao desconectar')
@@ -92,7 +154,7 @@ export default function WhatsAppConnect({ tenantId }: Props) {
           </motion.div>
           <div>
             <h3 className="text-sm font-semibold text-primary">WhatsApp</h3>
-            <p className="text-xs text-muted">Conecte seu WhatsApp para começar a atender</p>
+            <p className="text-xs text-muted">Conecte seu WhatsApp para comecar a atender</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -102,7 +164,7 @@ export default function WhatsAppConnect({ tenantId }: Props) {
             className={`w-2 h-2 rounded-full ${isConnected ? 'bg-emerald-500' : 'bg-zinc-600'}`}
           />
           <span className={`text-xs font-medium ${isConnected ? 'text-emerald-400' : 'text-secondary'}`}>
-            {isConnected ? 'Online' : status === 'WAITING_QR' ? 'Aguardando QR' : 'Desconectado'}
+            {isConnected ? 'Online' : status === 'WAITING_QR' ? 'Aguardando QR' : status === 'PAIRING' ? 'Aguardando pareamento' : 'Desconectado'}
           </span>
         </div>
       </div>
@@ -136,7 +198,24 @@ export default function WhatsAppConnect({ tenantId }: Props) {
           </motion.div>
         )}
 
-        {!isConnected && status !== 'WAITING_QR' && (
+        {status === 'PAIRING' && pairingCode && (
+          <motion.div
+            key="pairing"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mb-4 overflow-hidden"
+          >
+            <div className="p-4 bg-zinc-800/50 rounded-xl text-center">
+              <KeyRound className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
+              <p className="text-sm text-secondary mb-1">Codigo de pareamento</p>
+              <p className="text-2xl font-mono font-bold text-emerald-400 tracking-widest">{pairingCode}</p>
+              <p className="text-xs text-muted mt-2">Abra o WhatsApp &gt; Aparelhos conectados &gt; Conectar</p>
+            </div>
+          </motion.div>
+        )}
+
+        {!isConnected && status !== 'WAITING_QR' && status !== 'PAIRING' && (
           <motion.div
             key="disconnected"
             initial={{ opacity: 0 }}
@@ -144,8 +223,17 @@ export default function WhatsAppConnect({ tenantId }: Props) {
             exit={{ opacity: 0 }}
             className="text-center py-6"
           >
-            <WifiOff className="w-8 h-8 text-surface-hover mx-auto mb-2" />
-            <p className="text-sm text-secondary mb-4">Abra o WhatsApp no seu celular e escaneie o QR Code</p>
+            {mode === 'qr' ? (
+              <>
+                <WifiOff className="w-8 h-8 text-surface-hover mx-auto mb-2" />
+                <p className="text-sm text-secondary mb-4">Abra o WhatsApp no celular e escaneie o QR Code</p>
+              </>
+            ) : (
+              <>
+                <KeyRound className="w-8 h-8 text-surface-hover mx-auto mb-2" />
+                <p className="text-sm text-secondary mb-4">Digite o numero de telefone para parear</p>
+              </>
+            )}
           </motion.div>
         )}
 
@@ -163,16 +251,58 @@ export default function WhatsAppConnect({ tenantId }: Props) {
         )}
       </AnimatePresence>
 
+      {/* Mode toggle + pairing input */}
+      {!isConnected && status !== 'WAITING_QR' && status !== 'PAIRING' && (
+        <div className="mb-3">
+          <div className="flex gap-2 mb-3">
+            <button
+              onClick={() => setMode('qr')}
+              className={`flex-1 py-2 text-xs font-medium rounded-lg transition-all ${mode === 'qr' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-surface-hover text-secondary border border-transparent'}`}
+            >
+              <QrCode className="w-3.5 h-3.5 inline mr-1" /> QR Code
+            </button>
+            <button
+              onClick={() => setMode('pairing')}
+              className={`flex-1 py-2 text-xs font-medium rounded-lg transition-all ${mode === 'pairing' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-surface-hover text-secondary border border-transparent'}`}
+            >
+              <KeyRound className="w-3.5 h-3.5 inline mr-1" /> Pareamento
+            </button>
+          </div>
+          {mode === 'pairing' && (
+            <div className="flex gap-2">
+              <input
+                type="tel"
+                placeholder="55DDNUMERO (so numeros)"
+                value={pairingNumber}
+                onChange={e => setPairingNumber(e.target.value.replace(/\D/g, ''))}
+                className="flex-1 px-3 py-2 bg-surface-hover border border-theme rounded-lg text-sm text-primary placeholder:text-muted focus:outline-none focus:border-emerald-500/50"
+              />
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="flex gap-3 mt-2">
         {!isConnected ? (
-          <motion.button
-            whileTap={{ scale: 0.98 }}
-            onClick={handleConnect}
-            disabled={loading}
-            className="flex-1 px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-medium rounded-xl hover:from-emerald-400 hover:to-emerald-500 transition-all duration-300 disabled:opacity-50 text-sm"
-          >
-            {loading ? 'Conectando...' : 'Conectar WhatsApp'}
-          </motion.button>
+          mode === 'qr' ? (
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={handleConnect}
+              disabled={loading}
+              className="flex-1 px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-medium rounded-xl hover:from-emerald-400 hover:to-emerald-500 transition-all duration-300 disabled:opacity-50 text-sm"
+            >
+              {loading ? 'Conectando...' : 'Conectar WhatsApp'}
+            </motion.button>
+          ) : (
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={handlePairing}
+              disabled={loading || !pairingNumber.replace(/\D/g, '')}
+              className="flex-1 px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-medium rounded-xl hover:from-emerald-400 hover:to-emerald-500 transition-all duration-300 disabled:opacity-50 text-sm"
+            >
+              {loading ? 'Pareando...' : 'Parear'}
+            </motion.button>
+          )
         ) : (
           <motion.button
             whileTap={{ scale: 0.98 }}
@@ -180,6 +310,16 @@ export default function WhatsAppConnect({ tenantId }: Props) {
             className="px-5 py-2.5 bg-red-500/10 text-red-400 border border-red-500/20 font-medium rounded-xl hover:bg-red-500/20 transition-all text-sm"
           >
             Desconectar
+          </motion.button>
+        )}
+        {status === 'WAITING_QR' && (
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={handleRefreshQR}
+            disabled={loading}
+            className="px-4 py-2.5 bg-zinc-700/50 text-secondary border border-theme font-medium rounded-xl hover:bg-zinc-700 transition-all text-sm"
+          >
+            Novo QR
           </motion.button>
         )}
         {isConnected && (

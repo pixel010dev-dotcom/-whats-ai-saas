@@ -1,4 +1,4 @@
-﻿﻿﻿import { NextResponse } from 'next/server'
+﻿import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { generateChatResponse } from '@/lib/ai/client'
 import { sendMessage } from '@/lib/whatsapp/evolution'
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
       ? knowledgeEntries.map((k: Knowledge) => `- ${k.title}: ${k.content}`).join('\n')
       : 'Nenhum conhecimento cadastrado'
 
-    const systemPrompt = `Voc\u00ea \u00e9 um atendente digital da empresa.\nPersonalidade: ${settings?.aiPersonality || 'Educado, profissional e amig\u00e1vel'}\n\nRegras:\n- Seja educado e profissional\n- Ajude o cliente com suas d\u00favidas\n- Se n\u00e3o souber responder com base no conhecimento, inicie sua resposta com exatamente [TRANSFER]\n- Responda em portugu\u00eas do Brasil\n- N\u00e3o invente informa\u00e7\u00f5es\n\nConhecimento da empresa:\n${knowledgeStr}`
+    const systemPrompt = `Voce e um atendente digital da empresa.\nPersonalidade: ${settings?.aiPersonality || 'Educado, profissional e amigavel'}\n\nRegras:\n- Seja educado e profissional\n- Ajude o cliente com suas duvidas\n- Se nao souber responder com base no conhecimento, inicie sua resposta com exatamente [TRANSFER]\n- Responda em portugues do Brasil\n- Nao invente informacoes\n\nConhecimento da empresa:\n${knowledgeStr}`
 
     const history = conversation.messages.map((m: Message) => ({
       role: m.role === 'assistant' ? 'assistant' as const : 'user' as const,
@@ -79,7 +79,7 @@ export async function POST(req: Request) {
       const wa = await prisma.whatsApp.findFirst({ where: { tenantId } })
       if (wa?.instanceName && supportPhone) {
         const customerInfo = customer ? 'Cliente: ' + (customer.name || '') + ' (' + (customer.phone || '') + ')' : ''
-        const msg = '*Novo atendimento - Suporte\\n\\n' + customerInfo + '\\n*Mensagem:* ' + message
+        const msg = '*Novo atendimento - Suporte*\n\n' + customerInfo + '\n*Mensagem:* ' + message
         try { await sendMessage(wa.instanceName, supportPhone, msg) } catch (e) {
           console.error('Support forward error:', e)
         }

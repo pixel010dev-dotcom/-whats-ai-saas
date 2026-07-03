@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿import { NextResponse } from 'next/server'
+﻿import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { generateChatResponse } from '@/lib/ai/client'
 import { sendMessage } from '@/lib/whatsapp/evolution'
@@ -17,7 +17,6 @@ export async function POST(req: Request) {
     }
 
     const tenantId = tenant.id
-
 
     let customer = null
     if (customerPhone) {
@@ -77,8 +76,7 @@ export async function POST(req: Request) {
     const aiResponse = await generateChatResponse(history, systemPrompt)
 
     const supportPhone = settings?.supportPhone
-    const supportActive = settings?.supportActive
-    const needsTransfer = aiResponse.content.startsWith('[TRANSFER]') && supportPhone && supportActive
+    const needsTransfer = aiResponse.content.startsWith('[TRANSFER]') && supportPhone && settings?.supportActive
 
     const responseContent = needsTransfer
       ? 'Transferindo para um atendente humano...'

@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { generateChatResponse } from '@/lib/ai/client'
+import { sendMessage } from '@/lib/whatsapp/evolution'
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
     const { instanceName, data } = body
-    if (!instanceName || data?.message?.fromMe !== false) {
+    if (!instanceName || data?.key?.fromMe) {
       return NextResponse.json({ error: 'invalid payload' }, { status: 400 })
     }
 
@@ -76,6 +77,8 @@ export async function POST(req: Request) {
     await prisma.message.create({
       data: { conversationId: conversation.id, role: 'assistant', content: aiResponse.content }
     })
+
+    await sendMessage(instanceName, remoteJid, aiResponse.content)
 
     await prisma.conversation.update({
       where: { id: conversation.id },
