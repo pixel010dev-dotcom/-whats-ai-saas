@@ -82,7 +82,8 @@ export async function POST(req: Request) {
       }
 
       try {
-        const pairData = await createInstanceWithNumber({ instanceName, number })
+        await createInstanceWithNumber({ instanceName, number })
+        const pairData = await getPairingCode(instanceName, number)
         await prisma.whatsApp.update({
           where: { id: wa.id },
           data: { status: 'WAITING_QR', qrCode: null },
@@ -107,7 +108,7 @@ export async function POST(req: Request) {
       }
       try {
         const statusData = await getInstanceStatus(wa.instanceName)
-        const waStatus = statusData?.state || 'DISCONNECTED'
+        const waStatus = statusData?.instance?.state || statusData?.state || 'DISCONNECTED'
         await prisma.whatsApp.update({
           where: { id: wa.id },
           data: { status: waStatus },
