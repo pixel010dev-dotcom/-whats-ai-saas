@@ -33,6 +33,29 @@ export default function PlanosPage() {
     amount: number
   } | null>(null)
   const [copied, setCopied] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  const [timeLeft, setTimeLeft] = useState(600)
+
+  useEffect(() => {
+    if (!showModal) { setTimeLeft(600); return }
+    if (timeLeft <= 0) return
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => Math.max(0, prev - 1))
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [showModal])
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => { if (e.key == "Escape") setShowModal(false) }
+    window.addEventListener("keydown", handleEsc)
+    return () => window.removeEventListener("keydown", handleEsc)
+  }, [])
+
+  const formatTime = (seconds: number) => {
+    const min = Math.floor(seconds / 60)
+    const sec = seconds % 60
+    return min + ":" + sec.toString().padStart(2, "0")
+  }
 
   async function handleSelectPlan() {
     setPaymentData(null)
@@ -54,6 +77,8 @@ export default function PlanosPage() {
       if (res.ok) {
         const data = await res.json()
         setPaymentData(data.payment)
+        setShowModal(true)
+        setTimeLeft(600)
         toast.success('Pagamento PIX gerado!')
       } else {
         const err = await res.json()
@@ -121,32 +146,74 @@ export default function PlanosPage() {
           </button>
         </div>
       </div>
-      {paymentData && (
-        <div className="max-w-md mx-auto mt-8 bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
-          <div className="w-14 h-14 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
-            <QrCode className="w-7 h-7 text-emerald-400" />
-          </div>
-          <h3 className="text-lg font-semibold text-zinc-100 mb-1">Pagamento PIX</h3>
-          <p className="text-sm text-zinc-500 mb-4">Escaneie o QR Code ou copie o codigo</p>
-          {paymentData.qrCodeBase64 ? (
-            <div className="bg-white p-4 rounded-xl inline-block mb-4">
-              <img src={'data:image/png;base64,' + paymentData.qrCodeBase64} alt="QR Code PIX" className="w-48 h-48 mx-auto" />
-            </div>
-          ) : (
-            <div className="bg-zinc-800 rounded-xl p-8 mb-4">
-              <QrCode className="w-32 h-32 text-zinc-600 mx-auto" />
-              <p className="text-xs text-zinc-600 mt-2">QR Code nao disponivel</p>
-            </div>
-          )}
-          <div className="bg-zinc-800 rounded-lg p-3 mb-4">
-            <p className="text-xs text-zinc-500 mb-2">Codigo PIX Copia e Cola</p>
-            <p className="text-xs text-zinc-300 break-all mb-2">{paymentData.copyPaste || paymentData.qrCode}</p>
-            <button onClick={() => handleCopyPix(paymentData.copyPaste || paymentData.qrCode)} className="inline-flex items-center gap-2 text-sm text-emerald-400 hover:text-emerald-300 transition-colors">
-              {copied ? <><CheckCheck className="w-4 h-4" />Copiado!</> : <><Copy className="w-4 h-4" />Copiar codigo</>}
+      {showModal && paymentData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setShowModal(false)}>
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+          <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-md bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl shadow-green-500/10 overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-emerald-400 to-green-500" />
+            <button onClick={() => setShowModal(false)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center transition-colors z-10">
+              <X className="w-4 h-4 text-zinc-400" />
             </button>
+            <div className="pt-8 pb-2 px-8 text-center">
+              <div className="w-14 h-14 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
+                <QrCode className="w-7 h-7 text-emerald-400" />
+              </div>
+              <h3 className="text-xl font-bold text-zinc-100">Pagamento via PIX</h3>
+              <p className="text-sm text-zinc-500 mt-1">Escaneie o QR Code abaixo com seu banco</p>
+            </div>
+            <div className="flex items-center justify-center gap-2 mt-4">
+              <div className={"flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium " + (timeLeft < 120 ? "bg-red-500/10 text-red-400" : "bg-green-500/10 text-green-400")}>
+                <Clock className="w-3.5 h-3.5" />
+                <span>{formatTime(timeLeft)}</span>
+              </div>
+              <span className="text-xs text-zinc-600">tempo para pagar</span>
+            </div>
+            <div className="px-8 py-6 flex justify-center">
+              {paymentData.qrCodeBase64 ? (
+                <div className="bg-white p-4 rounded-2xl shadow-lg shadow-black/20">
+                  <img src={"data:image/png;base64," + paymentData.qrCodeBase64} alt="QR Code PIX" className="w-56 h-56 mx-auto" />
+                </div>
+              ) : (
+                <div className="bg-zinc-800 rounded-2xl p-10">
+                  <QrCode className="w-36 h-36 text-zinc-600 mx-auto" />
+                  <p className="text-xs text-zinc-600 mt-2">QR Code nao disponivel</p>
+                </div>
+              )}
+            </div>
+            <div className="text-center mb-4">
+              <p className="text-sm text-zinc-500">Valor a pagar</p>
+              <p className="text-2xl font-bold text-zinc-100">{formatCurrency(paymentData.amount)}</p>
+            </div>
+            <div className="px-8 pb-4">
+              <div className="bg-zinc-800/50 border border-zinc-700/50 rounded-xl p-3">
+                <p className="text-xs text-zinc-500 mb-2">Codigo PIX Copia e Cola</p>
+                <p className="text-xs text-zinc-400 break-all line-clamp-2 mb-2 font-mono">{paymentData.copyPaste || paymentData.qrCode}</p>
+                <button onClick={() => handleCopyPix(paymentData.copyPaste || paymentData.qrCode)} className="w-full py-2 rounded-lg text-sm font-medium transition-all bg-zinc-700 hover:bg-zinc-600 text-zinc-200 flex items-center justify-center gap-2">
+                  {copied ? (
+                    <><CheckCheck className="w-4 h-4 text-emerald-400" />Copiado!</>
+                  ) : (
+                    <><Copy className="w-4 h-4" />Copiar codigo PIX</>
+                  )}
+                </button>
+              </div>
+            </div>
+            <div className="px-8 pb-8">
+              <div className="flex items-center justify-center gap-4 text-xs text-zinc-600">
+                <div className="flex items-center gap-1.5">
+                  <Shield className="w-3.5 h-3.5" />
+                  Pagamento seguro
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5" />
+                  PIX na hora
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Smartphone className="w-3.5 h-3.5" />
+                  Qualquer banco
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-zinc-500">Valor: <span className="font-semibold text-zinc-200">{formatCurrency(paymentData.amount)}</span></p>
-          <p className="text-xs text-zinc-600 mt-2">Apos o pagamento, sua assinatura sera ativada automaticamente</p>
         </div>
       )}
     </div>
