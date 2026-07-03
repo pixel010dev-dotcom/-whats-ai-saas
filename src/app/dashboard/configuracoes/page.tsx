@@ -1,4 +1,4 @@
-ï»¿'use client'
+'use client'
 
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/app/context/AuthProvider'
@@ -63,12 +63,12 @@ export default function ConfiguracoesPage() {
         body: JSON.stringify({ tenantId, ...settings }),
       })
       if (res.ok) {
-        toast.success('ConfiguraÃ§Ãµes salvas com sucesso!')
+        toast.success('Configurações salvas com sucesso!')
       } else {
-        toast.error('Erro ao salvar configuraÃ§Ãµes')
+        toast.error('Erro ao salvar configurações')
       }
     } catch {
-      toast.error('Erro ao salvar configuraÃ§Ãµes')
+      toast.error('Erro ao salvar configurações')
     } finally {
       setSaving(false)
     }
@@ -87,17 +87,18 @@ export default function ConfiguracoesPage() {
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-2xl font-bold text-zinc-100">ConfiguraÃ§Ãµes</h1>
+        <h1 className="text-2xl font-bold text-zinc-100">Configurações</h1>
         <p className="text-sm text-zinc-500 mt-1">Personalize o comportamento do seu assistente IA</p>
       </div>
 
       <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 space-y-5">
         <div>
+          <div className="bg-zinc-800/30 border border-zinc-700/30 rounded-lg p-2.5 mb-3"><p className="text-xs text-zinc-500"><span className="text-emerald-400 font-medium">Dica:</span> Descreva como a IA deve se comportar. Ex: "Voce e um vendedor consultivo, educado e focado em fechar vendas"</p></div>
           <label className="block text-sm font-medium text-zinc-300 mb-2">Personalidade da IA</label>
           <textarea
             value={settings.aiPersonality}
             onChange={e => setSettings({ ...settings, aiPersonality: e.target.value })}
-            placeholder="Ex: VocÃª Ã© um atendente simpÃ¡tico e profissional da empresa X..."
+            placeholder="Ex: Você é um atendente simpático e profissional da empresa X..."
             className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[100px] resize-y"
             maxLength={500}
           />
@@ -105,22 +106,23 @@ export default function ConfiguracoesPage() {
         </div>
 
         <div>
+          <div className="bg-zinc-800/30 border border-zinc-700/30 rounded-lg p-2.5 mb-3"><p className="text-xs text-zinc-500"><span className="text-emerald-400 font-medium">Dica:</span> Primeira mensagem que o cliente ve. Ex: "Ola! Eu sou o assistente da Loja X. Como posso ajudar?"</p></div>
           <label className="block text-sm font-medium text-zinc-300 mb-2">Mensagem de boas-vindas</label>
           <textarea
             value={settings.welcomeMessage}
             onChange={e => setSettings({ ...settings, welcomeMessage: e.target.value })}
-            placeholder="OlÃ¡! Como posso ajudar vocÃª hoje?"
+            placeholder="Olá! Como posso ajudar você hoje?"
             className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[80px] resize-y"
             maxLength={200}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">HorÃ¡rio de funcionamento</label>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Horário de funcionamento</label>
           <input
             value={settings.businessHours}
             onChange={e => setSettings({ ...settings, businessHours: e.target.value })}
-            placeholder="Seg-Sex 8h Ã s 18h, SÃ¡b 8h Ã s 12h"
+            placeholder="Seg-Sex 8h às 18h, Sáb 8h às 12h"
             className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             maxLength={100}
           />
@@ -134,7 +136,7 @@ export default function ConfiguracoesPage() {
             className="w-4 h-4 rounded border-zinc-600 bg-zinc-800 text-emerald-500 focus:ring-emerald-500"
           />
           <div>
-            <span className="text-sm font-medium text-zinc-200">Respostas automÃ¡ticas</span>
+            <span className="text-sm font-medium text-zinc-200">Respostas automáticas</span>
             <p className="text-xs text-zinc-500">Responder automaticamente mensagens dos clientes</p>
           </div>
         </label>
@@ -152,7 +154,7 @@ export default function ConfiguracoesPage() {
             placeholder="554598566730"
             className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
-          <p className="text-xs text-zinc-500 mt-1">NÃºmero com DDI e DDD, apenas nÃºmeros. Ex: 5511999999999</p>
+          <p className="text-xs text-zinc-500 mt-1">Número com DDI e DDD, apenas números. Ex: 5511999999999</p>
         </div>
 
         <label className="flex items-center gap-3 cursor-pointer">
@@ -164,21 +166,21 @@ export default function ConfiguracoesPage() {
           />
           <div>
             <span className="text-sm font-medium text-zinc-200">Ativar encaminhamento para WhatsApp</span>
-            <p className="text-xs text-zinc-500">Quando a IA nÃ£o souber responder, encaminha pro seu WhatsApp</p>
+            <p className="text-xs text-zinc-500">Quando a IA não souber responder, encaminha pro seu WhatsApp</p>
           </div>
         </label>
       </div>
 
       <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 space-y-5">
         <h2 className="text-lg font-semibold text-zinc-200">Personalidade da IA do Suporte</h2>
-        <p className="text-sm text-zinc-500">ConfiguraÃ§Ãµes especÃ­ficas para o chat de suporte do site (widget flutuante)</p>
+        <p className="text-sm text-zinc-500">Configurações específicas para o chat de suporte do site (widget flutuante)</p>
 
         <div>
           <label className="block text-sm font-medium text-zinc-300 mb-2">Personalidade</label>
           <textarea
             value={settings.supportPersonality}
             onChange={e => setSettings({ ...settings, supportPersonality: e.target.value })}
-            placeholder="Ex: VocÃª Ã© um atendente de suporte simpÃ¡tico e prestativo..."
+            placeholder="Ex: Você é um atendente de suporte simpático e prestativo..."
             className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[100px] resize-y"
             maxLength={500}
           />
@@ -190,7 +192,7 @@ export default function ConfiguracoesPage() {
           <textarea
             value={settings.supportWelcomeMessage}
             onChange={e => setSettings({ ...settings, supportWelcomeMessage: e.target.value })}
-            placeholder="OlÃ¡! Precisa de ajuda? Estou aqui para ajudar!"
+            placeholder="Olá! Precisa de ajuda? Estou aqui para ajudar!"
             className="w-full px-4 py-3 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[80px] resize-y"
             maxLength={200}
           />
@@ -202,9 +204,10 @@ export default function ConfiguracoesPage() {
         disabled={saving}
         className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold rounded-xl hover:from-emerald-400 hover:to-emerald-500 transition-all duration-300 disabled:opacity-50 shadow-lg shadow-emerald-500/25"
       >
-        {saving ? 'Salvando...' : 'Salvar configuraÃ§Ãµes'}
+        {saving ? 'Salvando...' : 'Salvar configurações'}
       </button>
     </div>
   )
 }
+
 
