@@ -98,8 +98,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true, response: aiResponse.content })
   } catch (err) {
-    console.error('WhatsApp webhook error:', err)
-    return NextResponse.json({ error: 'internal error' }, { status: 500 })
+    const msg = err instanceof Error ? err.stack || err.message : String(err)
+    console.error('WhatsApp webhook error:', msg)
+    return NextResponse.json({ error: 'internal error', detail: msg }, { status: 500 })
   }
 }
 
