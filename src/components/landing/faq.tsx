@@ -33,8 +33,8 @@ const faqs = [
     a: 'Sim! Sem multa, sem burocracia. Você cancela pelo dashboard e o plano continua até o final do período já pago.'
   },
   {
-    q: 'Quantas pessoas podem usar ao mesmo tempo?',
-    a: 'Depende do seu plano. No Básico é 1 usuário, no Profissional até 3, e no Premium ilimitado.'
+    q: 'Contratei o plano. Quantas pessoas podem usar ao mesmo tempo?',
+    a: 'O plano Único dá acesso completo para você e até 2 colaboradores acompanharem as conversas pelo dashboard.'
   }
 ]
 

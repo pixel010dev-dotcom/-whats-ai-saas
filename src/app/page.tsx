@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Hero from '@/components/landing/hero'
 import Features from '@/components/landing/features'
 import HowItWorks from '@/components/landing/how-it-works'
+import Comparison from '@/components/landing/comparison'
 import Pricing from '@/components/landing/pricing'
 import Testimonials from '@/components/landing/testimonials'
 import FAQ from '@/components/landing/faq'
@@ -79,6 +80,9 @@ export default function Home() {
       {/* How It Works Section */}
       <HowItWorks />
 
+      {/* Comparison Section */}
+      <Comparison />
+
       {/* Pricing Section */}
       <Pricing />
 
@@ -97,18 +101,18 @@ export default function Home() {
         
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-            Pronto para transformar seu atendimento?
+            Pare de perder clientes. Automatize seu WhatsApp agora.
           </h2>
           <p className="text-xl text-green-100 mb-10 max-w-2xl mx-auto">
-            Automatize suas vendas no WhatsApp em 5 minutos e nunca mais perca um cliente.
-            Comece grátis, sem cartão de crédito.
+            Em 5 minutos sua IA já está vendendo por você. Enquanto você dorme, ela trabalha.
+            R$ 29,90/mês. Ativação instantânea. Cancele quando quiser.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/register"
               className="px-8 py-4 bg-white text-emerald-400 font-bold rounded-xl text-lg shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
             >
-              Começar grátis agora
+              Quero vender 24h por dia
             </Link>
             <a
               href="#features"

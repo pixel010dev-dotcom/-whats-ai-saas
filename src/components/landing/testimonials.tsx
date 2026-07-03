@@ -5,36 +5,44 @@ import { useEffect, useRef, useState } from 'react'
 
 const testimonials = [
   {
-    name: 'Carlos Silva',
-    role: 'Padaria do Carlos',
-    content: 'Minhas vendas pelo WhatsApp aumentaram 340% em 2 meses. A IA não deixa nenhum cliente sem resposta, mesmo quando estou dormindo. Melhor investimento que já fiz.',
+    name: 'Diogo Pfeifer',
+    role: 'Geoleads',
+    content: 'Estava perdendo cliente porque demorava pra responder no WhatsApp. A IA responde na hora com preço certo, estoque e até fecha negociação. Tripliquei as vendas sem contratar ninguém.',
     rating: 5,
-    initials: 'CS',
-    color: 'from-emerald-400 to-emerald-600'
+    initials: 'DP',
+    gradient: 'from-emerald-500 to-emerald-600',
   },
   {
-    name: 'Ana Oliveira',
-    role: 'Moda Feminina LOOK',
-    content: '\u201CAtendo 3x mais clientes com metade do esforço. A inteligência artificial é tão boa que os clientes acham que sou eu respondendo. Simplesmente incrível!\u201D',
+    name: 'Maria Santos',
+    role: 'Salgados da Maria',
+    content: 'Coloquei cardápio, preços e horários. A IA faz orçamento, confirma pedido e até pergunta se o cliente quer adicionar mais coisas. Virou meu melhor vendedor noturno.',
     rating: 5,
-    initials: 'AO',
-    color: 'from-purple-400 to-pink-600'
+    initials: 'MS',
+    gradient: 'from-violet-500 to-purple-600',
   },
   {
-    name: 'Roberto Mendes',
+    name: 'Ricardo Oliveira',
     role: 'Auto Peças FM',
-    content: '\u201CJá testei vários chatbots. Esse é o único que realmente entende do que o cliente precisa e consegue fechar vendas sozinho. Recomendo de olhos fechados.\u201D',
+    content: 'Meus cliente perguntam 24h por dia: preço de peça, horário, se tem estoque. Agora a IA responde tudo sozinha. Só entro quando é pra fechar a venda. Menos estresse, mais resultado.',
     rating: 5,
-    initials: 'RM',
-    color: 'from-blue-400 to-indigo-600'
+    initials: 'RO',
+    gradient: 'from-blue-500 to-cyan-600',
   },
   {
     name: 'Juliana Costa',
     role: 'Doces e Delícias',
-    content: '\u201CO pós-venda automático recuperou 15 clientes que não compravam há meses. Minha receita subiu 50% sem eu fazer nada.\u201D',
-    rating: 5,
+    content: 'No começo desconfiei se a IA ia entender de encomenda de bolo. Mas ela aprendeu rápido: sabor, tamanho, prazo. Minhas clientes nem percebem que não sou eu respondendo.',
+    rating: 4,
     initials: 'JC',
-    color: 'from-orange-400 to-red-600'
+    gradient: 'from-amber-500 to-orange-600',
+  },
+  {
+    name: 'Rafael Lima',
+    role: 'Barbearia do Rafa',
+    content: 'Botava agenda no papel e perdia corte toda hora. Agora a IA agenda direto pelo WhatsApp, manda lembrete e se o cliente cancelar, ja abre vaga. Nunca mais tive furo de agenda.',
+    rating: 5,
+    initials: 'RL',
+    gradient: 'from-rose-500 to-red-600',
   }
 ]
 
@@ -108,7 +116,7 @@ export default function Testimonials() {
                 </p>
 
                 <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${testimonial.color} flex items-center justify-center text-white font-bold text-sm`}>
+                  <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${testimonial.gradient} flex items-center justify-center text-white font-bold text-sm`}>
                     {testimonial.initials}
                   </div>
                   <div>
