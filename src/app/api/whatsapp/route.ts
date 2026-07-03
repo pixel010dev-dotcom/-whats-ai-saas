@@ -9,7 +9,8 @@ async function checkSubscription(tenantId: string): Promise<boolean> {
 
 export async function POST(req: Request) {
   try {
-    const { action, tenantId } = await req.json()
+    const body = await req.json()
+    const { action, tenantId, number } = body
     if (!tenantId) {
       return NextResponse.json({ error: 'tenantId � obrigat�rio' }, { status: 400 })
     }
@@ -64,7 +65,6 @@ export async function POST(req: Request) {
     }
 
     if (action === 'connect-pairing') {
-      const { number } = await req.json()
       if (!number) {
         return NextResponse.json({ error: 'N�mero de telefone � obrigat�rio' }, { status: 400 })
       }
