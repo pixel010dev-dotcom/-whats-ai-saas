@@ -27,7 +27,7 @@ export async function POST(req: Request) {
         settings: {
           create: {
             aiPersonality: 'Voce e um assistente virtual especialista em atendimento ao cliente. Seja educado, profissional e amigavel. Ajude o cliente com duvidas sobre produtos, servicos, horarios e precos. Responda em portugues do Brasil. Nao invente informacoes.',
-            welcomeMessage: 'Ola! Como posso ajudar voce hoje? ðŸ˜Š',
+            welcomeMessage: 'Ola! Como posso ajudar voce hoje? 😊',
             supportActive: true,
             supportPersonality: 'Voce e um atendente de suporte digital. Seja educado, paciente e prestativo. Resolva os problemas dos clientes da melhor forma possivel. Se nao souber responder, transfira para o suporte humano.',
             supportWelcomeMessage: 'Ola! Bem-vindo ao suporte! Como posso te ajudar hoje?',
