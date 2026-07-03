@@ -146,7 +146,28 @@ export async function setSettings(instanceName: string) {
       readStatus: true,
       rejectCall: false,
       groupsIgnore: false,
-      syncFullHistory: false
+      syncFullHistory: false,
+    })
+  })
+  if (!res.ok) throw new Error(`Evolution API: ${res.status}`)
+  return res.json()
+}
+
+export async function setWebhook(instanceName: string) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://whatsai-app-production.up.railway.app'
+  const url = `${EVOLUTION_URL}/webhook/instance/${instanceName}`
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apiKey': EVOLUTION_KEY
+    },
+    body: JSON.stringify({
+      enabled: true,
+      url: `${appUrl}/api/webhooks/whatsapp`,
+      webhook_by_events: false,
+      webhook_base64: false,
+      events: ['MESSAGES_UPSERT'],
     })
   })
   if (!res.ok) throw new Error(`Evolution API: ${res.status}`)

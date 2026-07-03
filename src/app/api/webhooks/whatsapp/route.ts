@@ -6,9 +6,11 @@ import { sendMessage } from '@/lib/whatsapp/evolution'
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { instanceName, data } = body
-    if (!instanceName || data?.key?.fromMe) {
-      return NextResponse.json({ error: 'invalid payload' }, { status: 400 })
+    const event = body.event || ''
+    const instanceName = body.instanceName || body.instance
+    const data = body.data
+    if (!instanceName || event !== 'messages.upsert' || data?.key?.fromMe) {
+      return NextResponse.json({ success: true, ignored: true })
     }
 
     const wa = await prisma.whatsApp.findFirst({ where: { instanceName } })
@@ -60,6 +62,10 @@ export async function POST(req: Request) {
       prisma.tenantSettings.findUnique({ where: { tenantId } }),
       prisma.knowledge.findMany({ where: { tenantId }, take: 5 })
     ])
+
+    if (settings && !settings.autoReply) {
+      return NextResponse.json({ success: true, autoReply: false })
+    }
 
     const knowledgeStr = knowledgeEntries.length > 0
       ? knowledgeEntries.map(k => `- ${k.title}: ${k.content}`).join('\n')

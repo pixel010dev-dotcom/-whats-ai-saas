@@ -1,6 +1,6 @@
 ﻿import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createInstance, createInstanceWithNumber, getQRCode, getPairingCode, getInstanceStatus, disconnectInstance, setSettings } from '@/lib/whatsapp/evolution'
+import { createInstance, createInstanceWithNumber, getQRCode, getPairingCode, getInstanceStatus, disconnectInstance, setSettings, setWebhook } from '@/lib/whatsapp/evolution'
 
 async function checkSubscription(tenantId: string): Promise<boolean> {
   const sub = await prisma.subscription.findUnique({ where: { tenantId } })
@@ -46,6 +46,7 @@ export async function POST(req: Request) {
       }
 
       await setSettings(instanceName).catch(() => {})
+      await setWebhook(instanceName).catch(() => {})
 
       try {
         const qrData = await getQRCode(instanceName)
@@ -86,6 +87,7 @@ export async function POST(req: Request) {
       try {
         await createInstanceWithNumber({ instanceName, number })
         await setSettings(instanceName).catch(() => {})
+        await setWebhook(instanceName).catch(() => {})
         const pairData = await getPairingCode(instanceName, number)
         await prisma.whatsApp.update({
           where: { id: wa.id },

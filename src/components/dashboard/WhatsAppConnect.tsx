@@ -19,6 +19,7 @@ export default function WhatsAppConnect({ tenantId }: Props) {
   const [mode, setMode] = useState<'qr' | 'pairing'>('qr')
   const [loading, setLoading] = useState(false)
   const [timer, setTimer] = useState(0)
+  const [autoReply, setAutoReply] = useState(true)
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined)
   const timerRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined)
 
@@ -39,6 +40,19 @@ export default function WhatsAppConnect({ tenantId }: Props) {
     check()
     intervalRef.current = setInterval(check, 5000)
     return () => clearInterval(intervalRef.current)
+  }, [tenantId])
+
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const res = await fetch(`/api/settings?tenantId=${tenantId}`)
+        if (res.ok) {
+          const data = await res.json()
+          setAutoReply(data.autoReply)
+        }
+      } catch {}
+    }
+    fetchSettings()
   }, [tenantId])
 
   useEffect(() => {
@@ -181,6 +195,23 @@ export default function WhatsAppConnect({ tenantId }: Props) {
       toast.success('WhatsApp desconectado')
     } catch {
       toast.error('Erro ao desconectar')
+    }
+  }
+
+  async function handleToggleAI() {
+    const newVal = !autoReply
+    try {
+      const res = await fetch('/api/whatsapp/toggle-ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tenantId, autoReply: newVal }),
+      })
+      if (res.ok) {
+        setAutoReply(newVal)
+        toast.success(newVal ? 'IA ativada' : 'IA desativada')
+      }
+    } catch {
+      toast.error('Erro ao alterar')
     }
   }
 
@@ -380,9 +411,23 @@ export default function WhatsAppConnect({ tenantId }: Props) {
           </motion.button>
         )}
         {isConnected && (
-          <div className="flex-1 px-4 py-2.5 bg-emerald-500/5 border border-emerald-500/20 rounded-xl text-center">
-            <span className="text-emerald-400 font-medium text-sm">Conectado</span>
-          </div>
+          <>
+            <div className="flex-1 px-4 py-2.5 bg-emerald-500/5 border border-emerald-500/20 rounded-xl text-center">
+              <span className="text-emerald-400 font-medium text-sm">Conectado</span>
+            </div>
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              onClick={handleToggleAI}
+              className={`px-4 py-2.5 font-medium rounded-xl transition-all text-sm flex items-center gap-2 ${
+                autoReply
+                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                  : 'bg-zinc-700/50 text-secondary border border-theme'
+              }`}
+            >
+              <span className={`w-2 h-2 rounded-full ${autoReply ? 'bg-emerald-500' : 'bg-zinc-500'}`} />
+              IA {autoReply ? 'Ativa' : 'Inativa'}
+            </motion.button>
+          </>
         )}
       </div>
     </motion.div>
