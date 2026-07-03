@@ -23,7 +23,18 @@ export async function POST(req: Request) {
       data: {
         name: empresa,
         slug: slugify(empresa) + '-' + Math.random().toString(36).slice(2, 6),
-        plan: 'UNICO', status: 'ACTIVE', settings: { create: {} },
+        plan: 'UNICO', status: 'ACTIVE',
+        settings: {
+          create: {
+            aiPersonality: 'Voce e um assistente virtual especialista em atendimento ao cliente. Seja educado, profissional e amigavel. Ajude o cliente com duvidas sobre produtos, servicos, horarios e precos. Responda em portugues do Brasil. Nao invente informacoes.',
+            welcomeMessage: 'Ola! Como posso ajudar voce hoje? ðŸ˜Š',
+            supportActive: true,
+            supportPersonality: 'Voce e um atendente de suporte digital. Seja educado, paciente e prestativo. Resolva os problemas dos clientes da melhor forma possivel. Se nao souber responder, transfira para o suporte humano.',
+            supportWelcomeMessage: 'Ola! Bem-vindo ao suporte! Como posso te ajudar hoje?',
+            autoReply: true,
+            workingHours: true
+          }
+        },
         subscriptions: {
           create: { plan: 'UNICO', status: 'PENDING' }
         }
