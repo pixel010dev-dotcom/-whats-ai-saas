@@ -1,3 +1,4 @@
+// v2 - PIX modal com overlay centralizado - 2026-07-02 22:37
 'use client'
 
 import { useState, useEffect } from 'react'
