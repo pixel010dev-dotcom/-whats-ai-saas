@@ -139,6 +139,38 @@ export default function ConhecimentoPage() {
         </button>
       </div>
 
+      <div className="bg-gradient-to-r from-emerald-500/5 to-emerald-600/5 border border-emerald-500/10 rounded-xl p-4 mb-6">
+        <div className="flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5">
+            <BrainCircuit className="w-4 h-4 text-emerald-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-emerald-300 mb-1">Como alimentar a IA</h3>
+            <p className="text-xs text-zinc-500 leading-relaxed">
+              A IA usa essas informacoes para responder seus clientes. Quanto mais dados, melhor ela atende.
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2 mt-3">
+          <div className="bg-zinc-800/30 rounded-lg p-2.5">
+            <p className="text-xs font-medium text-zinc-300">Produtos</p>
+            <p className="text-[11px] text-zinc-600 mt-0.5">"Bolo de chocolate medio - R$ 89,90. Entrega em 48h."</p>
+          </div>
+          <div className="bg-zinc-800/30 rounded-lg p-2.5">
+            <p className="text-xs font-medium text-zinc-300">Horarios</p>
+            <p className="text-[11px] text-zinc-600 mt-0.5">"Seg a Sex 8h-18h | Sab 9h-13h | Dom fechado"</p>
+          </div>
+          <div className="bg-zinc-800/30 rounded-lg p-2.5">
+            <p className="text-xs font-medium text-zinc-300">Pagamento</p>
+            <p className="text-[11px] text-zinc-600 mt-0.5">"Aceitamos PIX, cartao ate 12x e boleto"</p>
+          </div>
+          <div className="bg-zinc-800/30 rounded-lg p-2.5">
+            <p className="text-xs font-medium text-zinc-300">FAQ</p>
+            <p className="text-[11px] text-zinc-600 mt-0.5">"Trocas em ate 7 dias. Garantia de 30 dias."</p>
+          </div>
+        </div>
+      </div>
+
       <div className="relative">
         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
         <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar na base de conhecimento..." className="w-full bg-zinc-800/50 border border-zinc-700 rounded-lg pl-10 pr-4 py-2.5 text-sm text-zinc-100 outline-none focus:ring-2 focus:ring-emerald-500/50 placeholder-zinc-500" />
