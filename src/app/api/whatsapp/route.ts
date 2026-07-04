@@ -2,6 +2,15 @@
 import { prisma } from '@/lib/prisma'
 import { createInstance, createInstanceWithNumber, getQRCode, getPairingCode, getInstanceStatus, disconnectInstance, setSettings, setWebhook } from '@/lib/whatsapp/evolution'
 
+async function replyPending(instanceName: string) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://whatsai-app-production.up.railway.app'
+  const secret = process.env.CRON_SECRET
+  if (!secret) return
+  try {
+    await fetch(`${appUrl}/api/webhooks/whatsapp?instanceName=${instanceName}&secret=${secret}`)
+  } catch {}
+}
+
 async function checkSubscription(tenantId: string): Promise<boolean> {
   const sub = await prisma.subscription.findUnique({ where: { tenantId } })
   return sub?.status === 'ACTIVE'
@@ -47,6 +56,7 @@ export async function POST(req: Request) {
 
       await setSettings(instanceName).catch(() => {})
       await setWebhook(instanceName).catch(() => {})
+      replyPending(instanceName)
 
       try {
         const qrData = await getQRCode(instanceName)
