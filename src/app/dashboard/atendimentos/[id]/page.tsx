@@ -146,8 +146,8 @@ export default function ChatDetailPage() {
         <div className="flex-1 min-w-0">
           <p className="font-medium text-zinc-200 truncate">{conversation?.customerName || 'Cliente'}</p>
           <div className="flex items-center gap-2">
-            <span className={'w-2 h-2 rounded-full ' + (conversation?.status === 'ACTIVE' ? 'bg-emerald-400' : 'bg-zinc-500')} />
-            <span className="text-xs text-zinc-500">{conversation?.status === 'ACTIVE' ? 'Online' : 'Offline'}</span>
+            <span className={'w-2 h-2 rounded-full ' + (conversation?.status === 'ACTIVE' ? 'bg-emerald-400' : conversation?.status === 'WAITING' ? 'bg-amber-400' : 'bg-zinc-500')} />
+            <span className="text-xs text-zinc-500">{conversation?.status === 'ACTIVE' ? 'Ativo' : conversation?.status === 'WAITING' ? 'Aguardando' : conversation?.status === 'TRANSFERRED' ? 'Transferido' : 'Fechado'}</span>
             {conversation?.customerPhone && <span className="text-xs text-zinc-600">{conversation.customerPhone}</span>}
           </div>
         </div>

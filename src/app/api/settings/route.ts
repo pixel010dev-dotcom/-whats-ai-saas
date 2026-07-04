@@ -5,9 +5,16 @@ import { settingsSchema } from '@/lib/validations'
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url)
-    const tenantId = searchParams.get('tenantId')
+    let tenantId = searchParams.get('tenantId')
+    const slug = searchParams.get('slug')
+
+    if (!tenantId && slug) {
+      const tenant = await prisma.tenant.findUnique({ where: { slug } })
+      if (tenant) tenantId = tenant.id
+    }
+
     if (!tenantId) {
-      return NextResponse.json({ error: 'tenantId é obrigatório' }, { status: 400 })
+      return NextResponse.json({ error: 'tenantId ou slug é obrigatório' }, { status: 400 })
     }
 
     let settings = await prisma.tenantSettings.findUnique({ where: { tenantId } })

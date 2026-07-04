@@ -18,16 +18,14 @@ export default function ChatWidget({ slug, title = 'Precisa de ajuda?' }: Props)
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const [customerId, setCustomerId] = useState('')
-  const [conversationId, setConversationId] = useState('')
   const [showForm, setShowForm] = useState(true)
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [welcomeMsg, setWelcomeMsg] = useState('')
+  const [convId, setConvId] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Load support settings
     fetch('/api/settings?slug=' + slug)
       .then(r => r.json())
       .then(data => {
@@ -42,6 +40,21 @@ export default function ChatWidget({ slug, title = 'Precisa de ajuda?' }: Props)
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
     }
   }, [messages])
+
+  async function loadHistory(conversationId: string) {
+    try {
+      const res = await fetch('/api/messages?conversationId=' + conversationId)
+      if (res.ok) {
+        const data = await res.json()
+        if (data.messages?.length > 0) {
+          setMessages(data.messages.map((m: { role: string; content: string }) => ({
+            role: m.role as 'user' | 'assistant',
+            content: m.content,
+          })))
+        }
+      }
+    } catch {}
+  }
 
   async function sendMessage(text: string) {
     setLoading(true)
@@ -62,7 +75,10 @@ export default function ChatWidget({ slug, title = 'Precisa de ajuda?' }: Props)
       const data = await res.json()
       if (data.response) {
         setMessages(prev => [...prev, { role: 'assistant', content: data.response }])
-        setConversationId(data.conversationId || '')
+        if (data.conversationId && !convId) {
+          setConvId(data.conversationId)
+          loadHistory(data.conversationId)
+        }
       }
     } catch {
       setMessages(prev => [...prev, { role: 'assistant', content: 'Desculpe, ocorreu um erro. Tente novamente.' }])

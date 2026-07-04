@@ -8,7 +8,7 @@ import TimelineCharts from '@/components/dashboard/TimelineCharts'
 import type { DashboardMetrics, ConversationSummary } from '@/types'
 import {
   MessageSquare, Users, SendHorizonal, DollarSign, MessageCircle,
-  TrendingUp, Clock, Target, Zap
+  TrendingUp
 } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -62,56 +62,33 @@ function MetricCard({ label, value, icon: Icon, loading, trend }: {
   )
 }
 
-function FollowUpWidget() {
-  const items = [
-    { icon: Target, label: 'Meta de conversas hoje', value: '0 / 50', progress: 0, color: 'emerald' },
-    { icon: Clock, label: 'Tempo médio de resposta', value: '—', progress: 0, color: 'violet' },
-    { icon: MessageCircle, label: 'Taxa de conversão', value: '—', progress: 0, color: 'blue' },
-    { icon: Zap, label: 'Leads hoje', value: '0', progress: 0, color: 'amber' },
-  ]
-
+function AIStatusWidget({ metrics }: { metrics: DashboardMetrics | null }) {
   return (
     <motion.div
       variants={itemVariants}
       className="bg-surface border border-theme p-4 sm:p-5 rounded-xl"
     >
-      <h3 className="text-sm font-semibold text-primary mb-4">Metas & Acompanhamento</h3>
+      <h3 className="text-sm font-semibold text-primary mb-4">Status da IA</h3>
       <div className="grid grid-cols-2 gap-3">
-        {items.map((item, i) => {
-          const colors: Record<string, string> = {
-            emerald: 'bg-emerald-500/10 text-emerald-400',
-            violet: 'bg-violet-500/10 text-violet-400',
-            blue: 'bg-blue-500/10 text-blue-400',
-            amber: 'bg-amber-500/10 text-amber-400',
-          }
-          const barColors: Record<string, string> = {
-            emerald: 'bg-emerald-500',
-            violet: 'bg-violet-500',
-            blue: 'bg-blue-500',
-            amber: 'bg-amber-500',
-          }
-          return (
-            <div key={i} className="space-y-2">
-              <div className="flex items-start gap-2">
-                <div className={`p-1.5 rounded-lg shrink-0 ${colors[item.color]}`}>
-                  <item.icon className="w-3.5 h-3.5" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xs text-secondary truncate">{item.label}</p>
-                  <p className="text-sm font-semibold text-primary">{item.value}</p>
-                </div>
-              </div>
-              <div className="h-1.5 bg-surface-hover rounded-full overflow-hidden">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${item.progress}%` }}
-                  transition={{ duration: 1, delay: 0.3 + i * 0.1 }}
-                  className={`h-full rounded-full ${barColors[item.color]}`}
-                />
-              </div>
-            </div>
-          )
-        })}
+        <div className="space-y-2 p-3 rounded-lg bg-emerald-500/5">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-xs text-secondary">Sistema</span>
+          </div>
+          <p className="text-sm font-semibold text-primary">Operacional</p>
+        </div>
+        <div className="space-y-2 p-3 rounded-lg bg-violet-500/5">
+          <span className="text-xs text-secondary">Conversas ativas</span>
+          <p className="text-sm font-semibold text-primary">{metrics?.activeConversations ?? '—'}</p>
+        </div>
+        <div className="space-y-2 p-3 rounded-lg bg-blue-500/5">
+          <span className="text-xs text-secondary">Msgs hoje</span>
+          <p className="text-sm font-semibold text-primary">{metrics?.messagesToday ?? '—'}</p>
+        </div>
+        <div className="space-y-2 p-3 rounded-lg bg-amber-500/5">
+          <span className="text-xs text-secondary">Clientes</span>
+          <p className="text-sm font-semibold text-primary">{metrics?.customers ?? '—'}</p>
+        </div>
       </div>
     </motion.div>
   )
@@ -201,7 +178,7 @@ export default function DashboardHome() {
         />
       </div>
 
-      <FollowUpWidget />
+      <AIStatusWidget metrics={metrics} />
 
       {tenantId && (
         <motion.div variants={itemVariants}>
@@ -263,11 +240,11 @@ export default function DashboardHome() {
                   </div>
                   <div className="text-right shrink-0 ml-3">
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                      conv.status === 'ACTIVE' || conv.status === 'PENDING'
+                      conv.status === 'ACTIVE' || conv.status === 'WAITING'
                         ? 'bg-emerald-500/10 text-emerald-400'
                         : 'bg-surface-hover text-muted'
                     }`}>
-                      {conv.status === 'ACTIVE' ? 'Ativo' : conv.status === 'PENDING' ? 'Pendente' : 'Fechado'}
+                      {conv.status === 'ACTIVE' ? 'Ativo' : conv.status === 'WAITING' ? 'Aguardando' : 'Fechado'}
                     </span>
                     <p className="text-xs text-muted mt-1">{timeAgo(conv.lastMessageAt)}</p>
                   </div>

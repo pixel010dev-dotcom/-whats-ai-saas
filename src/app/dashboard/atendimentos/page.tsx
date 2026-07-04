@@ -100,9 +100,11 @@ export default function AtendimentosPage() {
                       ? 'bg-emerald-500/10 text-emerald-400'
                       : conv.status === 'WAITING'
                       ? 'bg-amber-500/10 text-amber-400'
+                      : conv.status === 'TRANSFERRED'
+                      ? 'bg-blue-500/10 text-blue-400'
                       : 'bg-zinc-700 text-zinc-400'
                   }`}>
-                    {conv.status === 'ACTIVE' ? 'Ativo' : conv.status === 'WAITING' ? 'Aguardando' : 'Fechado'}
+                    {conv.status === 'ACTIVE' ? 'Ativo' : conv.status === 'WAITING' ? 'Aguardando' : conv.status === 'TRANSFERRED' ? 'Transferido' : 'Fechado'}
                   </span>
                 </div>
                 <p className="text-sm text-zinc-500 truncate mt-0.5">{conv.lastMessage}</p>
