@@ -381,21 +381,21 @@ const northFreeProvider = openCodeKey
 // Lista completa de provedores (ordem = prioridade)
 // ============================================================
 const providers: AIProvider[] = [
-  // 1o - Groq (mais rapido, free tier generoso)
+  // 1o - OpenCode Zen (modelos free com limites generosos)
+  new OpenCodeZenProvider(),
+
+  // 2o - Groq (rapido, free tier bom)
   new GroqProvider(),
 
-  // 2o - Cerebras (rapido, modelo bom)
+  // 3o - Cerebras (rapido, modelo bom)
   new CerebrasProvider(),
 
-  // 3o - OpenRouter (Gemini Flash 2.0 - rapido e barato)
+  // 4o - OpenRouter (Gemini Flash 2.0)
   new OpenRouterProvider(),
 
-  // Extras com chave (opcionais - so entram se configurados)
+  // Extras com chave
   ...(deepSeekProvider ? [deepSeekProvider] : []),
   ...(geminiProvider ? [geminiProvider] : []),
-
-  // Fallback principal - OpenCode Zen (gratuito)
-  new OpenCodeZenProvider(),
 
   // Outros provedores free
   new MistralProvider(),
@@ -406,7 +406,7 @@ const providers: AIProvider[] = [
   ...(githubProvider ? [githubProvider] : []),
   ...(huggingFaceProvider ? [huggingFaceProvider] : []),
 
-  // Ultimos recursos - modelos FREE do OpenCode Zen
+  // Modelos FREE extras do OpenCode Zen
   ...(mimoFreeProvider ? [mimoFreeProvider] : []),
   ...(nemotronFreeProvider ? [nemotronFreeProvider] : []),
   ...(northFreeProvider ? [northFreeProvider] : []),
