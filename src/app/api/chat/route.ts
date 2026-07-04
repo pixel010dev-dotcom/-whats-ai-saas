@@ -70,7 +70,7 @@ ${knowledgeStr}`
       content: m.content
     }))
 
-    const aiResponse = await generateChatResponse(history, systemPrompt, 250)
+    const aiResponse = await generateChatResponse(history, systemPrompt, 400)
 
     const supportPhone = settings?.supportPhone;
     const supportActive = settings?.supportActive;
