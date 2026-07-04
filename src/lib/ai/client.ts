@@ -43,6 +43,12 @@ class OpenAICompatibleProvider implements AIProvider {
     const timeout = setTimeout(() => controller.abort(), 25000)
 
     try {
+      const body: Record<string, unknown> = {
+        model,
+        messages: params.messages,
+        temperature: params.temperature ?? 0.7,
+      }
+      if (params.maxTokens !== undefined) body.max_tokens = params.maxTokens
       const res = await fetch(this.baseUrl + '/chat/completions', {
         signal: controller.signal,
         method: 'POST',
@@ -51,12 +57,7 @@ class OpenAICompatibleProvider implements AIProvider {
           'Authorization': 'Bearer ' + this.apiKey,
           ...this.extraHeaders,
         },
-        body: JSON.stringify({
-          model,
-          messages: params.messages,
-          temperature: params.temperature ?? 0.7,
-          max_tokens: params.maxTokens ?? 1000,
-        }),
+        body: JSON.stringify(body),
       })
       if (!res.ok) throw new Error(this.name + ': ' + res.status + ' ' + res.statusText)
       const data = await res.json()
@@ -81,6 +82,12 @@ class OpenCodeZenProvider implements AIProvider {
     const timeout = setTimeout(() => controller.abort(), 25000)
 
     try {
+      const body: Record<string, unknown> = {
+        model,
+        messages: params.messages,
+        temperature: params.temperature ?? 0.7,
+      }
+      if (params.maxTokens !== undefined) body.max_tokens = params.maxTokens
       const res = await fetch(this.baseUrl + '/chat/completions', {
         signal: controller.signal,
         method: 'POST',
@@ -88,12 +95,7 @@ class OpenCodeZenProvider implements AIProvider {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + this.apiKey,
         },
-        body: JSON.stringify({
-          model,
-          messages: params.messages,
-          temperature: params.temperature ?? 0.7,
-          max_tokens: params.maxTokens ?? 1000,
-        }),
+        body: JSON.stringify(body),
       })
       if (!res.ok) throw new Error('OpenCode Zen: ' + res.status)
       const data = await res.json()
@@ -118,6 +120,12 @@ class GroqProvider implements AIProvider {
     const timeout = setTimeout(() => controller.abort(), 25000)
 
     try {
+      const body: Record<string, unknown> = {
+        model,
+        messages: params.messages,
+        temperature: params.temperature ?? 0.7,
+      }
+      if (params.maxTokens !== undefined) body.max_tokens = params.maxTokens
       const res = await fetch(this.baseUrl + '/chat/completions', {
         signal: controller.signal,
         method: 'POST',
@@ -125,12 +133,7 @@ class GroqProvider implements AIProvider {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + this.apiKey,
         },
-        body: JSON.stringify({
-          model,
-          messages: params.messages,
-          temperature: params.temperature ?? 0.7,
-          max_tokens: params.maxTokens ?? 1000,
-        }),
+        body: JSON.stringify(body),
       })
       if (!res.ok) throw new Error('Groq: ' + res.status)
       const data = await res.json()
@@ -155,6 +158,12 @@ class OpenRouterProvider implements AIProvider {
     const timeout = setTimeout(() => controller.abort(), 25000)
 
     try {
+      const body: Record<string, unknown> = {
+        model,
+        messages: params.messages,
+        temperature: params.temperature ?? 0.7,
+      }
+      if (params.maxTokens !== undefined) body.max_tokens = params.maxTokens
       const res = await fetch(this.baseUrl + '/chat/completions', {
         signal: controller.signal,
         method: 'POST',
@@ -164,12 +173,7 @@ class OpenRouterProvider implements AIProvider {
           'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://whats-ai-saas.railway.app',
           'X-Title': 'WhatsAI',
         },
-        body: JSON.stringify({
-          model,
-          messages: params.messages,
-          temperature: params.temperature ?? 0.7,
-          max_tokens: params.maxTokens ?? 1000,
-        }),
+        body: JSON.stringify(body),
       })
       if (!res.ok) throw new Error('OpenRouter: ' + res.status)
       const data = await res.json()
@@ -242,6 +246,12 @@ class CerebrasProvider implements AIProvider {
     const timeout = setTimeout(() => controller.abort(), 25000)
 
     try {
+      const body: Record<string, unknown> = {
+        model,
+        messages: params.messages,
+        temperature: params.temperature ?? 0.7,
+      }
+      if (params.maxTokens !== undefined) body.max_tokens = params.maxTokens
       const res = await fetch(this.baseUrl + '/chat/completions', {
         signal: controller.signal,
         method: 'POST',
@@ -249,12 +259,7 @@ class CerebrasProvider implements AIProvider {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + this.apiKey,
         },
-        body: JSON.stringify({
-          model,
-          messages: params.messages,
-          temperature: params.temperature ?? 0.7,
-          max_tokens: params.maxTokens ?? 1000,
-        }),
+        body: JSON.stringify(body),
       })
       if (!res.ok) throw new Error('Cerebras: ' + res.status)
       const data = await res.json()
@@ -291,6 +296,12 @@ class MistralProvider implements AIProvider {
     const timeout = setTimeout(() => controller.abort(), 25000)
 
     try {
+      const body: Record<string, unknown> = {
+        model,
+        messages: params.messages,
+        temperature: params.temperature ?? 0.7,
+      }
+      if (params.maxTokens !== undefined) body.max_tokens = params.maxTokens
       const res = await fetch(this.baseUrl + '/chat/completions', {
         signal: controller.signal,
         method: 'POST',
@@ -298,12 +309,7 @@ class MistralProvider implements AIProvider {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + this.apiKey,
         },
-        body: JSON.stringify({
-          model,
-          messages: params.messages,
-          temperature: params.temperature ?? 0.7,
-          max_tokens: params.maxTokens ?? 1000,
-        }),
+        body: JSON.stringify(body),
       })
       if (!res.ok) throw new Error('Mistral: ' + res.status)
       const data = await res.json()
@@ -381,24 +387,26 @@ const northFreeProvider = openCodeKey
 // Lista completa de provedores (ordem = prioridade)
 // ============================================================
 const providers: AIProvider[] = [
-  // 1o - Groq (Llama 3.3 70B - melhor qualidade, excelente em seguir instrucoes)
-  new GroqProvider(),
-
-  // 2o - OpenCode Zen (DeepSeek V4 Flash Free - fallback)
-  new OpenCodeZenProvider(),
-
-  // 3o - OpenRouter (Gemini Flash 2.0)
+  // 1o - OpenRouter (Gemini Flash 2.0 - mais rapido, melhor em portugues, nunca timeouta)
   new OpenRouterProvider(),
+
+  // 2o - Google Gemini (via API direta - fallback do OpenRouter)
+  ...(geminiProvider ? [geminiProvider] : []),
+
+  // 3o - Groq (Llama 3.3 70B)
+  new GroqProvider(),
 
   // 4o - Cerebras
   new CerebrasProvider(),
 
+  // 5o - Mistral
+  new MistralProvider(),
+
+  // 6o - OpenCode Zen (DeepSeek V4 Flash Free - ultimo recurso)
+  new OpenCodeZenProvider(),
+
   // Extras com chave
   ...(deepSeekProvider ? [deepSeekProvider] : []),
-  ...(geminiProvider ? [geminiProvider] : []),
-
-  // Outros provedores free
-  new MistralProvider(),
   ...(togetherProvider ? [togetherProvider] : []),
   ...(sambanovaProvider ? [sambanovaProvider] : []),
   ...(githubProvider ? [githubProvider] : []),

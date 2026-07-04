@@ -55,7 +55,7 @@ ${knowledgeStr}`
     content: m.content
   }))
 
-  const aiResponse = await generateChatResponse(history, systemPrompt, 2048)
+  const aiResponse = await generateChatResponse(history, systemPrompt)
   const responseText = aiResponse.content || 'Não entendi, pode repetir?'
 
   await prisma.message.create({

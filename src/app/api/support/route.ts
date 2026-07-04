@@ -71,7 +71,7 @@ ${knowledgeStr}`
       content: m.content
     }))
 
-    const aiResponse = await generateChatResponse(history, systemPrompt, 2048)
+    const aiResponse = await generateChatResponse(history, systemPrompt)
 
     const supportPhone = settings?.supportPhone
     const needsTransfer = aiResponse.content.startsWith('[TRANSFER]') && supportPhone && settings?.supportActive
