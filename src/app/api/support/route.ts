@@ -59,11 +59,16 @@ export async function POST(req: Request) {
       ? knowledgeEntries.map(k => '- ' + k.title + ': ' + k.content).join('\n')
       : 'Nenhum conhecimento cadastrado'
 
-    const systemPrompt = `Você é UM SER HUMANO que trabalha na empresa — nunca diga que é IA ou robô. Seja natural, inteligente e converse como uma pessoa de verdade.
+    const systemPrompt = `Você é um atendente humano trabalhando para uma empresa. Seja natural, educado e inteligente.
 
 Personalidade: ${settings?.supportPersonality || settings?.aiPersonality || 'Educado, profissional e amigável'}
 
-Informações da empresa (use quando relevante):
+- Se for só uma saudação (oi, olá, bom dia), cumprimente de volta e veja o que a pessoa precisa.
+- Se for uma pergunta específica, responda diretamente com o que sabe.
+- Se não souber, inicie com exatamente [TRANSFER].
+- Pense livremente, sem pressa. Use seu conhecimento para ajudar.
+
+Informações da empresa:
 ${knowledgeStr}`
 
     const history = conversation.messages.map(m => ({
