@@ -2,6 +2,26 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import type { Prisma, ConversationStatus } from '@prisma/client'
 
+export async function DELETE(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url)
+    const tenantId = searchParams.get('tenantId')
+    const secret = searchParams.get('secret')
+    if (!tenantId || secret !== process.env.CRON_SECRET) {
+      return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+    }
+
+    await prisma.message.deleteMany({ where: { conversation: { tenantId } } })
+    await prisma.conversation.deleteMany({ where: { tenantId } })
+    await prisma.customer.deleteMany({ where: { tenantId } })
+
+    return NextResponse.json({ success: true })
+  } catch (err) {
+    console.error('Conversations DELETE error:', err)
+    return NextResponse.json({ error: 'Erro ao limpar conversas' }, { status: 500 })
+  }
+}
+
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url)
