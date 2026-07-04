@@ -1,5 +1,5 @@
 // AI Client unificado com fallback entre provedores
-// Timeout de 20s por provedor para resposta rapida
+// Timeout de 25s por provedor para resposta rapida
 
 interface AICompletionParams {
   messages: { role: 'user' | 'assistant' | 'system'; content: string }[]
@@ -40,7 +40,7 @@ class OpenAICompatibleProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || this.defaultModel
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 20000)
+    const timeout = setTimeout(() => controller.abort(), 25000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -78,7 +78,7 @@ class OpenCodeZenProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'deepseek-v4-flash-free'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 20000)
+    const timeout = setTimeout(() => controller.abort(), 25000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -115,7 +115,7 @@ class GroqProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'llama-3.3-70b-versatile'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 20000)
+    const timeout = setTimeout(() => controller.abort(), 25000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -152,7 +152,7 @@ class OpenRouterProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'google/gemini-2.0-flash-001'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 20000)
+    const timeout = setTimeout(() => controller.abort(), 25000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -239,7 +239,7 @@ class CerebrasProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'gemma-4-31b'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 20000)
+    const timeout = setTimeout(() => controller.abort(), 25000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -288,7 +288,7 @@ class MistralProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'mistral-small-latest'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 20000)
+    const timeout = setTimeout(() => controller.abort(), 25000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -381,17 +381,17 @@ const northFreeProvider = openCodeKey
 // Lista completa de provedores (ordem = prioridade)
 // ============================================================
 const providers: AIProvider[] = [
-  // 1o - OpenCode Zen (modelos free com limites generosos)
+  // 1o - OpenCode Zen (DeepSeek V4 Flash Free - limites generosos)
   new OpenCodeZenProvider(),
 
-  // 2o - Groq (rapido, free tier bom)
+  // 2o - Groq (Llama 3.3 70B)
   new GroqProvider(),
 
-  // 3o - Cerebras (rapido, modelo bom)
-  new CerebrasProvider(),
-
-  // 4o - OpenRouter (Gemini Flash 2.0)
+  // 3o - OpenRouter (Gemini Flash 2.0)
   new OpenRouterProvider(),
+
+  // 4o - Cerebras
+  new CerebrasProvider(),
 
   // Extras com chave
   ...(deepSeekProvider ? [deepSeekProvider] : []),
@@ -399,8 +399,6 @@ const providers: AIProvider[] = [
 
   // Outros provedores free
   new MistralProvider(),
-
-  // Extras adicionais
   ...(togetherProvider ? [togetherProvider] : []),
   ...(sambanovaProvider ? [sambanovaProvider] : []),
   ...(githubProvider ? [githubProvider] : []),
@@ -431,7 +429,7 @@ export async function completeAI(
       return { ...result, provider: provider.name }
     } catch (err) {
       if (err instanceof Object && 'name' in err && (err as {name: string}).name === 'AbortError') {
-        errors.push(provider.name + ': timeout after 20s')
+        errors.push(provider.name + ': timeout after 25s')
         console.warn('[AI Fallback] ' + provider.name + ' timed out, trying next...')
       } else {
         errors.push(
