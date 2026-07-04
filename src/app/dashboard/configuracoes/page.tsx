@@ -93,7 +93,7 @@ export default function ConfiguracoesPage() {
 
       <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 space-y-5">
         <div>
-          <div className="bg-zinc-800/30 border border-zinc-700/30 rounded-lg p-2.5 mb-3"><p className="text-xs text-zinc-500"><span className="text-emerald-400 font-medium">Dica:</span> Descreva como a IA deve se comportar. Ex: "Voce e um vendedor consultivo, educado e focado em fechar vendas"</p></div>
+          <div className="bg-zinc-800/30 border border-zinc-700/30 rounded-lg p-2.5 mb-3"><p className="text-xs text-zinc-500"><span className="text-emerald-400 font-medium">Dica:</span> Descreva como a IA deve se comportar. Ex: &ldquo;Você é um vendedor consultivo, educado e focado em fechar vendas&rdquo;</p></div>
           <label className="block text-sm font-medium text-zinc-300 mb-2">Personalidade da IA</label>
           <textarea
             value={settings.aiPersonality}
@@ -106,7 +106,7 @@ export default function ConfiguracoesPage() {
         </div>
 
         <div>
-          <div className="bg-zinc-800/30 border border-zinc-700/30 rounded-lg p-2.5 mb-3"><p className="text-xs text-zinc-500"><span className="text-emerald-400 font-medium">Dica:</span> Primeira mensagem que o cliente ve. Ex: "Ola! Eu sou o assistente da Loja X. Como posso ajudar?"</p></div>
+          <div className="bg-zinc-800/30 border border-zinc-700/30 rounded-lg p-2.5 mb-3"><p className="text-xs text-zinc-500"><span className="text-emerald-400 font-medium">Dica:</span> Primeira mensagem que o cliente ve. Ex: &ldquo;Ola! Eu sou o assistente da Loja X. Como posso ajudar?&rdquo;</p></div>
           <label className="block text-sm font-medium text-zinc-300 mb-2">Mensagem de boas-vindas</label>
           <textarea
             value={settings.welcomeMessage}

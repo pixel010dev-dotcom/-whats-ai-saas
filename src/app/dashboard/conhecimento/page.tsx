@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/app/context/AuthProvider'
@@ -154,19 +154,19 @@ export default function ConhecimentoPage() {
         <div className="grid grid-cols-2 gap-2 mt-3">
           <div className="bg-zinc-800/30 rounded-lg p-2.5">
             <p className="text-xs font-medium text-zinc-300">Produtos</p>
-            <p className="text-[11px] text-zinc-600 mt-0.5">"Bolo de chocolate medio - R$ 89,90. Entrega em 48h."</p>
+            <p className="text-[11px] text-zinc-600 mt-0.5">{'\u201C'}Bolo de chocolate medio - R$ 89,90. Entrega em 48h.{'\u201D'}</p>
           </div>
           <div className="bg-zinc-800/30 rounded-lg p-2.5">
             <p className="text-xs font-medium text-zinc-300">Horarios</p>
-            <p className="text-[11px] text-zinc-600 mt-0.5">"Seg a Sex 8h-18h | Sab 9h-13h | Dom fechado"</p>
+            <p className="text-[11px] text-zinc-600 mt-0.5">{'\u201C'}Seg a Sex 8h-18h | Sab 9h-13h | Dom fechado{'\u201D'}</p>
           </div>
           <div className="bg-zinc-800/30 rounded-lg p-2.5">
             <p className="text-xs font-medium text-zinc-300">Pagamento</p>
-            <p className="text-[11px] text-zinc-600 mt-0.5">"Aceitamos PIX, cartao ate 12x e boleto"</p>
+            <p className="text-[11px] text-zinc-600 mt-0.5">{'\u201C'}Aceitamos PIX, cartao ate 12x e boleto{'\u201D'}</p>
           </div>
           <div className="bg-zinc-800/30 rounded-lg p-2.5">
             <p className="text-xs font-medium text-zinc-300">FAQ</p>
-            <p className="text-[11px] text-zinc-600 mt-0.5">"Trocas em ate 7 dias. Garantia de 30 dias."</p>
+            <p className="text-[11px] text-zinc-600 mt-0.5">{'\u201C'}Trocas em ate 7 dias. Garantia de 30 dias.{'\u201D'}</p>
           </div>
         </div>
       </div>

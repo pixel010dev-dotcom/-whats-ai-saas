@@ -66,14 +66,13 @@ export default function WhatsAppConnect({ tenantId }: Props) {
 
   useEffect(() => {
     if (status === 'WAITING_QR' || status === 'PAIRING') {
-      setTimer(180)
       timerRef.current = setInterval(() => {
         setTimer(prev => {
           if (prev <= 1) {
             clearInterval(timerRef.current)
             if (status === 'WAITING_QR') handleRefreshQR()
             else handlePairingRefresh()
-            return 0
+            return 180
           }
           return prev - 1
         })

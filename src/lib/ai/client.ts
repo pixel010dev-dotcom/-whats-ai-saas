@@ -423,7 +423,7 @@ export async function completeAI(
       const result = await provider.complete(params)
       return { ...result, provider: provider.name }
     } catch (err) {
-      if ((err as any)?.name === 'AbortError') {
+      if (err instanceof Object && 'name' in err && (err as {name: string}).name === 'AbortError') {
         errors.push(provider.name + ': timeout after 3min')
         console.warn('[AI Fallback] ' + provider.name + ' timed out, trying next...')
       } else {

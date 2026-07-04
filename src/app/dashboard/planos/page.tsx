@@ -38,13 +38,12 @@ export default function PlanosPage() {
   const [timeLeft, setTimeLeft] = useState(600)
 
   useEffect(() => {
-    if (!showModal) { setTimeLeft(600); return }
-    if (timeLeft <= 0) return
+    if (!showModal || timeLeft <= 0) return
     const timer = setInterval(() => {
       setTimeLeft((prev) => Math.max(0, prev - 1))
     }, 1000)
     return () => clearInterval(timer)
-  }, [showModal])
+  }, [showModal, timeLeft])
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => { if (e.key == "Escape") setShowModal(false) }
