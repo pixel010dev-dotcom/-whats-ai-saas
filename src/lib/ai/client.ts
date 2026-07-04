@@ -381,11 +381,11 @@ const northFreeProvider = openCodeKey
 // Lista completa de provedores (ordem = prioridade)
 // ============================================================
 const providers: AIProvider[] = [
-  // 1o - OpenCode Zen (DeepSeek V4 Flash Free - limites generosos)
-  new OpenCodeZenProvider(),
-
-  // 2o - Groq (Llama 3.3 70B)
+  // 1o - Groq (Llama 3.3 70B - melhor qualidade, excelente em seguir instrucoes)
   new GroqProvider(),
+
+  // 2o - OpenCode Zen (DeepSeek V4 Flash Free - fallback)
+  new OpenCodeZenProvider(),
 
   // 3o - OpenRouter (Gemini Flash 2.0)
   new OpenRouterProvider(),
