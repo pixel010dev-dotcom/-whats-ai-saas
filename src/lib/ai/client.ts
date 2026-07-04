@@ -434,7 +434,11 @@ export async function completeAI(
   for (const provider of providers) {
     try {
       const result = await provider.complete(params)
-      return { ...result, provider: provider.name }
+      if (result.content && result.content.trim().length > 0) {
+        return { ...result, provider: provider.name }
+      }
+      errors.push(provider.name + ': resposta vazia')
+      console.warn('[AI Fallback] ' + provider.name + ' retornou vazio, tentando proximo...')
     } catch (err) {
       if (err instanceof Object && 'name' in err && (err as {name: string}).name === 'AbortError') {
         errors.push(provider.name + ': timeout after 25s')

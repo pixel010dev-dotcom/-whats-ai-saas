@@ -55,8 +55,19 @@ ${knowledgeStr}`
     content: m.content
   }))
 
-  const aiResponse = await generateChatResponse(history, systemPrompt)
-  const responseText = aiResponse.content || 'Não entendi, pode repetir?'
+  let responseText = ''
+  try {
+    const aiResponse = await generateChatResponse(history, systemPrompt)
+    responseText = aiResponse.content
+  } catch {
+    console.warn('[WhatsApp] Todos provedores falharam para ' + phone)
+    return ''
+  }
+
+  if (!responseText || responseText.trim().length === 0) {
+    console.warn('[WhatsApp] Resposta vazia para ' + phone)
+    return ''
+  }
 
   await prisma.message.create({
     data: { conversationId: conversation.id, role: 'assistant', content: responseText }
