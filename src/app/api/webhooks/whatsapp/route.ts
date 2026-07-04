@@ -44,13 +44,13 @@ export async function POST(req: Request) {
 
     let conversation = await prisma.conversation.findFirst({
       where: { tenantId, customerId: customer.id, status: { not: 'CLOSED' } },
-      include: { messages: { orderBy: { createdAt: 'asc' }, take: 10 } }
+      include: { messages: { orderBy: { createdAt: 'asc' }, take: 30 } }
     })
 
     if (!conversation) {
       conversation = await prisma.conversation.create({
         data: { tenantId, customerId: customer.id, status: 'ACTIVE', channel: 'whatsapp' },
-        include: { messages: { orderBy: { createdAt: 'asc' }, take: 10 } }
+        include: { messages: { orderBy: { createdAt: 'asc' }, take: 30 } }
       })
     }
 
@@ -60,7 +60,7 @@ export async function POST(req: Request) {
 
     const [settings, knowledgeEntries] = await Promise.all([
       prisma.tenantSettings.findUnique({ where: { tenantId } }),
-      prisma.knowledge.findMany({ where: { tenantId }, take: 5 })
+      prisma.knowledge.findMany({ where: { tenantId }, take: 10 })
     ])
 
     if (settings && !settings.autoReply) {
@@ -71,14 +71,28 @@ export async function POST(req: Request) {
       ? knowledgeEntries.map(k => `- ${k.title}: ${k.content}`).join('\n')
       : 'Nenhum conhecimento cadastrado'
 
-    const systemPrompt = `Você é um atendente digital da empresa.\nPersonalidade: ${settings?.aiPersonality || 'Educado, profissional e amigável'}\n\nRegras:\n- Seja educado e profissional\n- Ajude o cliente com suas dúvidas\n- Se não souber responder, peça desculpas e diga que vai transferir\n- Responda em português do Brasil\n- Não invente informações\n\nConhecimento da empresa:\n${knowledgeStr}`
+    const systemPrompt = `Você é um atendente da empresa — uma pessoa real que trabalha no atendimento.
+
+Personalidade: ${settings?.aiPersonality || 'Educado, profissional e amigável'}
+
+REGRAS (siga todas):
+1. FALE COMO HUMANO — nunca diga que é IA, assistente virtual ou robô. Se perguntarem, diga que é um atendente.
+2. SEJA NATURAL — use linguagem coloquial, igual brasileiro conversa no WhatsApp.
+3. RESPOSTAS CURTAS — máximo 2 a 3 frases. Cliente não quer textão.
+4. SEJA DIRETO — se perguntaram preço, endereço, horário, responda o valor/fato direto.
+5. NÃO REPITA — mantenha o contexto da conversa, não pergunte algo que já foi respondido.
+6. SE NÃO SOUBER — responda "Vou verificar com o responsável e já te respondo".
+7. NÃO INVENTE — use apenas as informações do conhecimento abaixo.
+
+Conhecimento da empresa:
+${knowledgeStr}`
 
     const history = conversation.messages.map(m => ({
       role: m.role === 'assistant' ? 'assistant' as const : 'user' as const,
       content: m.content
     }))
 
-    const aiResponse = await generateChatResponse(history, systemPrompt)
+    const aiResponse = await generateChatResponse(history, systemPrompt, 250)
 
     await prisma.message.create({
       data: { conversationId: conversation.id, role: 'assistant', content: aiResponse.content }

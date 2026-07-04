@@ -1,6 +1,5 @@
 // AI Client unificado com fallback entre provedores
-// Agora com 13 provedores para maximizar disponibilidade
-// Timeout de 15s por provedor para nunca travar a cadeia
+// Timeout de 20s por provedor para resposta rapida
 
 interface AICompletionParams {
   messages: { role: 'user' | 'assistant' | 'system'; content: string }[]
@@ -41,7 +40,7 @@ class OpenAICompatibleProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || this.defaultModel
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 180000)
+    const timeout = setTimeout(() => controller.abort(), 20000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -79,7 +78,7 @@ class OpenCodeZenProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'deepseek-v4-flash-free'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 180000)
+    const timeout = setTimeout(() => controller.abort(), 20000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -116,7 +115,7 @@ class GroqProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'llama-3.3-70b-versatile'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 180000)
+    const timeout = setTimeout(() => controller.abort(), 20000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -153,7 +152,7 @@ class OpenRouterProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'google/gemini-2.0-flash-001'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 180000)
+    const timeout = setTimeout(() => controller.abort(), 20000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -240,7 +239,7 @@ class CerebrasProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'gemma-4-31b'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 180000)
+    const timeout = setTimeout(() => controller.abort(), 20000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -289,7 +288,7 @@ class MistralProvider implements AIProvider {
   async complete(params: AICompletionParams) {
     const model = params.model || 'mistral-small-latest'
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 180000)
+    const timeout = setTimeout(() => controller.abort(), 20000)
 
     try {
       const res = await fetch(this.baseUrl + '/chat/completions', {
@@ -382,18 +381,26 @@ const northFreeProvider = openCodeKey
 // Lista completa de provedores (ordem = prioridade)
 // ============================================================
 const providers: AIProvider[] = [
-  // Primario - OpenCode Zen com DeepSeek V4 Flash Free
-  new OpenCodeZenProvider(),
-
-  // Outros provedores free e rapidos
+  // 1o - Groq (mais rapido, free tier generoso)
   new GroqProvider(),
-  new OpenRouterProvider(),
-  new CerebrasProvider(),
-  new MistralProvider(),
 
-  // Extras (opcionais - so entram se a chave estiver configurada)
+  // 2o - Cerebras (rapido, modelo bom)
+  new CerebrasProvider(),
+
+  // 3o - OpenRouter (Gemini Flash 2.0 - rapido e barato)
+  new OpenRouterProvider(),
+
+  // Extras com chave (opcionais - so entram se configurados)
   ...(deepSeekProvider ? [deepSeekProvider] : []),
   ...(geminiProvider ? [geminiProvider] : []),
+
+  // Fallback principal - OpenCode Zen (gratuito)
+  new OpenCodeZenProvider(),
+
+  // Outros provedores free
+  new MistralProvider(),
+
+  // Extras adicionais
   ...(togetherProvider ? [togetherProvider] : []),
   ...(sambanovaProvider ? [sambanovaProvider] : []),
   ...(githubProvider ? [githubProvider] : []),
@@ -424,7 +431,7 @@ export async function completeAI(
       return { ...result, provider: provider.name }
     } catch (err) {
       if (err instanceof Object && 'name' in err && (err as {name: string}).name === 'AbortError') {
-        errors.push(provider.name + ': timeout after 3min')
+        errors.push(provider.name + ': timeout after 20s')
         console.warn('[AI Fallback] ' + provider.name + ' timed out, trying next...')
       } else {
         errors.push(
@@ -443,11 +450,12 @@ export async function completeAI(
 // ============================================================
 export async function generateChatResponse(
   messages: { role: 'user' | 'assistant' | 'system'; content: string }[],
-  systemPrompt?: string
+  systemPrompt?: string,
+  maxTokens?: number
 ): Promise<{ content: string; model: string; provider: string }> {
   const fullMessages = systemPrompt
     ? [{ role: 'system' as const, content: systemPrompt }, ...messages]
     : messages
 
-  return completeAI({ messages: fullMessages })
+  return completeAI({ messages: fullMessages, maxTokens })
 }

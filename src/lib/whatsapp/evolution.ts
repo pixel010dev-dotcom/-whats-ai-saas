@@ -87,19 +87,46 @@ export async function getPairingCode(instanceName: string, number: string) {
   return res.json()
 }
 
+function splitLongText(text: string, maxLen = 1000): string[] {
+  if (text.length <= maxLen) return [text]
+  const parts: string[] = []
+  let remaining = text
+  while (remaining.length > 0) {
+    if (remaining.length <= maxLen) {
+      parts.push(remaining)
+      break
+    }
+    let cut = remaining.lastIndexOf('. ', maxLen)
+    if (cut === -1 || cut < maxLen * 0.5) cut = remaining.lastIndexOf(', ', maxLen)
+    if (cut === -1 || cut < maxLen * 0.5) cut = remaining.lastIndexOf(' ', maxLen)
+    if (cut === -1 || cut < maxLen * 0.5) cut = maxLen
+    parts.push(remaining.slice(0, cut + 1))
+    remaining = remaining.slice(cut + 1).trim()
+  }
+  return parts
+}
+
 export async function sendMessage(instanceName: string, to: string, text: string) {
   const phone = to.replace(/\D/g, '')
-  const url = `${EVOLUTION_URL}/message/sendText/${instanceName}`
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apiKey': EVOLUTION_KEY
-    },
-    body: JSON.stringify({ number: phone, text, delay: 1000 })
-  })
-  if (!res.ok) throw new Error(`Evolution API: ${res.status}`)
-  return res.json()
+  const parts = splitLongText(text)
+  const results = []
+  for (let i = 0; i < parts.length; i++) {
+    const url = `${EVOLUTION_URL}/message/sendText/${instanceName}`
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apiKey': EVOLUTION_KEY
+      },
+      body: JSON.stringify({ number: phone, text: parts[i], delay: i === parts.length - 1 ? 1000 : 1500 })
+    })
+    if (!res.ok) throw new Error(`Evolution API: ${res.status}`)
+    results.push(await res.json())
+    if (i < parts.length - 1) {
+      await new Promise(r => setTimeout(r, 1200))
+    }
+  }
+  return results
 }
 
 export async function sendImage(instanceName: string, to: string, imageUrl: string, caption?: string) {

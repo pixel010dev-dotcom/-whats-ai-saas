@@ -28,12 +28,12 @@ export async function POST(req: Request) {
 
     let conversation = await prisma.conversation.findFirst({
       where: { tenantId, customerId: customer?.id, status: { not: 'CLOSED' } },
-      include: { messages: { orderBy: { createdAt: 'asc' }, take: 10 } }
+      include: { messages: { orderBy: { createdAt: 'asc' }, take: 30 } }
     })
     if (!conversation) {
       conversation = await prisma.conversation.create({
         data: { tenantId, customerId: customer?.id, status: 'ACTIVE' },
-        include: { messages: { orderBy: { createdAt: 'asc' }, take: 10 } }
+        include: { messages: { orderBy: { createdAt: 'asc' }, take: 30 } }
       })
     }
 
@@ -43,21 +43,35 @@ export async function POST(req: Request) {
 
     const [settings, knowledgeEntries] = await Promise.all([
       prisma.tenantSettings.findUnique({ where: { tenantId } }),
-      prisma.knowledge.findMany({ where: { tenantId }, take: 5 })
+      prisma.knowledge.findMany({ where: { tenantId }, take: 10 })
     ])
 
     const knowledgeStr = knowledgeEntries && knowledgeEntries.length > 0
       ? knowledgeEntries.map((k: Knowledge) => `- ${k.title}: ${k.content}`).join('\n')
       : 'Nenhum conhecimento cadastrado'
 
-    const systemPrompt = `Voce e um atendente digital da empresa.\nPersonalidade: ${settings?.aiPersonality || 'Educado, profissional e amigavel'}\n\nRegras:\n- Seja educado e profissional\n- Ajude o cliente com suas duvidas\n- Se nao souber responder com base no conhecimento, inicie sua resposta com exatamente [TRANSFER]\n- Responda em portugues do Brasil\n- Nao invente informacoes\n\nConhecimento da empresa:\n${knowledgeStr}`
+    const systemPrompt = `Você é um atendente da empresa — uma pessoa real que trabalha no atendimento.
+
+Personalidade: ${settings?.aiPersonality || 'Educado, profissional e amigável'}
+
+REGRAS (siga todas):
+1. FALE COMO HUMANO — nunca diga que é IA, assistente virtual ou robô.
+2. SEJA NATURAL — use linguagem coloquial, igual brasileiro conversa no WhatsApp.
+3. RESPOSTAS CURTAS — máximo 2 a 3 frases. Cliente não quer textão.
+4. SEJA DIRETO — se perguntaram preço, endereço, horário, responda o valor/fato direto.
+5. NÃO REPITA — mantenha o contexto da conversa, não pergunte algo que já foi respondido.
+6. SE NÃO SOUBER — inicie sua resposta com exatamente [TRANSFER].
+7. NÃO INVENTE — use apenas as informações do conhecimento abaixo.
+
+Conhecimento da empresa:
+${knowledgeStr}`
 
     const history = conversation.messages.map((m: Message) => ({
       role: m.role === 'assistant' ? 'assistant' as const : 'user' as const,
       content: m.content
     }))
 
-    const aiResponse = await generateChatResponse(history, systemPrompt)
+    const aiResponse = await generateChatResponse(history, systemPrompt, 250)
 
     const supportPhone = settings?.supportPhone;
     const supportActive = settings?.supportActive;
