@@ -72,7 +72,7 @@ class OpenAICompatibleProvider implements AIProvider {
 // Validador de respostas ruins
 // Detecta eco, respostas vazias ou sem sentido
 // ============================================================
-function isBadResponse(content: string, _userMessage?: string): boolean {
+function isBadResponse(content: string): boolean {
   const trimmed = content.trim()
   if (!trimmed) return true
   if (trimmed.length < 3) return true
@@ -446,15 +446,14 @@ const providers: AIProvider[] = [
 // Se TODOS falharem, joga erro com detalhes de cada um.
 // ============================================================
 export async function completeAI(
-  params: AICompletionParams,
-  userLastMessage?: string
+  params: AICompletionParams
 ): Promise<{ content: string; model: string; provider: string }> {
   const errors: string[] = []
 
   for (const provider of providers) {
     try {
       const result = await provider.complete(params)
-      if (result.content && result.content.trim().length > 0 && !isBadResponse(result.content, userLastMessage)) {
+      if (result.content && result.content.trim().length > 0 && !isBadResponse(result.content)) {
         return { ...result, provider: provider.name }
       }
       const reason = !result.content || result.content.trim().length === 0
@@ -484,12 +483,11 @@ export async function completeAI(
 export async function generateChatResponse(
   messages: { role: 'user' | 'assistant' | 'system'; content: string }[],
   systemPrompt?: string,
-  maxTokens?: number,
-  userLastMessage?: string
+  maxTokens?: number
 ): Promise<{ content: string; model: string; provider: string }> {
   const fullMessages = systemPrompt
     ? [{ role: 'system' as const, content: systemPrompt }, ...messages]
     : messages
 
-  return completeAI({ messages: fullMessages, maxTokens: maxTokens ?? 1024 }, userLastMessage)
+  return completeAI({ messages: fullMessages, maxTokens: maxTokens ?? 1024 })
 }

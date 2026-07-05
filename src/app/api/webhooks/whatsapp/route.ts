@@ -68,7 +68,7 @@ ${knowledgeStr}`
 
   let responseText = ''
   try {
-    const aiResponse = await generateChatResponse(history, systemPrompt, undefined, text)
+    const aiResponse = await generateChatResponse(history, systemPrompt, undefined)
     responseText = aiResponse.content
   } catch {
     console.warn('[WhatsApp] Todos provedores falharam para ' + phone)

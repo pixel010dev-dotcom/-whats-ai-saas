@@ -75,7 +75,7 @@ ${knowledgeStr}`
 
     let aiResponse: { content: string; model: string; provider: string }
     try {
-      aiResponse = await generateChatResponse(history, systemPrompt, undefined, message)
+      aiResponse = await generateChatResponse(history, systemPrompt, undefined)
     } catch {
       console.warn('[Chat] Todos provedores falharam')
       await prisma.message.create({
