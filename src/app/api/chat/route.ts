@@ -1,4 +1,4 @@
-﻿import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { generateChatResponse } from '@/lib/ai/client'
 import { sendMessage } from '@/lib/whatsapp/evolution'
@@ -50,16 +50,22 @@ export async function POST(req: Request) {
       ? knowledgeEntries.map((k: Knowledge) => `- ${k.title}: ${k.content}`).join('\n')
       : 'Nenhum conhecimento cadastrado'
 
-    const systemPrompt = `Você é um atendente humano trabalhando para uma empresa. Seja natural, educado e inteligente.
+    const systemPrompt = `Voce e um atendente virtual inteligente de uma empresa.
 
-Personalidade: ${settings?.aiPersonality || 'Educado, profissional e amigável'}
+REGRA DE OURO: Responda de forma util, completa e natural. Nao seja robotico.
 
-- Se for só uma saudação (oi, olá, bom dia), cumprimente de volta e veja o que a pessoa precisa.
-- Se for uma pergunta específica, responda diretamente com o que sabe.
-- Se não souber, inicie com exatamente [TRANSFER].
-- Pense livremente, sem pressa. Use seu conhecimento para ajudar.
+ORIENTACOES:
+- Seja natural, variado e inteligente como um bom atendente humano
+- Comprimente educadamente e mostre disposicao para ajudar
+- Responda perguntas com as informacoes disponiveis, de forma direta e completa
+- Se nao souber responder, ofereca transferencia [TRANSFER]
+- Use o conhecimento da empresa para embasar suas respostas
+- PENSE e reflita antes de responder - nao tenha pressa
+- IMPORTANTE: Sua resposta vai direto para o cliente no WhatsApp, entao seja claro e direto
 
-Informações da empresa:
+Personalidade: ${settings?.aiPersonality || 'Educado, profissional e amigavel'}
+
+Informacoes da empresa para consulta:
 ${knowledgeStr}`
 
     const history = conversation.messages.map((m: Message) => ({
@@ -67,7 +73,20 @@ ${knowledgeStr}`
       content: m.content
     }))
 
-    const aiResponse = await generateChatResponse(history, systemPrompt)
+    let aiResponse: { content: string; model: string; provider: string }
+    try {
+      aiResponse = await generateChatResponse(history, systemPrompt, undefined, message)
+    } catch {
+      console.warn('[Chat] Todos provedores falharam')
+      await prisma.message.create({
+        data: { conversationId: conversation.id, role: 'assistant', content: 'Desculpe, estou com instabilidade no momento. Por favor, tente novamente em alguns instantes.' }
+      })
+      return NextResponse.json({
+        success: false,
+        response: 'Desculpe, estou com instabilidade no momento. Por favor, tente novamente em alguns instantes.',
+        conversationId: conversation.id
+      })
+    }
 
     const supportPhone = settings?.supportPhone;
     const supportActive = settings?.supportActive;

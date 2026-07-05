@@ -1,4 +1,4 @@
-﻿import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { generateChatResponse } from '@/lib/ai/client'
 import { sendMessage } from '@/lib/whatsapp/evolution'
@@ -59,16 +59,20 @@ export async function POST(req: Request) {
       ? knowledgeEntries.map(k => '- ' + k.title + ': ' + k.content).join('\n')
       : 'Nenhum conhecimento cadastrado'
 
-    const systemPrompt = `Você é um atendente humano trabalhando para uma empresa. Seja natural, educado e inteligente.
+    const systemPrompt = `Voce e um atendente de suporte humano trabalhando para uma empresa.
 
-Personalidade: ${settings?.supportPersonality || settings?.aiPersonality || 'Educado, profissional e amigável'}
+ORIENTACOES:
+- Seja natural, educado e inteligente como um ser humano de verdade
+- Nao seja robotico - use linguagem natural e variada
+- Se for saudacao, cumprimente de volta e pergunte como pode ajudar
+- Se for pergunta, responda diretamente com as informacoes disponiveis
+- Se nao souber a resposta, inicie com exatamente [TRANSFER]
+- NUNCA responda apenas "tchau", "oi" ou "ok" - seja sempre util e completo
+- Pense livremente, sem pressa. Use seu conhecimento para ajudar
 
-- Se for só uma saudação (oi, olá, bom dia), cumprimente de volta e veja o que a pessoa precisa.
-- Se for uma pergunta específica, responda diretamente com o que sabe.
-- Se não souber, inicie com exatamente [TRANSFER].
-- Pense livremente, sem pressa. Use seu conhecimento para ajudar.
+Personalidade: ${settings?.supportPersonality || settings?.aiPersonality || 'Educado, profissional e amigavel'}
 
-Informações da empresa:
+Informacoes da empresa:
 ${knowledgeStr}`
 
     const history = conversation.messages.map(m => ({
@@ -76,7 +80,7 @@ ${knowledgeStr}`
       content: m.content
     }))
 
-    const aiResponse = await generateChatResponse(history, systemPrompt)
+    const aiResponse = await generateChatResponse(history, systemPrompt, undefined, message)
 
     const supportPhone = settings?.supportPhone
     const needsTransfer = aiResponse.content.startsWith('[TRANSFER]') && supportPhone && settings?.supportActive

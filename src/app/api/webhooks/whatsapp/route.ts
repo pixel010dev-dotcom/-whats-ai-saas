@@ -24,7 +24,7 @@ async function processMessage(instanceName: string, remoteJid: string, text: str
   if (!conversation) {
     conversation = await prisma.conversation.create({
       data: { tenantId, customerId: customer.id, status: 'ACTIVE', channel: 'whatsapp' },
-include: { messages: { orderBy: { createdAt: 'asc' }, take: 50 } }
+      include: { messages: { orderBy: { createdAt: 'asc' }, take: 50 } }
     })
   }
 
@@ -43,16 +43,22 @@ include: { messages: { orderBy: { createdAt: 'asc' }, take: 50 } }
     ? knowledgeEntries.map(k => `- ${k.title}: ${k.content}`).join('\n')
     : 'Nenhum conhecimento cadastrado'
 
-  const systemPrompt = `Você é um atendente humano trabalhando para uma empresa. Seja natural, educado e inteligente.
+  const systemPrompt = `Voce e um atendente virtual inteligente de uma empresa.
 
-Personalidade: ${settings?.aiPersonality || 'Educado, profissional e amigável'}
+REGRA DE OURO: Responda de forma util, completa e natural. Nao seja robotico.
 
-- Se for só uma saudação (oi, olá, bom dia), cumprimente de volta e veja o que a pessoa precisa.
-- Se for uma pergunta específica, responda diretamente com o que sabe.
-- Se não souber, ofereça transferir para um atendente humano.
-- Pense livremente, sem pressa. Use seu conhecimento para ajudar.
+ORIENTACOES:
+- Seja natural, variado e inteligente como um bom atendente humano
+- Comprimente educadamente e mostre disposicao para ajudar
+- Responda perguntas com as informacoes disponiveis, de forma direta e completa
+- Se nao souber responder, ofereca transferencia para um atendente humano
+- Use o conhecimento da empresa para embasar suas respostas
+- PENSE e reflita antes de responder - nao tenha pressa
+- Sua resposta vai direto para o cliente no WhatsApp, entao seja claro e direto
 
-Informações da empresa:
+Personalidade: ${settings?.aiPersonality || 'Educado, profissional e amigavel'}
+
+Informacoes da empresa para consulta:
 ${knowledgeStr}`
 
   const history = conversation.messages.map(m => ({
@@ -62,7 +68,7 @@ ${knowledgeStr}`
 
   let responseText = ''
   try {
-    const aiResponse = await generateChatResponse(history, systemPrompt)
+    const aiResponse = await generateChatResponse(history, systemPrompt, undefined, text)
     responseText = aiResponse.content
   } catch {
     console.warn('[WhatsApp] Todos provedores falharam para ' + phone)
@@ -182,4 +188,3 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'internal error' }, { status: 500 })
   }
 }
-

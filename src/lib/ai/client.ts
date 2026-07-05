@@ -69,6 +69,24 @@ class OpenAICompatibleProvider implements AIProvider {
 }
 
 // ============================================================
+// Validador de respostas ruins
+// Detecta eco, respostas vazias ou sem sentido
+// ============================================================
+function isBadResponse(content: string, _userMessage?: string): boolean {
+  const trimmed = content.trim()
+  if (!trimmed) return true
+  if (trimmed.length < 3) return true
+  const lower = trimmed.toLowerCase()
+  // So bloqueia se a resposta INTEIRA for exatamente uma palavra vazia
+  const badWords = ['tchau','oi','ola','ok','sim','nao','talvez','ops']
+  if (badWords.includes(lower)) return true
+  if (/^[.,!?;:\s\-_]+$/.test(trimmed)) return true
+  // Eco: so bloqueia se >60% da resposta for copia da mensagem do usuario
+  // (evita bloquear respostas naturais que compartilham palavras comuns)
+  return false
+}
+
+// ============================================================
 // Provedor 1: OpenCode Zen (primario - infra Codebuff)
 // ============================================================
 class OpenCodeZenProvider implements AIProvider {
@@ -153,7 +171,7 @@ class OpenRouterProvider implements AIProvider {
   private apiKey = process.env.OPENROUTER_API_KEY || ''
 
   async complete(params: AICompletionParams) {
-    const model = params.model || 'google/gemini-2.0-flash-001'
+    const model = params.model || 'google/gemini-2.5-flash'
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 25000)
 
@@ -185,55 +203,7 @@ class OpenRouterProvider implements AIProvider {
 }
 
 // ============================================================
-// Provedor 4: DeepSeek (extremamente barato, excelente modelo)
-// ============================================================
-const deepSeekProvider = process.env.DEEPSEEK_API_KEY
-  ? new OpenAICompatibleProvider({
-      name: 'DeepSeek',
-      baseUrl: 'https://api.deepseek.com/v1',
-      apiKey: process.env.DEEPSEEK_API_KEY,
-      defaultModel: 'deepseek-chat',
-    })
-  : null
-
-// ============================================================
-// Provedor 5: Together AI (confiavel, bons modelos)
-// ============================================================
-const togetherProvider = process.env.TOGETHER_API_KEY
-  ? new OpenAICompatibleProvider({
-      name: 'Together AI',
-      baseUrl: 'https://api.together.xyz/v1',
-      apiKey: process.env.TOGETHER_API_KEY,
-      defaultModel: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-    })
-  : null
-
-// ============================================================
-// Provedor 6: SambaNova (free tier sem cartao de credito)
-// ============================================================
-const sambanovaProvider = process.env.SAMBANOVA_API_KEY
-  ? new OpenAICompatibleProvider({
-      name: 'SambaNova',
-      baseUrl: 'https://api.sambanova.ai/v1',
-      apiKey: process.env.SAMBANOVA_API_KEY,
-      defaultModel: 'Meta-Llama-3.1-8B-Instruct',
-    })
-  : null
-
-// ============================================================
-// Provedor 7: GitHub Models (free para devs)
-// ============================================================
-const githubProvider = process.env.GITHUB_API_KEY
-  ? new OpenAICompatibleProvider({
-      name: 'GitHub Models',
-      baseUrl: 'https://models.inference.ai.azure.com',
-      apiKey: process.env.GITHUB_API_KEY,
-      defaultModel: 'gpt-4o-mini',
-    })
-  : null
-
-// ============================================================
-// Provedor 8: Cerebras (rapido, modelo pequeno)
+// Provedor 4: Cerebras (rapido, modelo pequeno)
 // ============================================================
 class CerebrasProvider implements AIProvider {
   name = 'Cerebras'
@@ -271,19 +241,7 @@ class CerebrasProvider implements AIProvider {
 }
 
 // ============================================================
-// Provedor 9: HuggingFace Inference (100K creditos/mes gratis)
-// ============================================================
-const huggingFaceProvider = process.env.HUGGINGFACE_API_KEY
-  ? new OpenAICompatibleProvider({
-      name: 'HuggingFace',
-      baseUrl: 'https://api-inference.huggingface.co/v1',
-      apiKey: process.env.HUGGINGFACE_API_KEY,
-      defaultModel: 'meta-llama/Meta-Llama-3-8B-Instruct',
-    })
-  : null
-
-// ============================================================
-// Provedor 10: Mistral (bom modelo open-source)
+// Provedor 5: Mistral (bom modelo open-source)
 // ============================================================
 class MistralProvider implements AIProvider {
   name = 'Mistral'
@@ -321,6 +279,66 @@ class MistralProvider implements AIProvider {
 }
 
 // ============================================================
+// Provedor 6: DeepSeek (extremamente barato, excelente modelo)
+// ============================================================
+const deepSeekProvider = process.env.DEEPSEEK_API_KEY
+  ? new OpenAICompatibleProvider({
+      name: 'DeepSeek',
+      baseUrl: 'https://api.deepseek.com/v1',
+      apiKey: process.env.DEEPSEEK_API_KEY,
+      defaultModel: 'deepseek-chat',
+    })
+  : null
+
+// ============================================================
+// Provedor 7: Together AI (confiavel, bons modelos)
+// ============================================================
+const togetherProvider = process.env.TOGETHER_API_KEY
+  ? new OpenAICompatibleProvider({
+      name: 'Together AI',
+      baseUrl: 'https://api.together.xyz/v1',
+      apiKey: process.env.TOGETHER_API_KEY,
+      defaultModel: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
+    })
+  : null
+
+// ============================================================
+// Provedor 8: SambaNova (free tier sem cartao de credito)
+// ============================================================
+const sambanovaProvider = process.env.SAMBANOVA_API_KEY
+  ? new OpenAICompatibleProvider({
+      name: 'SambaNova',
+      baseUrl: 'https://api.sambanova.ai/v1',
+      apiKey: process.env.SAMBANOVA_API_KEY,
+      defaultModel: 'Meta-Llama-3.1-8B-Instruct',
+    })
+  : null
+
+// ============================================================
+// Provedor 9: GitHub Models (free para devs)
+// ============================================================
+const githubProvider = process.env.GITHUB_API_KEY
+  ? new OpenAICompatibleProvider({
+      name: 'GitHub Models',
+      baseUrl: 'https://models.inference.ai.azure.com',
+      apiKey: process.env.GITHUB_API_KEY,
+      defaultModel: 'gpt-4o-mini',
+    })
+  : null
+
+// ============================================================
+// Provedor 10: HuggingFace Inference (100K creditos/mes gratis)
+// ============================================================
+const huggingFaceProvider = process.env.HUGGINGFACE_API_KEY
+  ? new OpenAICompatibleProvider({
+      name: 'HuggingFace',
+      baseUrl: 'https://api-inference.huggingface.co/v1',
+      apiKey: process.env.HUGGINGFACE_API_KEY,
+      defaultModel: 'meta-llama/Meta-Llama-3-8B-Instruct',
+    })
+  : null
+
+// ============================================================
 // Provedor 11: Google Gemini (via API direta)
 // ============================================================
 const geminiProvider = process.env.GEMINI_API_KEY
@@ -334,12 +352,6 @@ const geminiProvider = process.env.GEMINI_API_KEY
 
 // ============================================================
 // Provedor Custom: configurado via env vars (ultimo recurso)
-// Permite adicionar QUALQUER provedor OpenAI-compativel
-// sem modificar o codigo. Configure no .env:
-//   CUSTOM_AI_NAME="Meu Provider"
-//   CUSTOM_AI_BASE_URL="https://api.exemplo.com/v1"
-//   CUSTOM_AI_API_KEY="sk-..."
-//   CUSTOM_AI_MODEL="meu-modelo"
 // ============================================================
 const customProvider = process.env.CUSTOM_AI_BASE_URL && process.env.CUSTOM_AI_API_KEY
   ? new OpenAICompatibleProvider({
@@ -385,24 +397,31 @@ const northFreeProvider = openCodeKey
 
 // ============================================================
 // Lista completa de provedores (ordem = prioridade)
+// Ordem baseada em confiabilidade + qualidade + limites gratuitos:
+// 1. OpenRouter (agregador, varios modelos, mais confiavel)
+// 2. Groq (Llama 3.3 70B - rapido, free tier generoso)
+// 3. Cerebras (Gemma 4 31B - gratuito)
+// 4. Google Gemini (API direta - 60 RPM, 1500 req/dia)
+// 5. Mistral
+// 6. OpenCode Zen (DeepSeek V4 Flash Free - ultimo recurso)
 // ============================================================
 const providers: AIProvider[] = [
-  // 1o - OpenRouter (Gemini Flash 2.0 - mais rapido, melhor em portugues, nunca timeouta)
+  // 1o - OpenRouter (agregador - mais confiavel)
   new OpenRouterProvider(),
 
-  // 2o - Google Gemini (via API direta - fallback do OpenRouter)
-  ...(geminiProvider ? [geminiProvider] : []),
-
-  // 3o - Groq (Llama 3.3 70B)
+  // 2o - Groq (30 RPM, 1000 req/dia - rapido e gratis)
   new GroqProvider(),
 
-  // 4o - Cerebras
+  // 3o - Cerebras (5 RPM - gratis, resposta rapida)
   new CerebrasProvider(),
+
+  // 4o - Google Gemini (60 RPM, 1500 req/dia)
+  ...(geminiProvider ? [geminiProvider] : []),
 
   // 5o - Mistral
   new MistralProvider(),
 
-  // 6o - OpenCode Zen (DeepSeek V4 Flash Free - ultimo recurso)
+  // 6o - OpenCode Zen (modelo free, ultimo recurso)
   new OpenCodeZenProvider(),
 
   // Extras com chave
@@ -427,18 +446,22 @@ const providers: AIProvider[] = [
 // Se TODOS falharem, joga erro com detalhes de cada um.
 // ============================================================
 export async function completeAI(
-  params: AICompletionParams
+  params: AICompletionParams,
+  userLastMessage?: string
 ): Promise<{ content: string; model: string; provider: string }> {
   const errors: string[] = []
 
   for (const provider of providers) {
     try {
       const result = await provider.complete(params)
-      if (result.content && result.content.trim().length > 0) {
+      if (result.content && result.content.trim().length > 0 && !isBadResponse(result.content, userLastMessage)) {
         return { ...result, provider: provider.name }
       }
-      errors.push(provider.name + ': resposta vazia')
-      console.warn('[AI Fallback] ' + provider.name + ' retornou vazio, tentando proximo...')
+      const reason = !result.content || result.content.trim().length === 0
+        ? 'resposta vazia'
+        : 'resposta ruim (eco/tchau)'
+      errors.push(provider.name + ': ' + reason)
+      console.warn('[AI Fallback] ' + provider.name + ' retornou ' + reason + ', tentando proximo...')
     } catch (err) {
       if (err instanceof Object && 'name' in err && (err as {name: string}).name === 'AbortError') {
         errors.push(provider.name + ': timeout after 25s')
@@ -461,11 +484,12 @@ export async function completeAI(
 export async function generateChatResponse(
   messages: { role: 'user' | 'assistant' | 'system'; content: string }[],
   systemPrompt?: string,
-  maxTokens?: number
+  maxTokens?: number,
+  userLastMessage?: string
 ): Promise<{ content: string; model: string; provider: string }> {
   const fullMessages = systemPrompt
     ? [{ role: 'system' as const, content: systemPrompt }, ...messages]
     : messages
 
-  return completeAI({ messages: fullMessages, maxTokens })
+  return completeAI({ messages: fullMessages, maxTokens }, userLastMessage)
 }
