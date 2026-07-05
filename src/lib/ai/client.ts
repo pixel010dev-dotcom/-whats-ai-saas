@@ -491,5 +491,5 @@ export async function generateChatResponse(
     ? [{ role: 'system' as const, content: systemPrompt }, ...messages]
     : messages
 
-  return completeAI({ messages: fullMessages, maxTokens }, userLastMessage)
+  return completeAI({ messages: fullMessages, maxTokens: maxTokens ?? 1024 }, userLastMessage)
 }
