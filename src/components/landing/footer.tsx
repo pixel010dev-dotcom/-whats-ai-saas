@@ -28,7 +28,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li><Link href="#features" className="text-sm hover:text-emerald-400 transition-colors">Funcionalidades</Link></li>
               <li><Link href="/pricing" className="text-sm hover:text-emerald-400 transition-colors">Preços</Link></li>
-              <li><Link href="/register" className="text-sm hover:text-emerald-400 transition-colors">Começar grátis</Link></li>
+              <li><Link href="/register" className="text-sm hover:text-emerald-400 transition-colors">Começar agora</Link></li>
               <li><Link href="/login" className="text-sm hover:text-emerald-400 transition-colors">Entrar</Link></li>
             </ul>
           </div>
@@ -60,7 +60,7 @@ export default function Footer() {
               &copy; {new Date().getFullYear()} WhatsAI. Todos os direitos reservados.
             </p>
             <div className="flex items-center gap-6">
-              <span className="text-sm text-zinc-500">Feito com \u2764\ufe0f pela equipe WhatsAI</span>
+              <span className="text-sm text-zinc-500">Feito com ❤️ pela equipe WhatsAI</span>
               <div className="flex gap-4">
                 <span className="w-5 h-5 rounded bg-zinc-800 flex items-center justify-center text-xs cursor-pointer hover:bg-emerald-600 hover:text-white transition-colors">in</span>
                 <span className="w-5 h-5 rounded bg-zinc-800 flex items-center justify-center text-xs cursor-pointer hover:bg-emerald-600 hover:text-white transition-colors">ig</span>

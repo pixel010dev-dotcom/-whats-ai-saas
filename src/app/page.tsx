@@ -64,7 +64,7 @@ export default function Home() {
                 href="/register"
                 className="px-5 py-2.5 text-sm font-semibold bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-0.5 transition-all duration-300"
               >
-                Começar grátis
+                Começar agora
               </Link>
             </div>
           </div>
@@ -105,7 +105,7 @@ export default function Home() {
           </h2>
           <p className="text-xl text-green-100 mb-10 max-w-2xl mx-auto">
             Em 5 minutos sua IA já está vendendo por você. Enquanto você dorme, ela trabalha.
-            R$ 29,90/mês. Ativação instantânea. Cancele quando quiser.
+            R$ 29,90/mês — PIX. Ativação instantânea.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

@@ -81,7 +81,7 @@ export default function Pricing() {
                 <span className="text-5xl font-bold text-zinc-100">R$ {plan.price.toFixed(2).replace('.', ',')}</span>
                 <span className="text-zinc-500">/mes</span>
               </div>
-              <p className="text-sm text-zinc-600 mt-2">7 dias gratis &middot; Cancele quando quiser</p>
+              <p className="text-sm text-zinc-600 mt-2">Pagamento via PIX &middot; Ativacao instantanea</p>
             </div>
 
             <ul className="space-y-3 mb-8 max-w-xs mx-auto">
@@ -97,11 +97,11 @@ export default function Pricing() {
               href="/register"
               className="block w-full py-3.5 rounded-xl text-center text-base font-semibold bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
             >
-              Comecar gratis &rarr;
+              Comecar agora &rarr;
             </Link>
 
             <p className="text-xs text-zinc-600 text-center mt-4">
-              Sem cartao de credito &middot; Ativacao instantanea
+              PIX &middot; Ativacao instantanea
             </p>
           </div>
         </motion.div>

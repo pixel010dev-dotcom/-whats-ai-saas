@@ -34,7 +34,7 @@ export default function Register() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Erro ao cadastrar')
-      router.push('/dashboard')
+      router.push('/dashboard/planos')
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao cadastrar')
@@ -60,7 +60,7 @@ export default function Register() {
               <span className="font-bold text-2xl text-white">WhatsAI</span>
             </Link>
             <h1 className="text-3xl font-bold text-white mb-2">Criar conta</h1>
-            <p className="text-gray-400">Teste gratis por 7 dias</p>
+            <p className="text-gray-400">Apenas <strong className="text-green-400">R$ 29,90/mês</strong> — ativação imediata via PIX</p>
           </div>
 
           <div className="flex justify-center gap-2 mb-8">
@@ -123,7 +123,7 @@ export default function Register() {
                 </div>
                 <div className="flex gap-3">
                   <button type="button" onClick={() => setStep(1)} className="flex-1 bg-white/10 hover:bg-white/15 text-white py-3 rounded-xl font-semibold transition-all duration-300 border border-white/10">Voltar</button>
-                  <button type="submit" disabled={loading} className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white py-3 rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 shadow-lg shadow-green-500/25">{loading ? 'Criando...' : 'Criar conta gratuita'}</button>
+                  <button type="submit" disabled={loading} className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white py-3 rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 shadow-lg shadow-green-500/25">{loading ? 'Criando...' : 'Criar conta e pagar'}</button>
 
                 </div>
               </>
