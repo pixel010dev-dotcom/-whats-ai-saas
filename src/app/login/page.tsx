@@ -67,6 +67,24 @@ function LoginForm() {
               <label className="block text-sm font-medium text-gray-300 mb-1.5">Senha</label>
               <input type="password" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Sua senha" required />
             </div>
+            <div className="flex justify-end -mt-2">
+              <button type="button" onClick={async () => {
+                if (!email) { setError('Digite seu email primeiro'); return }
+                try {
+                  const supabase = (await import('@supabase/ssr')).createBrowserClient(
+                    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+                  )
+                  const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin + '/dashboard',
+                  })
+                  if (resetError) setError(resetError.message)
+                  else { setError(''); alert('Email de recuperação enviado! Verifique sua caixa de entrada.') }
+                } catch { setError('Erro ao enviar email de recuperação') }
+              }} className="text-xs text-green-400 hover:text-green-300 transition-colors">
+                Esqueci minha senha
+              </button>
+            </div>
             <button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white py-3 rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 shadow-lg shadow-green-500/25">{loading ? 'Entrando...' : 'Entrar'}</button>
           </form>
           <p className="text-center text-sm text-gray-500 mt-6">

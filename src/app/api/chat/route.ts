@@ -14,6 +14,12 @@ export async function POST(req: Request) {
     }
     const { message, tenantId, customerPhone, customerName } = parsed.data
 
+    // #1 Block unpaid users
+    const sub = await prisma.subscription.findUnique({ where: { tenantId } })
+    if (!sub || sub.status !== 'ACTIVE') {
+      return NextResponse.json({ error: 'Assinatura inativa. Acesse /dashboard/planos para pagar.', code: 'SUBSCRIPTION_REQUIRED' }, { status: 402 })
+    }
+
     let customer = null
     if (customerPhone) {
       customer = await prisma.customer.findUnique({

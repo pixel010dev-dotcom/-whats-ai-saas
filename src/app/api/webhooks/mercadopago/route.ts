@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendPaymentReceipt } from '@/lib/email'
 import crypto from 'crypto'
 
 export async function POST(req: Request) {
@@ -41,6 +42,22 @@ export async function POST(req: Request) {
             create: { tenantId: payment.external_reference, plan: 'UNICO', status: 'ACTIVE', currentPeriodStart: new Date(), currentPeriodEnd: new Date(Date.now() + thirtyDays) },
           })
           await prisma.tenant.update({ where: { id: payment.external_reference }, data: { status: 'ACTIVE' } })
+
+          // Send receipt email
+          const tenant = await prisma.tenant.findUnique({
+            where: { id: payment.external_reference },
+            include: { users: { take: 1 } }
+          })
+          if (tenant?.users[0]?.email) {
+            sendPaymentReceipt({
+              to: tenant.users[0].email,
+              name: tenant.users[0].name || 'Cliente',
+              amount: payment.transaction_amount || 29.90,
+              plan: 'WhatsAI - Plano Único',
+              paymentMethod: 'PIX',
+              tenantSlug: tenant.slug,
+            }).catch(() => {})
+          }
         }
       }
     }

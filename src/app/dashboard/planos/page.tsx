@@ -1,10 +1,11 @@
-// v2 - PIX modal com overlay centralizado - 2026-07-02 22:37
+// v3 - PIX + onboarding + status check
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Check, Copy, CheckCheck, QrCode, ArrowRight, Zap, X, Shield, Clock, Smartphone } from 'lucide-react'
+import { Check, Copy, CheckCheck, QrCode, ArrowRight, Zap, X, Shield, Clock, Smartphone, Bot, BookOpen, Smartphone as SmartphoneIcon, ArrowUpRight } from 'lucide-react'
 import { toast } from 'sonner'
 import { formatCurrency } from '@/lib/utils'
+import Link from 'next/link'
 
 const plan = {
   name: 'WhatsAI',
@@ -24,8 +25,17 @@ const plan = {
   color: 'from-emerald-400 to-emerald-600',
 }
 
+const onboardingSteps = [
+  { icon: SmartphoneIcon, label: 'Conectar WhatsApp', desc: 'Escaneie o QR Code para conectar seu WhatsApp', href: '/dashboard/whatsapp' },
+  { icon: BookOpen, label: 'Adicionar Conhecimento', desc: 'Ensine a IA sobre seus produtos e servicos', href: '/dashboard/conhecimento' },
+  { icon: Bot, label: 'Configurar IA', desc: 'Ajuste a personalidade da sua atendente virtual', href: '/dashboard/configuracoes' },
+  { icon: SmartphoneIcon, label: 'Widget do Site', desc: 'Coloque o chat no seu site para começar a vender', href: '#' },
+]
+
 export default function PlanosPage() {
   const [loading, setLoading] = useState(false)
+  const [checking, setChecking] = useState(true)
+  const [isActive, setIsActive] = useState(false)
   const [paymentData, setPaymentData] = useState<{
     qrCode: string
     qrCodeBase64: string
@@ -36,6 +46,47 @@ export default function PlanosPage() {
   const [copied, setCopied] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [timeLeft, setTimeLeft] = useState(600)
+  const [paid, setPaid] = useState(false)
+
+  // Check subscription status on load
+  useEffect(() => {
+    async function check() {
+      try {
+        const profile = await (await fetch('/api/auth/profile')).json()
+        const tid = profile.tenant?.id
+        if (!tid) return
+        const res = await fetch(`/api/subscriptions?tenantId=${tid}`)
+        const data = await res.json()
+        if (data.subscription?.status === 'ACTIVE') {
+          setIsActive(true)
+        }
+      } catch {} finally {
+        setChecking(false)
+      }
+    }
+    check()
+  }, [])
+
+  // Auto-detect payment completion
+  useEffect(() => {
+    if (!showModal || paid) return
+    const interval = setInterval(async () => {
+      try {
+        const profile = await (await fetch('/api/auth/profile')).json()
+        const tid = profile.tenant?.id
+        if (!tid) return
+        const res = await fetch(`/api/subscriptions?tenantId=${tid}`)
+        const data = await res.json()
+        if (data.subscription?.status === 'ACTIVE') {
+          setPaid(true)
+          setShowModal(false)
+          setIsActive(true)
+          toast.success('✅ Pagamento confirmado! Seu WhatsAI esta ativo!')
+        }
+      } catch {}
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [showModal, paid])
 
   useEffect(() => {
     if (!showModal || timeLeft <= 0) return
@@ -103,6 +154,65 @@ export default function PlanosPage() {
     }
   }
 
+  if (checking) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
+
+  // #2 + #6: Screen for active subscribers (onboarding)
+  if (isActive) {
+    return (
+      <div className="max-w-3xl mx-auto space-y-8">
+        {/* Success banner */}
+        <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/5 border border-emerald-500/20 rounded-2xl p-8 text-center">
+          <div className="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-4">
+            <Check className="w-8 h-8 text-emerald-400" />
+          </div>
+          <h1 className="text-2xl font-bold text-zinc-100">WhatsAI ativo! 🎉</h1>
+          <p className="text-zinc-400 mt-2">Sua assinatura está ativa. Aqui o passo a passo pra começar:</p>
+        </div>
+
+        {/* Onboarding steps */}
+        <div className="grid sm:grid-cols-2 gap-4">
+          {onboardingSteps.map((step, i) => (
+            <Link
+              key={i}
+              href={step.href}
+              className="group bg-zinc-900/50 border border-zinc-800 rounded-xl p-5 hover:border-emerald-500/30 transition-all hover:shadow-lg hover:shadow-emerald-500/5"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0 group-hover:bg-emerald-500/20 transition-colors">
+                  <step.icon className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-zinc-100">{i + 1}. {step.label}</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-emerald-400 transition-colors" />
+                  </div>
+                  <p className="text-xs text-zinc-500 mt-1">{step.desc}</p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Support info */}
+        <div className="bg-zinc-900/30 border border-zinc-800 rounded-xl p-6 text-center">
+          <p className="text-sm text-zinc-400">
+            Precisando de ajuda? Me chama no WhatsApp:{' '}
+            <a href="https://wa.me/554598566730" className="text-emerald-400 hover:text-emerald-300 font-medium">
+               (45) 9856-6730
+            </a>
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  // Payment screen for non-active users
   return (
     <div className="space-y-6">
       <div className="text-center max-w-2xl mx-auto">
@@ -219,4 +329,3 @@ export default function PlanosPage() {
     </div>
   )
 }
-// FORCE FRESH BUILD
