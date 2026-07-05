@@ -38,6 +38,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { user, loading, signOut } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [subStatus, setSubStatus] = useState<string | null>(null)
+
+  // Check subscription status
+  useEffect(() => {
+    async function checkSub() {
+      try {
+        const profile = await (await fetch('/api/auth/profile')).json()
+        if (profile.tenant?.id) {
+          const sub = await (await fetch(`/api/subscriptions?tenantId=${profile.tenant.id}`)).json()
+          setSubStatus(sub.subscription?.status || null)
+        }
+      } catch {}
+    }
+    if (!loading && user) checkSub()
+  }, [loading, user])
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -66,6 +81,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen bg-page text-primary">
       <Toaster richColors position="top-right" />
       <header className="bg-page-secondary/80 border-b border-theme sticky top-0 z-50 backdrop-blur-xl">
+        {subStatus && subStatus !== 'ACTIVE' && (
+          <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border-b border-amber-500/20 px-4 py-2">
+            <div className="max-w-7xl mx-auto flex items-center justify-between">
+              <p className="text-xs sm:text-sm text-amber-400">
+                💰 Sua assinatura está <strong>{subStatus === 'PENDING' ? 'pendente' : subStatus === 'EXPIRED' ? 'expirada' : subStatus === 'CANCELLED' ? 'cancelada' : subStatus}</strong>.
+                Pague via PIX para continuar usando o WhatsAI.
+              </p>
+              <Link
+                href="/dashboard/planos"
+                className="text-xs font-semibold bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 px-3 py-1 rounded-lg transition-colors shrink-0 ml-3"
+              >
+                Pagar agora
+              </Link>
+            </div>
+          </div>
+        )}
         <div className="flex items-center justify-between px-4 h-14">
           <div className="flex items-center gap-3">
             <button
