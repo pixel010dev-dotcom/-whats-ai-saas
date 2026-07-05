@@ -10,7 +10,6 @@ export async function GET() {
       status: 'error',
       db: 'disconnected',
       message: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack?.split('\n').slice(0, 5) : undefined,
     }, { status: 500 })
   }
 }

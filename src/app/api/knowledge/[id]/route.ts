@@ -5,6 +5,15 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   try {
     const { id } = await params
     const body = await req.json()
+    const tenantId = body.tenantId
+
+    // Verify ownership
+    if (tenantId) {
+      const existing = await prisma.knowledge.findUnique({ where: { id }, select: { tenantId: true } })
+      if (!existing || existing.tenantId !== tenantId) {
+        return NextResponse.json({ error: 'Conhecimento não encontrado' }, { status: 404 })
+      }
+    }
 
     const knowledge = await prisma.knowledge.update({
       where: { id },
@@ -25,6 +34,16 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
+    const body = await req.json().catch(() => ({}))
+    const tenantId = body?.tenantId
+
+    if (tenantId) {
+      const existing = await prisma.knowledge.findUnique({ where: { id }, select: { tenantId: true } })
+      if (!existing || existing.tenantId !== tenantId) {
+        return NextResponse.json({ error: 'Conhecimento não encontrado' }, { status: 404 })
+      }
+    }
+
     await prisma.knowledge.delete({ where: { id } })
     return NextResponse.json({ success: true })
   } catch (err) {

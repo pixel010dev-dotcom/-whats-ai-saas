@@ -5,9 +5,21 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url)
     const conversationId = searchParams.get('conversationId')
+    const tenantId = searchParams.get('tenantId')
     
     if (!conversationId) {
       return NextResponse.json({ error: 'conversationId é obrigatório' }, { status: 400 })
+    }
+
+    // Verify conversation belongs to tenant
+    if (tenantId) {
+      const conversation = await prisma.conversation.findUnique({
+        where: { id: conversationId },
+        select: { tenantId: true }
+      })
+      if (!conversation || conversation.tenantId !== tenantId) {
+        return NextResponse.json({ error: 'Conversa não encontrada' }, { status: 404 })
+      }
     }
 
     const messages = await prisma.message.findMany({

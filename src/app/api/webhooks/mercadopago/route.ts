@@ -5,19 +5,22 @@ import crypto from 'crypto'
 export async function POST(req: Request) {
   try {
     const secret = process.env.MERCADO_PAGO_WEBHOOK_SECRET
-    if (secret) {
+    if (!secret) {
+      console.warn('[Mercado Pago] WEBHOOK_SECRET not configured, skipping signature verification')
+    } else {
       const rawBody = await req.clone().text()
       const signature = req.headers.get('x-signature') || ''
       const [hashPart] = signature.split(',')
       const receivedHash = hashPart?.split('=')[1]
-      if (receivedHash) {
-        const expectedHash = crypto
-          .createHmac('sha256', secret)
-          .update(rawBody)
-          .digest('hex')
-        if (receivedHash !== expectedHash) {
-          return NextResponse.json({ error: 'invalid signature' }, { status: 401 })
-        }
+      if (!receivedHash) {
+        return NextResponse.json({ error: 'missing signature' }, { status: 401 })
+      }
+      const expectedHash = crypto
+        .createHmac('sha256', secret)
+        .update(rawBody)
+        .digest('hex')
+      if (receivedHash !== expectedHash) {
+        return NextResponse.json({ error: 'invalid signature' }, { status: 401 })
       }
     }
 
