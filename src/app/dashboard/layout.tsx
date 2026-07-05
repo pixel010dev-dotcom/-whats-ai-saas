@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useAuth } from '@/app/context/AuthProvider'
 import { useTheme } from '@/components/theme/ThemeProvider'
 import { Toaster } from 'sonner'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
 import {
   LayoutDashboard, MessageSquare, Users, ShoppingBag, Package,
