@@ -29,8 +29,11 @@ export default function ChatWidget({ slug, title = 'Precisa de ajuda?' }: Props)
     fetch('/api/settings?slug=' + slug)
       .then(r => r.json())
       .then(data => {
-        const msg = data.supportWelcomeMessage || data.welcomeMessage || ''
-        if (msg) setWelcomeMsg(msg)
+        const msg = data.supportWelcomeMessage || data.welcomeMessage || 'Ola! Como posso ajudar voce hoje?'
+        setWelcomeMsg(msg)
+        // Start chat immediately without asking for contact
+        setShowForm(false)
+        setMessages([{ role: 'assistant', content: msg }])
       })
       .catch(() => {})
   }, [slug])

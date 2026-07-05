@@ -20,14 +20,11 @@ export async function POST(req: Request) {
 
     let customer = null
     if (customerPhone) {
-      customer = await prisma.customer.findUnique({
-        where: { phone_tenantId: { phone: customerPhone, tenantId } }
+      customer = await prisma.customer.upsert({
+        where: { phone_tenantId: { phone: customerPhone, tenantId } },
+        update: { name: customerName || undefined },
+        create: { tenantId, phone: customerPhone, name: customerName || 'Visitante' }
       })
-      if (!customer) {
-        customer = await prisma.customer.create({
-          data: { tenantId, phone: customerPhone, name: customerName || 'Visitante' }
-        })
-      }
     }
 
     let conversation = await prisma.conversation.findFirst({
