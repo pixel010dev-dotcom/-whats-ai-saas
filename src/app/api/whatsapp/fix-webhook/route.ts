@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   }
 
   const instances = await prisma.whatsApp.findMany({
-    where: { instanceName: { not: null }, status: { in: ['CONNECTED', 'open', 'close'] } }
+    where: { instanceName: { not: null }, status: { in: ['CONNECTED', 'open', 'CLOSED'] } }
   })
 
   let fixed = 0

@@ -39,6 +39,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { theme, toggleTheme } = useTheme()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!loading && !user) {
+      window.location.href = '/login'
+    }
+  }, [loading, user])
+
   if (loading) {
     return (
       <div className="min-h-screen bg-page flex items-center justify-center">
@@ -49,6 +56,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         />
       </div>
     )
+  }
+
+  if (!user) {
+    return null // Will redirect via useEffect
   }
 
   return (
