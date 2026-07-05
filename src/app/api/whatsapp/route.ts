@@ -33,7 +33,7 @@ export async function POST(req: Request) {
 
     if (action === 'connect') {
       let wa = await prisma.whatsApp.findFirst({ where: { tenantId } })
-      const instanceName = `wa-${tenantId.slice(0, 8)}`
+      const instanceName = `wa-${tenantId.slice(0, 12)}`
 
       if (!wa) {
         wa = await prisma.whatsApp.create({
@@ -83,7 +83,7 @@ export async function POST(req: Request) {
       }
 
       let wa = await prisma.whatsApp.findFirst({ where: { tenantId } })
-      const instanceName = `wa-${tenantId.slice(0, 8)}`
+      const instanceName = `wa-${tenantId.slice(0, 12)}`
 
       if (!wa) {
         wa = await prisma.whatsApp.create({

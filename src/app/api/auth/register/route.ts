@@ -44,9 +44,16 @@ export async function POST(req: Request) {
       await prisma.tenant.delete({ where: { id: tenant.id } }).catch(() => {})
       return NextResponse.json({ error: 'Erro ao criar usuário' }, { status: 500 })
     }
-    await prisma.user.create({
-      data: { id: authUser.user.id, email, name, role: 'owner', tenantId: tenant.id }
-    })
+
+    try {
+      await prisma.user.create({
+        data: { id: authUser.user.id, email, name, role: 'owner', tenantId: tenant.id }
+      })
+    } catch {
+      await prisma.tenant.delete({ where: { id: tenant.id } }).catch(() => {})
+      await supabaseAdmin.auth.admin.deleteUser(authUser.user.id).catch(() => {})
+      return NextResponse.json({ error: 'Erro ao criar usuário' }, { status: 500 })
+    }
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error(err)

@@ -59,20 +59,20 @@ export async function POST(req: Request) {
       ? knowledgeEntries.map(k => '- ' + k.title + ': ' + k.content).join('\n')
       : 'Nenhum conhecimento cadastrado'
 
-    const systemPrompt = `Voce e um atendente de suporte humano trabalhando para uma empresa.
+    const systemPrompt = `Voce e um atendente de suporte digital inteligente.
+
+REGRA DE OURO: Resolva o problema do cliente de forma util, completa e natural.
 
 ORIENTACOES:
-- Seja natural, educado e inteligente como um ser humano de verdade
-- Nao seja robotico - use linguagem natural e variada
-- Se for saudacao, cumprimente de volta e pergunte como pode ajudar
-- Se for pergunta, responda diretamente com as informacoes disponiveis
-- Se nao souber a resposta, inicie com exatamente [TRANSFER]
-- NUNCA responda apenas "tchau", "oi" ou "ok" - seja sempre util e completo
-- Pense livremente, sem pressa. Use seu conhecimento para ajudar
+- Seja natural, paciente e prestativo como um bom atendente de suporte
+- Responda perguntas diretamente com as informacoes disponiveis
+- Se nao souber resolver, inicie com exatamente [TRANSFER]
+- Use o conhecimento da empresa para embasar suas respostas
+- PENSE antes de responder - resolva o problema de verdade
 
 Personalidade: ${settings?.supportPersonality || settings?.aiPersonality || 'Educado, profissional e amigavel'}
 
-Informacoes da empresa:
+Informacoes da empresa para consulta:
 ${knowledgeStr}`
 
     const history = conversation.messages.map(m => ({
@@ -80,7 +80,17 @@ ${knowledgeStr}`
       content: m.content
     }))
 
-    const aiResponse = await generateChatResponse(history, systemPrompt, undefined, message)
+    let aiResponse: { content: string; model: string; provider: string }
+    try {
+      aiResponse = await generateChatResponse(history, systemPrompt, undefined)
+    } catch {
+      console.warn('[Support] Todos provedores falharam')
+      return NextResponse.json({
+        success: false,
+        response: 'Desculpe, estou com instabilidade no momento. Tente novamente em instantes.',
+        conversationId: conversation.id
+      })
+    }
 
     const supportPhone = settings?.supportPhone
     const needsTransfer = aiResponse.content.startsWith('[TRANSFER]') && supportPhone && settings?.supportActive
