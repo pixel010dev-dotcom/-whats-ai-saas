@@ -1,5 +1,6 @@
 // AI Client unificado com fallback entre provedores
 // Timeout de 25s por provedor para resposta rapida
+// Ordem: mais confiavel primeiro, ultimo recurso OpenCode Zen Free
 
 interface AICompletionParams {
   messages: { role: 'user' | 'assistant' | 'system'; content: string }[]
@@ -70,32 +71,29 @@ class OpenAICompatibleProvider implements AIProvider {
 
 // ============================================================
 // Validador de respostas ruins
-// Detecta eco, respostas vazias ou sem sentido
 // ============================================================
 function isBadResponse(content: string): boolean {
   const trimmed = content.trim()
   if (!trimmed) return true
   if (trimmed.length < 3) return true
   const lower = trimmed.toLowerCase()
-  // So bloqueia se a resposta INTEIRA for exatamente uma palavra vazia
   const badWords = ['tchau','oi','ola','ok','sim','nao','talvez','ops']
   if (badWords.includes(lower)) return true
   if (/^[.,!?;:\s\-_]+$/.test(trimmed)) return true
-  // Eco: so bloqueia se >60% da resposta for copia da mensagem do usuario
-  // (evita bloquear respostas naturais que compartilham palavras comuns)
   return false
 }
 
 // ============================================================
-// Provedor 1: OpenCode Zen (primario - infra Codebuff)
+// Provedor 1: OpenRouter (agregador, mais confiavel)
+// Modelo: Gemini 2.5 Flash (gratuito, excelente qualidade)
 // ============================================================
-class OpenCodeZenProvider implements AIProvider {
-  name = 'OpenCode Zen'
-  private baseUrl = process.env.OPENCODE_ZEN_BASE_URL || 'https://opencode.ai/zen/v1'
-  private apiKey = process.env.OPENCODE_ZEN_API_KEY || ''
+class OpenRouterProvider implements AIProvider {
+  name = 'OpenRouter'
+  private baseUrl = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1'
+  private apiKey = process.env.OPENROUTER_API_KEY || ''
 
   async complete(params: AICompletionParams) {
-    const model = params.model || 'deepseek-v4-flash-free'
+    const model = params.model || 'google/gemini-2.5-flash'
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 25000)
 
@@ -112,10 +110,12 @@ class OpenCodeZenProvider implements AIProvider {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + this.apiKey,
+          'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://whatsai-app-production.up.railway.app',
+          'X-Title': 'WhatsAI',
         },
         body: JSON.stringify(body),
       })
-      if (!res.ok) throw new Error('OpenCode Zen: ' + res.status)
+      if (!res.ok) throw new Error('OpenRouter: ' + res.status)
       const data = await res.json()
       return { content: data.choices[0].message.content, model }
     } finally {
@@ -126,6 +126,7 @@ class OpenCodeZenProvider implements AIProvider {
 
 // ============================================================
 // Provedor 2: Groq (mais rapido, free tier generoso)
+// Modelo: Llama 3.3 70B
 // ============================================================
 class GroqProvider implements AIProvider {
   name = 'Groq'
@@ -163,47 +164,8 @@ class GroqProvider implements AIProvider {
 }
 
 // ============================================================
-// Provedor 3: OpenRouter (agregador com centenas de modelos)
-// ============================================================
-class OpenRouterProvider implements AIProvider {
-  name = 'OpenRouter'
-  private baseUrl = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1'
-  private apiKey = process.env.OPENROUTER_API_KEY || ''
-
-  async complete(params: AICompletionParams) {
-    const model = params.model || 'google/gemini-2.5-flash'
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 25000)
-
-    try {
-      const body: Record<string, unknown> = {
-        model,
-        messages: params.messages,
-        temperature: params.temperature ?? 0.7,
-      }
-      if (params.maxTokens !== undefined) body.max_tokens = params.maxTokens
-      const res = await fetch(this.baseUrl + '/chat/completions', {
-        signal: controller.signal,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + this.apiKey,
-          'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://whats-ai-saas.railway.app',
-          'X-Title': 'WhatsAI',
-        },
-        body: JSON.stringify(body),
-      })
-      if (!res.ok) throw new Error('OpenRouter: ' + res.status)
-      const data = await res.json()
-      return { content: data.choices[0].message.content, model }
-    } finally {
-      clearTimeout(timeout)
-    }
-  }
-}
-
-// ============================================================
-// Provedor 4: Cerebras (rapido, modelo pequeno)
+// Provedor 3: Cerebras (gratuito, resposta rapida)
+// Modelo: Gemma 4 31B
 // ============================================================
 class CerebrasProvider implements AIProvider {
   name = 'Cerebras'
@@ -239,6 +201,19 @@ class CerebrasProvider implements AIProvider {
     }
   }
 }
+
+// ============================================================
+// Provedor 4: Google Gemini (via API direta)
+// Modelo: Gemini 2.0 Flash
+// ============================================================
+const geminiProvider = process.env.GEMINI_API_KEY
+  ? new OpenAICompatibleProvider({
+      name: 'Google Gemini',
+      baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai',
+      apiKey: process.env.GEMINI_API_KEY,
+      defaultModel: 'gemini-2.0-flash',
+    })
+  : null
 
 // ============================================================
 // Provedor 5: Mistral (bom modelo open-source)
@@ -279,7 +254,45 @@ class MistralProvider implements AIProvider {
 }
 
 // ============================================================
-// Provedor 6: DeepSeek (extremamente barato, excelente modelo)
+// Provedor 6: OpenCode Zen (DeepSeek V4 Flash Free - 100% gratis)
+// ============================================================
+class OpenCodeZenProvider implements AIProvider {
+  name = 'OpenCode Zen'
+  private baseUrl = process.env.OPENCODE_ZEN_BASE_URL || 'https://opencode.ai/zen/v1'
+  private apiKey = process.env.OPENCODE_ZEN_API_KEY || ''
+
+  async complete(params: AICompletionParams) {
+    const model = params.model || 'deepseek-v4-flash-free'
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 25000)
+
+    try {
+      const body: Record<string, unknown> = {
+        model,
+        messages: params.messages,
+        temperature: params.temperature ?? 0.7,
+      }
+      if (params.maxTokens !== undefined) body.max_tokens = params.maxTokens
+      const res = await fetch(this.baseUrl + '/chat/completions', {
+        signal: controller.signal,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.apiKey,
+        },
+        body: JSON.stringify(body),
+      })
+      if (!res.ok) throw new Error('OpenCode Zen: ' + res.status)
+      const data = await res.json()
+      return { content: data.choices[0].message.content, model }
+    } finally {
+      clearTimeout(timeout)
+    }
+  }
+}
+
+// ============================================================
+// Provedor 7: DeepSeek (chave dedicada, bom modelo)
 // ============================================================
 const deepSeekProvider = process.env.DEEPSEEK_API_KEY
   ? new OpenAICompatibleProvider({
@@ -291,79 +304,7 @@ const deepSeekProvider = process.env.DEEPSEEK_API_KEY
   : null
 
 // ============================================================
-// Provedor 7: Together AI (confiavel, bons modelos)
-// ============================================================
-const togetherProvider = process.env.TOGETHER_API_KEY
-  ? new OpenAICompatibleProvider({
-      name: 'Together AI',
-      baseUrl: 'https://api.together.xyz/v1',
-      apiKey: process.env.TOGETHER_API_KEY,
-      defaultModel: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-    })
-  : null
-
-// ============================================================
-// Provedor 8: SambaNova (free tier sem cartao de credito)
-// ============================================================
-const sambanovaProvider = process.env.SAMBANOVA_API_KEY
-  ? new OpenAICompatibleProvider({
-      name: 'SambaNova',
-      baseUrl: 'https://api.sambanova.ai/v1',
-      apiKey: process.env.SAMBANOVA_API_KEY,
-      defaultModel: 'Meta-Llama-3.1-8B-Instruct',
-    })
-  : null
-
-// ============================================================
-// Provedor 9: GitHub Models (free para devs)
-// ============================================================
-const githubProvider = process.env.GITHUB_API_KEY
-  ? new OpenAICompatibleProvider({
-      name: 'GitHub Models',
-      baseUrl: 'https://models.inference.ai.azure.com',
-      apiKey: process.env.GITHUB_API_KEY,
-      defaultModel: 'gpt-4o-mini',
-    })
-  : null
-
-// ============================================================
-// Provedor 10: HuggingFace Inference (100K creditos/mes gratis)
-// ============================================================
-const huggingFaceProvider = process.env.HUGGINGFACE_API_KEY
-  ? new OpenAICompatibleProvider({
-      name: 'HuggingFace',
-      baseUrl: 'https://api-inference.huggingface.co/v1',
-      apiKey: process.env.HUGGINGFACE_API_KEY,
-      defaultModel: 'meta-llama/Meta-Llama-3-8B-Instruct',
-    })
-  : null
-
-// ============================================================
-// Provedor 11: Google Gemini (via API direta)
-// ============================================================
-const geminiProvider = process.env.GEMINI_API_KEY
-  ? new OpenAICompatibleProvider({
-      name: 'Google Gemini',
-      baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai',
-      apiKey: process.env.GEMINI_API_KEY,
-      defaultModel: 'gemini-2.0-flash',
-    })
-  : null
-
-// ============================================================
-// Provedor Custom: configurado via env vars (ultimo recurso)
-// ============================================================
-const customProvider = process.env.CUSTOM_AI_BASE_URL && process.env.CUSTOM_AI_API_KEY
-  ? new OpenAICompatibleProvider({
-      name: process.env.CUSTOM_AI_NAME || 'Custom AI',
-      baseUrl: process.env.CUSTOM_AI_BASE_URL,
-      apiKey: process.env.CUSTOM_AI_API_KEY,
-      defaultModel: process.env.CUSTOM_AI_MODEL || 'default',
-    })
-  : null
-
-// ============================================================
-// Modelos FREE adicionais do OpenCode Zen
+// Modelos FREE extras do OpenCode Zen (ultimos recursos)
 // ============================================================
 const openCodeBaseUrl = process.env.OPENCODE_ZEN_BASE_URL || 'https://opencode.ai/zen/v1'
 const openCodeKey = process.env.OPENCODE_ZEN_API_KEY
@@ -386,64 +327,38 @@ const nemotronFreeProvider = openCodeKey
     })
   : null
 
-const northFreeProvider = openCodeKey
-  ? new OpenAICompatibleProvider({
-      name: 'North (Zen Free)',
-      baseUrl: openCodeBaseUrl,
-      apiKey: openCodeKey,
-      defaultModel: 'north-mini-code-free',
-    })
-  : null
-
 // ============================================================
-// Lista completa de provedores (ordem = prioridade)
-// Ordem baseada em confiabilidade + qualidade + limites gratuitos:
-// 1. OpenRouter (agregador, varios modelos, mais confiavel)
-// 2. Groq (Llama 3.3 70B - rapido, free tier generoso)
-// 3. Cerebras (Gemma 4 31B - gratuito)
-// 4. Google Gemini (API direta - 60 RPM, 1500 req/dia)
-// 5. Mistral
-// 6. OpenCode Zen (DeepSeek V4 Flash Free - ultimo recurso)
+// Lista de provedores (ordem = prioridade)
 // ============================================================
 const providers: AIProvider[] = [
-  // 1o - OpenRouter (agregador - mais confiavel)
+  // 1o - OpenRouter (mais confiavel, Gemini 2.5 Flash)
   new OpenRouterProvider(),
 
-  // 2o - Groq (30 RPM, 1000 req/dia - rapido e gratis)
+  // 2o - Groq (rapido, free tier generoso)
   new GroqProvider(),
 
-  // 3o - Cerebras (5 RPM - gratis, resposta rapida)
+  // 3o - Cerebras (gratuito, resposta rapida)
   new CerebrasProvider(),
 
-  // 4o - Google Gemini (60 RPM, 1500 req/dia)
+  // 4o - Google Gemini (via API direta)
   ...(geminiProvider ? [geminiProvider] : []),
 
   // 5o - Mistral
   new MistralProvider(),
 
-  // 6o - OpenCode Zen (modelo free, ultimo recurso)
+  // 6o - OpenCode Zen (DeepSeek V4 Flash Free)
   new OpenCodeZenProvider(),
 
-  // Extras com chave
+  // 7o - DeepSeek (chave dedicada)
   ...(deepSeekProvider ? [deepSeekProvider] : []),
-  ...(togetherProvider ? [togetherProvider] : []),
-  ...(sambanovaProvider ? [sambanovaProvider] : []),
-  ...(githubProvider ? [githubProvider] : []),
-  ...(huggingFaceProvider ? [huggingFaceProvider] : []),
 
-  // Modelos FREE extras do OpenCode Zen
+  // Modelos FREE extras do OpenCode Zen (ultimo recurso)
   ...(mimoFreeProvider ? [mimoFreeProvider] : []),
   ...(nemotronFreeProvider ? [nemotronFreeProvider] : []),
-  ...(northFreeProvider ? [northFreeProvider] : []),
-
-  // Provedor custom
-  ...(customProvider ? [customProvider] : []),
 ]
 
 // ============================================================
 // Funcao principal com fallback automatico
-// Tenta cada provedor em ordem ate um funcionar.
-// Se TODOS falharem, joga erro com detalhes de cada um.
 // ============================================================
 export async function completeAI(
   params: AICompletionParams
@@ -474,7 +389,9 @@ export async function completeAI(
     }
   }
 
-  throw new Error('All ' + providers.length + ' AI providers failed:\n' + errors.join('\n'))
+  // Se tudo falhar, tenta responder com mensagem amigavel
+  console.error('[AI] Todos os ' + providers.length + ' provedores falharam')
+  return { content: '', model: 'none', provider: 'none' }
 }
 
 // ============================================================
@@ -489,5 +406,5 @@ export async function generateChatResponse(
     ? [{ role: 'system' as const, content: systemPrompt }, ...messages]
     : messages
 
-  return completeAI({ messages: fullMessages, maxTokens: maxTokens ?? 1024 })
+  return completeAI({ messages: fullMessages, maxTokens: maxTokens ?? 512 })
 }
