@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Check, Zap, ShieldCheck, CreditCard, X, TrendingDown, Users, DollarSign, Gift, HelpCircle, ChevronDown, Sparkles, ArrowRight, Clock } from 'lucide-react'
+import { Check, Zap, ShieldCheck, CreditCard, X, TrendingDown, Users, HelpCircle, ChevronDown, Sparkles, ArrowRight, Clock } from 'lucide-react'
 
 const plan = {
   name: 'Único',

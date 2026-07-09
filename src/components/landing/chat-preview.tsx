@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 interface Message {
   role: 'user' | 'ai'
@@ -24,10 +24,11 @@ export default function ChatPreview() {
   const [showCursor, setShowCursor] = useState(true)
   const [isComplete, setIsComplete] = useState(false)
   const [restartTimer, setRestartTimer] = useState(false)
+  const startedRef = useRef(false)
 
   useEffect(() => {
-    setVisibleMessages([])
-    setIsComplete(false)
+    if (startedRef.current) return
+    startedRef.current = true
 
     const timers: NodeJS.Timeout[] = []
 
