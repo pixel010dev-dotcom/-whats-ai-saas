@@ -1,8 +1,77 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { Shield, Zap, Undo2, Users, Sparkles, ArrowRight, CheckCircle } from 'lucide-react'
 import ChatPreview from './chat-preview'
+
+// Animated counter component
+function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    let start = 0
+    const duration = 2000
+    const increment = target / (duration / 16)
+    const timer = setInterval(() => {
+      start += increment
+      if (start >= target) {
+        setCount(target)
+        clearInterval(timer)
+      } else {
+        setCount(Math.floor(start))
+      }
+    }, 16)
+    return () => clearInterval(timer)
+  }, [target])
+
+  return <span className="gradient-text font-bold">{count}{suffix}</span>
+}
+
+// Counter that triggers when in view
+function SocialCounter() {
+  const [hasStarted, setHasStarted] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasStarted(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.5 }
+    )
+    const el = document.getElementById('social-counter')
+    if (el) observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div id="social-counter" className="flex flex-wrap items-center gap-3 justify-center lg:justify-start">
+      <div className="flex -space-x-3">
+        {['D', 'M', 'R', 'L', 'C'].map((letter, i) => (
+          <div
+            key={i}
+            className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xs font-bold border-2 border-zinc-900"
+          >
+            {letter}
+          </div>
+        ))}
+        <div className="w-9 h-9 rounded-full bg-emerald-500/20 border-2 border-zinc-900 flex items-center justify-center text-xs font-semibold text-emerald-400">
+          <Users className="w-4 h-4" />
+        </div>
+      </div>
+      <span className="text-sm text-zinc-400">
+        <span className="font-bold text-zinc-100">
+          {hasStarted ? <AnimatedCounter target={487} suffix="+" /> : '487+'}
+        </span>{' '}
+        empresas já usam o WhatsAI
+      </span>
+    </div>
+  )
+}
 
 export default function Hero() {
   return (
@@ -41,52 +110,53 @@ export default function Hero() {
             </h1>
 
             <p className="mt-6 text-xl text-zinc-400 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Venda, negocie, atenda e feche pedidos automaticamente 24 horas por dia. 
-              Sua inteligência artificial que aprende sobre seu negócio e funciona como um atendente nota 10.
+              Venda, negocie, atenda e feche pedidos automaticamente 24 horas por dia.{' '}
+              <span className="text-emerald-400 font-semibold">Sem contratar ninguém.</span>
             </p>
 
+            {/* CTA Buttons */}
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link
                 href="/register"
                 className="group relative px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold rounded-xl text-lg shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden"
               >
-                <span className="relative z-10">Começar grátis →</span>
+                <span className="relative z-10 flex items-center gap-2">
+                  Começar grátis
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </Link>
               <Link
                 href="#features"
-                className="px-8 py-4 bg-zinc-900/50 border-zinc-800 text-zinc-300 font-semibold rounded-xl text-lg hover:border-zinc-600 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                className="px-8 py-4 bg-zinc-900/50 border border-zinc-700 text-zinc-300 font-semibold rounded-xl text-lg hover:border-zinc-500 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
               >
                 Ver funcionalidades
               </Link>
             </div>
 
-            <div className="mt-12 flex items-center gap-6 justify-center lg:justify-start text-sm text-zinc-500">
-              <div className="flex items-center gap-2">
-                <div className="flex -space-x-2">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xs font-bold border-2 border-white">D</div>
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xs font-bold border-2 border-white">M</div>
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white text-xs font-bold border-2 border-white">R</div>
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white text-xs font-bold border-2 border-white">L</div>
-                  <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-xs font-medium text-emerald-600 border-2 border-white">+12</div>
-                </div>
-              </div>
-              <span className="font-medium"><strong className="text-zinc-100">+12 clientes</strong> ativaram hoje</span>
-            </div>
-
-            <div className="mt-8 flex flex-wrap gap-3 justify-center lg:justify-start">
+            {/* Trust badges - directly below CTA */}
+            <div className="mt-6 flex flex-wrap gap-2 justify-center lg:justify-start">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-medium text-emerald-400">
+                <Shield className="w-3.5 h-3.5" />
+                7 dias de garantia
+              </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-zinc-800/50 border border-zinc-700/50 text-xs text-zinc-400">
-                <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                <Zap className="w-3.5 h-3.5 text-emerald-400" />
                 Ativação instantânea
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-zinc-800/50 border border-zinc-700/50 text-xs text-zinc-400">
-                <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <Undo2 className="w-3.5 h-3.5 text-emerald-400" />
                 Cancele quando quiser
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-zinc-800/50 border border-zinc-700/50 text-xs text-zinc-400">
-                <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                Pagamento seguro
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                Pagamento 100% seguro
               </span>
+            </div>
+
+            {/* Social proof counter */}
+            <div className="mt-8">
+              <SocialCounter />
             </div>
           </motion.div>
 
@@ -98,6 +168,33 @@ export default function Hero() {
             className="hidden lg:block relative"
           >
             <div className="absolute inset-0 bg-gradient-to-b from-green-500/10 to-transparent rounded-3xl blur-3xl" />
+            
+            {/* Badge flutuante "Vendas 24h" */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1.2, duration: 0.5 }}
+              className="absolute -top-4 -right-4 z-10 bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg shadow-emerald-500/30"
+            >
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5" />
+                Vendas 24h/dia
+              </div>
+            </motion.div>
+
+            {/* Badge "Responde em 2s" */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1.5, duration: 0.5 }}
+              className="absolute -bottom-4 -left-4 z-10 bg-zinc-900 border border-zinc-700 text-zinc-200 text-xs font-medium px-4 py-2 rounded-full shadow-lg"
+            >
+              <div className="flex items-center gap-1.5">
+                <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+                Responde em 2 segundos
+              </div>
+            </motion.div>
+
             <div className="relative">
               <ChatPreview />
             </div>

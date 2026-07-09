@@ -38,6 +38,7 @@ export default function Footer() {
             <h3 className="font-semibold text-white mb-4">Empresa</h3>
             <ul className="space-y-3">
               <li><Link href="/pricing" className="text-sm hover:text-emerald-400 transition-colors">Planos</Link></li>
+              <li><Link href="/afiliados" className="text-sm hover:text-emerald-400 transition-colors">Programa de Afiliados</Link></li>
               <li><span className="text-sm text-zinc-600">Blog (em breve)</span></li>
               <li><a href="mailto:pixel010dev@gmail.com" className="text-sm hover:text-emerald-400 transition-colors">Contato</a></li>
             </ul>
