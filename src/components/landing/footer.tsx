@@ -39,7 +39,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li><Link href="/pricing" className="text-sm hover:text-emerald-400 transition-colors">Planos</Link></li>
               <li><Link href="/afiliados" className="text-sm hover:text-emerald-400 transition-colors">Programa de Afiliados</Link></li>
-              <li><span className="text-sm text-zinc-600">Blog (em breve)</span></li>
+              <li><Link href="/blog" className="text-sm hover:text-emerald-400 transition-colors">Blog</Link></li>
               <li><a href="mailto:pixel010dev@gmail.com" className="text-sm hover:text-emerald-400 transition-colors">Contato</a></li>
             </ul>
           </div>
