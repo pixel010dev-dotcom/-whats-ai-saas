@@ -269,4 +269,264 @@ export const cidades: CityPage[] = [
       <p>Economia de até R$ 5.000/mês em atendimento. Plano a partir de R$ 29,90.</p>
     `,
   },
+  {
+    slug: 'sorocaba',
+    nome: 'Sorocaba',
+    uf: 'SP',
+    regiao: 'Sudeste',
+    populacao: '700 mil',
+    destaque: 'polo industrial do interior paulista',
+    conteudo: `
+      <p>Sorocaba é um dos principais centros industriais e comerciais do interior de São Paulo. Um <strong>chatbot WhatsApp em Sorocaba</strong> ajuda sua empresa a oferecer atendimento rápido e eficiente para milhares de clientes.</p>
+      <p>Com o <strong>WhatsAI</strong>, você automatiza vendas, agendamentos e suporte, reduzindo custos e aumentando a produtividade. Perfeito para indústrias, comércios e prestadores de serviço de Sorocaba.</p>
+      <p>Menos de R$ 1/dia para ter atendimento 24h no WhatsApp da sua empresa.</p>
+    `,
+  },
+  {
+    slug: 'ribeirao-preto',
+    nome: 'Ribeirão Preto',
+    uf: 'SP',
+    regiao: 'Sudeste',
+    populacao: '720 mil',
+    destaque: 'capital do agronegócio e polo de saúde',
+    conteudo: `
+      <p>Ribeirão Preto é referência em agronegócio, saúde e serviços no interior paulista. Um <strong>chatbot WhatsApp em Ribeirão Preto</strong> coloca seu negócio na frente da concorrência com atendimento automatizado de alta qualidade.</p>
+      <p>O <strong>WhatsAI</strong> ideal para clínicas, hospitais, comércios e empresas de Ribeirão. Automatize agendamentos, tire dúvidas e processe pedidos 24 horas por dia.</p>
+      <p>Invista R$ 29,90/mês e transforme o atendimento da sua empresa.</p>
+    `,
+  },
+  {
+    slug: 'juiz-de-fora',
+    nome: 'Juiz de Fora',
+    uf: 'MG',
+    regiao: 'Sudeste',
+    populacao: '580 mil',
+    destaque: 'principal polo da Zona da Mata Mineira',
+    conteudo: `
+      <p>Juiz de Fora é o principal centro econômico da Zona da Mata Mineira. Um <strong>chatbot WhatsApp em Juiz de Fora</strong> é essencial para empresas que querem atender bem e vender mais na região.</p>
+      <p>O <strong>WhatsAI</strong> funciona como um atendente virtual 24 horas: responde perguntas, agenda serviços, faz orçamentos e fecha vendas automaticamente.</p>
+      <p>Economia de até R$ 6.000/mês em atendimento. Ative em 5 minutos.</p>
+    `,
+  },
+  {
+    slug: 'uberlandia',
+    nome: 'Uberlândia',
+    uf: 'MG',
+    regiao: 'Sudeste',
+    populacao: '710 mil',
+    destaque: 'polo logístico e industrial do Triângulo Mineiro',
+    conteudo: `
+      <p>Uberlândia é o maior polo logístico e industrial do Triângulo Mineiro. Um <strong>chatbot WhatsApp em Uberlândia</strong> ajuda sua empresa a atender clientes com a agilidade que o mercado exige.</p>
+      <p>Com o <strong>WhatsAI</strong>, você automatiza o atendimento ao cliente, gerencia pedidos e qualifica leads automaticamente. Ideal para comércio, indústria e serviços.</p>
+      <p>Plano a partir de R$ 29,90/mês. Não perca mais vendas por falta de atendimento.</p>
+    `,
+  },
+  {
+    slug: 'sao-jose-dos-campos',
+    nome: 'São José dos Campos',
+    uf: 'SP',
+    regiao: 'Sudeste',
+    populacao: '730 mil',
+    destaque: 'capital do Vale do Paraíba e polo aeroespacial',
+    conteudo: `
+      <p>São José dos Campos é um dos principais polos tecnológicos e aeroespaciais do Brasil. Um <strong>chatbot WhatsApp em São José dos Campos</strong> é a ferramenta ideal para empresas modernas que buscam escalar o atendimento.</p>
+      <p>O <strong>WhatsAI</strong> oferece inteligência artificial avançada para automatizar vendas, suporte e agendamentos. Perfeito para empresas de tecnologia, comércios e prestadores de serviço.</p>
+      <p>Atendimento 24h por apenas R$ 29,90/mês. Sem burocracia.</p>
+    `,
+  },
+  {
+    slug: 'santos',
+    nome: 'Santos',
+    uf: 'SP',
+    regiao: 'Sudeste',
+    populacao: '435 mil',
+    destaque: 'maior porto da América Latina',
+    conteudo: `
+      <p>Santos é a cidade do maior porto da América Latina, com forte comércio e turismo. Um <strong>chatbot WhatsApp em Santos</strong> permite que seu negócio atenda turistas e moradores com eficiência e rapidez.</p>
+      <p>Com o <strong>WhatsAI</strong>, você automatiza o atendimento, agenda serviços e processa pedidos 24 horas por dia. Ideal para comércios, restaurantes, hotéis e serviços em Santos.</p>
+      <p>Menos de R$ 1/dia para ter um funcionário digital dedicado ao seu negócio.</p>
+    `,
+  },
+  {
+    slug: 'sao-jose-do-rio-preto',
+    nome: 'São José do Rio Preto',
+    uf: 'SP',
+    regiao: 'Sudeste',
+    populacao: '480 mil',
+    destaque: 'polo regional do noroeste paulista',
+    conteudo: `
+      <p>São José do Rio Preto é o principal centro econômico do noroeste paulista. Um <strong>chatbot WhatsApp em São José do Rio Preto</strong> coloca seu negócio à frente com atendimento automático de qualidade.</p>
+      <p>O <strong>WhatsAI</strong> funciona 24 horas, atende múltiplos clientes simultaneamente e integra com seu sistema de gestão. Perfeito para o comércio e serviços da região.</p>
+      <p>Plano a partir de R$ 29,90/mês. Ative em 5 minutos sem conhecimento técnico.</p>
+    `,
+  },
+  {
+    slug: 'londrina',
+    nome: 'Londrina',
+    uf: 'PR',
+    regiao: 'Sul',
+    populacao: '580 mil',
+    destaque: 'capital do norte paranaense',
+    conteudo: `
+      <p>Londrina é a principal cidade do norte do Paraná, com forte comércio e agronegócio. Um <strong>chatbot WhatsApp em Londrina</strong> ajuda sua empresa a atender clientes com a agilidade que o mercado paranaense exige.</p>
+      <p>O <strong>WhatsAI</strong> é ideal para comércios, clínicas, restaurantes e prestadores de serviço de Londrina. Automatize agendamentos, vendas e suporte 24 horas por dia.</p>
+      <p>Economia de até R$ 7.000/mês em atendimento. Plano a partir de R$ 29,90.</p>
+    `,
+  },
+  {
+    slug: 'maringa',
+    nome: 'Maringá',
+    uf: 'PR',
+    regiao: 'Sul',
+    populacao: '440 mil',
+    destaque: 'cidade planejada e polo de serviços',
+    conteudo: `
+      <p>Maringá é conhecida por sua qualidade de vida e forte setor de serviços. Um <strong>chatbot WhatsApp em Maringá</strong> é a solução ideal para empresas que querem se destacar no mercado paranaense.</p>
+      <p>Com o <strong>WhatsAI</strong>, você oferece atendimento instantâneo 24 horas, agenda consultas e processa pedidos automaticamente. Perfeito para o comércio e serviços de Maringá.</p>
+      <p>Invista em tecnologia por apenas R$ 29,90/mês e veja seus resultados crescerem.</p>
+    `,
+  },
+  {
+    slug: 'blumenau',
+    nome: 'Blumenau',
+    uf: 'SC',
+    regiao: 'Sul',
+    populacao: '365 mil',
+    destaque: 'capital catarinense da cerveja e tecnologia',
+    conteudo: `
+      <p>Blumenau é um polo de tecnologia e turismo em Santa Catarina. Um <strong>chatbot WhatsApp em Blumenau</strong> permite que sua empresa atenda clientes 24 horas por dia com eficiência e qualidade.</p>
+      <p>O <strong>WhatsAI</strong> é perfeito para o comércio, gastronomia e prestadores de serviço de Blumenau. Automatize reservas, vendas e suporte sem complicação.</p>
+      <p>Menos de R$ 1/dia para ter atendimento de primeira no WhatsApp da sua empresa.</p>
+    `,
+  },
+  {
+    slug: 'caxias-do-sul',
+    nome: 'Caxias do Sul',
+    uf: 'RS',
+    regiao: 'Sul',
+    populacao: '520 mil',
+    destaque: 'maior polo industrial do Rio Grande do Sul',
+    conteudo: `
+      <p>Caxias do Sul é o maior polo industrial do Rio Grande do Sul, com forte presença nos setores metalmecânico e de serviços. Um <strong>chatbot WhatsApp em Caxias do Sul</strong> é essencial para empresas que querem otimizar o atendimento.</p>
+      <p>O <strong>WhatsAI</strong> funciona 24 horas, atende dezenas de clientes simultaneamente e reduz custos operacionais. Ideal para indústrias, comércios e prestadores de serviço da região.</p>
+      <p>Plano a partir de R$ 29,90/mês. Ative hoje mesmo.</p>
+    `,
+  },
+  {
+    slug: 'pelotas',
+    nome: 'Pelotas',
+    uf: 'RS',
+    regiao: 'Sul',
+    populacao: '345 mil',
+    destaque: 'polo educacional e gastronômico do sul gaúcho',
+    conteudo: `
+      <p>Pelotas é referência em educação e gastronomia no sul do Rio Grande do Sul. Um <strong>chatbot WhatsApp em Pelotas</strong> ajuda seu negócio a oferecer atendimento moderno e eficiente para a comunidade.</p>
+      <p>O <strong>WhatsAI</strong> automatiza todo o atendimento: tira dúvidas sobre produtos, agenda serviços e processa pedidos automaticamente. Perfeito para comércios, restaurantes e prestadores de serviço.</p>
+      <p>Economia de até R$ 4.000/mês em atendimento. Apenas R$ 29,90/mês.</p>
+    `,
+  },
+  {
+    slug: 'cuiaba',
+    nome: 'Cuiabá',
+    uf: 'MT',
+    regiao: 'Centro-Oeste',
+    populacao: '620 mil',
+    destaque: 'capital mato-grossense do agronegócio',
+    conteudo: `
+      <p>Cuiabá é a capital de Mato Grosso, centro do agronegócio brasileiro. Um <strong>chatbot WhatsApp em Cuiabá</strong> permite que seu negócio atenda clientes 24 horas, mesmo nos horários de pico do comércio local.</p>
+      <p>O <strong>WhatsAI</strong> é ideal para empresas do agronegócio, comércio e serviços em Cuiabá. Automatize vendas, agendamentos e suporte com inteligência artificial.</p>
+      <p>Invista R$ 29,90/mês em um atendente virtual que trabalha sem descanso.</p>
+    `,
+  },
+  {
+    slug: 'campo-grande',
+    nome: 'Campo Grande',
+    uf: 'MS',
+    regiao: 'Centro-Oeste',
+    populacao: '920 mil',
+    destaque: 'capital sul-mato-grossense em expansão',
+    conteudo: `
+      <p>Campo Grande é a capital de Mato Grosso do Sul, com economia diversificada e forte comércio. Um <strong>chatbot WhatsApp em Campo Grande</strong> coloca sua empresa na vanguarda do atendimento digital.</p>
+      <p>Com o <strong>WhatsAI</strong>, você automatiza o atendimento ao cliente, qualifica leads e processa pedidos 24 horas por dia. Perfeito para comércios, clínicas e prestadores de serviço.</p>
+      <p>Menos de R$ 1/dia para transformar o atendimento da sua empresa. Experimente grátis.</p>
+    `,
+  },
+  {
+    slug: 'aracaju',
+    nome: 'Aracaju',
+    uf: 'SE',
+    regiao: 'Nordeste',
+    populacao: '680 mil',
+    destaque: 'capital sergipana do turismo e serviços',
+    conteudo: `
+      <p>Aracaju é a capital de Sergipe, conhecida por suas praias e qualidade de vida. Um <strong>chatbot WhatsApp em Aracaju</strong> é perfeito para hotéis, pousadas, restaurantes e comércios que atendem turistas e moradores.</p>
+      <p>O <strong>WhatsAI</strong> funciona 24 horas, atende em português natural e entende o contexto da conversa. Automatize agendamentos e vendas sem esforço.</p>
+      <p>Plano a partir de R$ 29,90/mês. Atendimento 24h sem aumentar sua equipe.</p>
+    `,
+  },
+  {
+    slug: 'feira-de-santana',
+    nome: 'Feira de Santana',
+    uf: 'BA',
+    regiao: 'Nordeste',
+    populacao: '625 mil',
+    destaque: 'principal entroncamento rodoviário do Nordeste',
+    conteudo: `
+      <p>Feira de Santana é o principal centro logístico e comercial do interior da Bahia. Um <strong>chatbot WhatsApp em Feira de Santana</strong> ajuda sua empresa a atender clientes de toda a região com eficiência.</p>
+      <p>O <strong>WhatsAI</strong> é ideal para comércios, serviços e logística. Automatize o atendimento, reduza custos e venda mais sem precisar contratar mais pessoas.</p>
+      <p>Economia de até R$ 5.000/mês. Plano a partir de R$ 29,90/mês.</p>
+    `,
+  },
+  {
+    slug: 'macapa',
+    nome: 'Macapá',
+    uf: 'AP',
+    regiao: 'Norte',
+    populacao: '520 mil',
+    destaque: 'capital amapaense na Amazônia',
+    conteudo: `
+      <p>Macapá é a capital do Amapá, com forte presença do comércio e serviços públicos. Um <strong>chatbot WhatsApp em Macapá</strong> permite que seu negócio atenda 24 horas por dia, superando as limitações de horário comercial.</p>
+      <p>O <strong>WhatsAI</strong> funciona como um atendente virtual dedicado: responde perguntas, agenda serviços e processa pedidos automaticamente. Ideal para o comércio local.</p>
+      <p>Invista R$ 29,90/mês em tecnologia e veja seu negócio crescer.</p>
+    `,
+  },
+  {
+    slug: 'rio-branco',
+    nome: 'Rio Branco',
+    uf: 'AC',
+    regiao: 'Norte',
+    populacao: '420 mil',
+    destaque: 'capital acreana e centro econômico do estado',
+    conteudo: `
+      <p>Rio Branco é a capital do Acre, centro econômico e administrativo do estado. Um <strong>chatbot WhatsApp em Rio Branco</strong> é a ferramenta ideal para empresas que querem modernizar o atendimento.</p>
+      <p>O <strong>WhatsAI</strong> oferece atendimento inteligente 24 horas: tira dúvidas, faz orçamentos e agenda serviços. Perfeito para comércios e prestadores de serviço de Rio Branco.</p>
+      <p>Plano a partir de R$ 29,90/mês. Ative em 5 minutos sem conhecimento técnico.</p>
+    `,
+  },
+  {
+    slug: 'palmas',
+    nome: 'Palmas',
+    uf: 'TO',
+    regiao: 'Norte',
+    populacao: '310 mil',
+    destaque: 'capital mais nova do Brasil',
+    conteudo: `
+      <p>Palmas é a capital mais nova do Brasil, com economia em rápido crescimento. Um <strong>chatbot WhatsApp em Palmas</strong> coloca seu negócio na frente com atendimento automatizado de alta qualidade.</p>
+      <p>Com o <strong>WhatsAI</strong>, você automatiza o atendimento, agenda serviços e processa pedidos 24 horas por dia. Ideal para o comércio e serviços em expansão de Palmas.</p>
+      <p>Menos de R$ 1/dia para ter um funcionário digital trabalhando para você.</p>
+    `,
+  },
+  {
+    slug: 'boa-vista',
+    nome: 'Boa Vista',
+    uf: 'RR',
+    regiao: 'Norte',
+    populacao: '440 mil',
+    destaque: 'capital roraimense e porta da Amazônia',
+    conteudo: `
+      <p>Boa Vista é a capital de Roraima, com comércio forte e economia em desenvolvimento. Um <strong>chatbot WhatsApp em Boa Vista</strong> ajuda sua empresa a oferecer atendimento moderno e eficiente.</p>
+      <p>O <strong>WhatsAI</strong> funciona 24 horas, atende múltiplos clientes simultaneamente e integra com seu sistema de gestão. Perfeito para o comércio e serviços de Boa Vista.</p>
+      <p>Plano a partir de R$ 29,90/mês. Transforme o atendimento da sua empresa hoje.</p>
+    `,
+  },
 ]
