@@ -1,16 +1,25 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.SUPABASE_URL || ''
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || ''
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || ''
+let _admin: SupabaseClient | null = null
+let _client: SupabaseClient | null = null
 
-// Admin client with service_role (server-side only)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false
+export function getSupabaseAdmin(): SupabaseClient {
+  if (!_admin) {
+    _admin = createClient(
+      process.env.SUPABASE_URL || '',
+      process.env.SUPABASE_SERVICE_KEY || '',
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    )
   }
-})
+  return _admin
+}
 
-// Anonymous client (safe for browser)
-export const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+export function getSupabaseClient(): SupabaseClient {
+  if (!_client) {
+    _client = createClient(
+      process.env.SUPABASE_URL || '',
+      process.env.SUPABASE_ANON_KEY || ''
+    )
+  }
+  return _client
+}

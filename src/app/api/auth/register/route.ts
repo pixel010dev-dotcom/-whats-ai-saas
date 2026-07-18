@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase'
 import { registerSchema } from '@/lib/validations'
 import { slugify } from '@/lib/utils'
 
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const { name, email, password, empresa } = parsed.data
     const existing = await prisma.user.findUnique({ where: { email } })
     if (existing) return NextResponse.json({ error: 'Email j\á cadastrado' }, { status: 400 })
-    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
+    const { data: authUser, error: authError } = await getSupabaseAdmin().auth.admin.createUser({
       email, password, email_confirm: true,
       user_metadata: { name, empresa }
     })
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
       })
     } catch {
       await prisma.tenant.delete({ where: { id: tenant.id } }).catch(() => {})
-      await supabaseAdmin.auth.admin.deleteUser(authUser.user.id).catch(() => {})
+      await getSupabaseAdmin().auth.admin.deleteUser(authUser.user.id).catch(() => {})
       return NextResponse.json({ error: 'Erro ao criar usuário' }, { status: 500 })
     }
     return NextResponse.json({ success: true })
