@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     description: 'Seu atendente virtual inteligente para WhatsApp.',
   },
   verification: {
-    google: 'Hp8q0blbMExSdzZSqYjSS-cjEEUoxSEKCrKIVnqBb7M',
+    google: 'rnt3kFueLN4_gxN3WM0rjlsdLQy2YHm71q6T2kGlt5Y',
   },
   icons: {
     icon: '/favicon.ico',
